@@ -1,21 +1,16 @@
-.gradle
+### Gradle ###
+.gradle/
 build/
+.kotlin/
+
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-.kotlin
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+.idea/
+out/
 *.iws
 *.iml
 *.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
 ### Eclipse ###
 .apt_generated
@@ -26,8 +21,6 @@ out/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
 ### NetBeans ###
 /nbproject/private/
@@ -39,5 +32,6 @@ bin/
 ### VS Code ###
 .vscode/
 
-### Mac OS ###
+### Sistemi Operativi (Mac / Windows) ###
 .DS_Store
+Thumbs.db
