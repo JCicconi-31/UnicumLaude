@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("application")
 }
 
 group = "it.unicam.universita.mdp2526"
@@ -7,6 +8,10 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+}
+
+application {
+    mainClass = "it.unicam.cs.mpgc.rpg130525.Main"
 }
 
 dependencies {
