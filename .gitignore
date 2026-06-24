@@ -1,37 +1,35 @@
 ### Gradle ###
 .gradle/
 build/
-.kotlin/
-
+/out/
+*.jar
+*.war
+*.ear
 !gradle/wrapper/gradle-wrapper.jar
 
-### IntelliJ IDEA ###
+### Intellj IDEA ###
 .idea/
-out/
 *.iws
 *.iml
 *.ipr
+out/
 
 ### Eclipse ###
-.apt_generated
+.metadata/
 .classpath
-.factorypath
 .project
-.settings
-.springBeans
-.sts4-cache
-bin/
+.settings/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
-.vscode/
-
-### Sistemi Operativi (Mac / Windows) ###
-.DS_Store
+### Windows ###
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.log
+*.tmp
+*.bak
+*.swp
+
+### File configurazione locali ###
+*.local.properties
+.env
