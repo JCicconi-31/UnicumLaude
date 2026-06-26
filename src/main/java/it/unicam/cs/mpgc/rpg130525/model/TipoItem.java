@@ -1,8 +1,8 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
 public enum TipoItem {
-    ChatGPT,
-    Caffe,
+    Caffè,
+    AppuntiLezione,
     Libro,
-    AppuntiLezione;
+    ChatGPT
 }
