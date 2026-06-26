@@ -1,6 +1,8 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 
 public class Studente {
     private final int intelligenzaBase;
@@ -11,11 +13,12 @@ public class Studente {
     private int monete;
 
     private final EnumMap<TipoItem, InventorySlot> inventario;
-    private final CarrerStrategy carriera;
+    private final List<Consumabile> zaino;
+    private final CareerStrategy carriera;
 
     public Studente(int intelligenzaBase, int resilienzaBase,
                     int saluteMentaleMax, int cfu, int monete,
-                    CarrerStrategy carriera) {
+                    CareerStrategy carriera) {
         if (intelligenzaBase <= 0)
             throw new IllegalArgumentException("Intelligenza deve essere positiva");
         if (saluteMentaleMax <= 0)
@@ -29,6 +32,7 @@ public class Studente {
         this.cfu = cfu;
         this.monete = monete + carriera.modificatoreMoneteIniziali();
         this.inventario = new EnumMap<>(TipoItem.class);
+        this.zaino = new ArrayList<>();
     }
 
     public int getIntelligenzaEffettiva() {
@@ -51,9 +55,31 @@ public class Studente {
         }
     }
 
+    public void recuperaHP(int quantita) {
+        this.saluteMentale = Math.min(saluteMentale + quantita, saluteMentaleMax);
+    }
+
+    public void aggiungiCFU(int quantita) {
+        this.cfu += quantita;
+    }
+
+    public void equipaggiaItem(Equipaggiamento item) {
+        inventario.put(item.getTipo(), new InventorySlot(item, 1));
+    }
+
+    public void aggiungiConsumabile(Consumabile consumabile) {
+        zaino.add(consumabile);
+    }
+
+    public void usaConsumabile(Consumabile consumabile) {
+        if (zaino.remove(consumabile))
+            consumabile.applica(this);
+    }
+
     public int getSaluteMentale() { return saluteMentale; }
     public int getSaluteMentaleMax() { return saluteMentaleMax; }
-    public int getCfu() { return cfu; }
+    public int getCFU() { return cfu; }
     public int getMonete() { return monete; }
     public EnumMap<TipoItem, InventorySlot> getInventario() { return inventario; }
+    public List<Consumabile> getZaino() { return zaino; }
 }
