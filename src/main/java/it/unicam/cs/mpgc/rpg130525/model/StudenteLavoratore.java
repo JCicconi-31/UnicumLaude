@@ -1,4 +1,14 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
-public class StudenteLavoratore {
+public class StudenteLavoratore implements CareerStrategy{
+
+    @Override
+    public int modificatoreHpMax() {
+        return 0;
+    }
+
+    @Override
+    public int modificatoreMoneteIniziali() {
+        return 0;
+    }
 }

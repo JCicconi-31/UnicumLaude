@@ -1,8 +1,14 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
-public class StudenteFullTime extends Studente{
+public class StudenteFullTime implements CareerStrategy{
 
-    public StudenteFullTime(String nome, String cognome, int intelligenzaBase, int resilienzaBase, int saluteMentaleMax, int cfu, int monete, CareerStrategy carriera) {
-        super(nome, cognome, intelligenzaBase, resilienzaBase, saluteMentaleMax, cfu, monete, carriera);
+    @Override
+    public int modificatoreHpMax() {
+        return 0;
+    }
+
+    @Override
+    public int modificatoreMoneteIniziali() {
+        return 0;
     }
 }
