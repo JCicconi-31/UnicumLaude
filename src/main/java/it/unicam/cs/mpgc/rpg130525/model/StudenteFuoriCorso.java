@@ -4,11 +4,11 @@ public class StudenteFuoriCorso implements CareerStrategy{
 
     @Override
     public int modificatoreHpMax() {
-        return 0;
+        return -10;
     }
 
     @Override
     public int modificatoreMoneteIniziali() {
-        return 0;
+        return -10;
     }
 }

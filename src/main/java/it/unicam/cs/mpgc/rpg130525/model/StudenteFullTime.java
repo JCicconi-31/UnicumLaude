@@ -4,7 +4,7 @@ public class StudenteFullTime implements CareerStrategy{
 
     @Override
     public int modificatoreHpMax() {
-        return 0;
+        return +20;
     }
 
     @Override
