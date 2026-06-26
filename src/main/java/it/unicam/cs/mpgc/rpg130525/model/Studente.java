@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
-public class Studente {
+public class Studente extends Persona{
     private final int intelligenzaBase;
     private final int resilienzaBase;
     private int saluteMentale;
@@ -16,9 +16,10 @@ public class Studente {
     private final List<Consumabile> zaino;
     private final CareerStrategy carriera;
 
-    public Studente(int intelligenzaBase, int resilienzaBase,
+    public Studente(String nome, String cognome, int intelligenzaBase, int resilienzaBase,
                     int saluteMentaleMax, int cfu, int monete,
                     CareerStrategy carriera) {
+        super(nome,cognome);
         if (intelligenzaBase <= 0)
             throw new IllegalArgumentException("Intelligenza deve essere positiva");
         if (saluteMentaleMax <= 0)
