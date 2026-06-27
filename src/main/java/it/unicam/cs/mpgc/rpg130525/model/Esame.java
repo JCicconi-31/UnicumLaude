@@ -8,13 +8,13 @@ public class Esame {
 
     public Esame(int codiceCorso, String nomeCorso, int cfuAssociati, Professore professore) {
         if (codiceCorso < 0)
-            throw new IllegalArgumentException("Codice corso non valido");
+            throw new IllegalArgumentException("codice corso non valido");
         if (nomeCorso == null || nomeCorso.isBlank())
-            throw new IllegalArgumentException("Nome esame non valido");
+            throw new IllegalArgumentException("nome esame non valido");
         if (cfuAssociati <= 0 || cfuAssociati > 18)
-            throw new IllegalArgumentException("Numero CFU non valido");
+            throw new IllegalArgumentException("numero CFU non valido");
         if (professore == null)
-            throw new IllegalArgumentException("Professore non valido");
+            throw new IllegalArgumentException("professore non valido");
         this.codiceCorso = codiceCorso;
         this.nomeCorso = nomeCorso;
         this.cfuAssociati = cfuAssociati;

@@ -21,6 +21,10 @@ public class Mappa {
         return Collections.unmodifiableSet(collegamenti.getOrDefault(stanza, Set.of()));
     }
 
-    //TODO
-    public void isDisponible(Stanza stanza, Set<Esame> esamiSuperati){}
+    //verifica se una stanza è accessibile secondo gli esami superati dal giocatore.
+    public boolean isDisponibile(Stanza stanza, Set<Esame> esamiSuperati) {
+        return propedeuticita.getOrDefault(stanza, Set.of())
+                .stream()
+                .allMatch(prerequisito -> esamiSuperati.contains(prerequisito.getEsame()));
+    }
 }
