@@ -1,8 +1,6 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
 
 public class Studente extends Persona{
     private final int intelligenzaBase;
@@ -76,6 +74,10 @@ public class Studente extends Persona{
     public int getSaluteMentale() { return saluteMentale; }
     public int getSaluteMentaleMax() { return saluteMentaleMax; }
     public int getMonete() { return monete; }
-    public EnumMap<TipoItem, InventorySlot> getInventario() { return inventario; }
-    public List<Consumabile> getZaino() { return zaino; }
+    public Map<TipoItem, InventorySlot> getInventario() {
+        return Collections.unmodifiableMap(inventario);
+    }
+    public List<Consumabile> getZaino() {
+        return Collections.unmodifiableList(zaino);
+    }
 }
