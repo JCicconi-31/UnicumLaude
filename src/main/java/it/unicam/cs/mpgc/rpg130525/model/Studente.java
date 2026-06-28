@@ -33,7 +33,7 @@ public class Studente extends Persona{
         this.monete = monete + carriera.modificatoreMoneteIniziali();
         this.inventario = new EnumMap<>(TipoItem.class);
         this.zaino = new ArrayList<>();
-        this.libretto = new Libretto(this);
+        this.libretto = new Libretto();
     }
 
     public int getIntelligenzaEffettiva() {
