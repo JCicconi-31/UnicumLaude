@@ -26,12 +26,11 @@ public class EsameSuperato {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        EsameSuperato that = (EsameSuperato) o;
-        return voto == that.voto && Objects.equals(esame, that.esame);
+        return Objects.equals(esame, ((EsameSuperato) o).esame);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(esame, voto);
+        return Objects.hash(esame);
     }
 }

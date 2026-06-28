@@ -9,15 +9,15 @@ public class Studente extends Persona{
     private final int resilienzaBase;
     private int saluteMentale;
     private final int saluteMentaleMax;
-    private int cfu;
     private int monete;
+    private Libretto libretto;
 
     private final EnumMap<TipoItem, InventorySlot> inventario;
     private final List<Consumabile> zaino;
     private final CareerStrategy carriera;
 
     public Studente(String nome, String cognome, int intelligenzaBase, int resilienzaBase,
-                    int saluteMentaleMax, int cfu, int monete,
+                    int saluteMentaleMax, int monete,
                     CareerStrategy carriera) {
         super(nome,cognome);
         if (intelligenzaBase <= 0)
@@ -30,10 +30,10 @@ public class Studente extends Persona{
         this.resilienzaBase = resilienzaBase;
         this.saluteMentaleMax = saluteMentaleMax + carriera.modificatoreHpMax();
         this.saluteMentale = this.saluteMentaleMax;
-        this.cfu = cfu;
         this.monete = monete + carriera.modificatoreMoneteIniziali();
         this.inventario = new EnumMap<>(TipoItem.class);
         this.zaino = new ArrayList<>();
+        this.libretto = new Libretto(this);
     }
 
     public int getIntelligenzaEffettiva() {
@@ -60,10 +60,6 @@ public class Studente extends Persona{
         this.saluteMentale = Math.min(saluteMentale + quantita, saluteMentaleMax);
     }
 
-    public void aggiungiCFU(int quantita) {
-        this.cfu += quantita;
-    }
-
     public void equipaggiaItem(Equipaggiamento item) {
         inventario.put(item.getTipo(), new InventorySlot(item, 1));
     }
@@ -79,7 +75,6 @@ public class Studente extends Persona{
 
     public int getSaluteMentale() { return saluteMentale; }
     public int getSaluteMentaleMax() { return saluteMentaleMax; }
-    public int getCFU() { return cfu; }
     public int getMonete() { return monete; }
     public EnumMap<TipoItem, InventorySlot> getInventario() { return inventario; }
     public List<Consumabile> getZaino() { return zaino; }
