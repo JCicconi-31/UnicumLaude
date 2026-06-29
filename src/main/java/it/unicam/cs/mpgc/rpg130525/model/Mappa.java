@@ -13,6 +13,11 @@ public class Mappa {
             propedeuticita.put(stanza, new HashSet<>());
     }
 
+    public void addCorridoio(Stanza a, Stanza b) {
+        collegamenti.get(a).add(b);
+        collegamenti.get(b).add(a);
+    }
+
     public void addPropedeuticita(Stanza prerequisito, Stanza successiva) {
         propedeuticita.get(successiva).add(prerequisito);
     }
