@@ -3,7 +3,7 @@ package it.unicam.cs.mpgc.rpg130525.model;
 import java.util.Objects;
 
 public class EsameSuperato {
-    Esame esame;
+    private final Esame esame;
     int voto;
 
     public EsameSuperato(Esame esame, int voto) {
