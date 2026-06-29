@@ -8,7 +8,7 @@ public class Studente extends Persona{
     private int saluteMentale;
     private final int saluteMentaleMax;
     private int monete;
-    private Libretto libretto;
+    private final Libretto libretto;
 
     private final EnumMap<TipoItem, InventorySlot> inventario;
     private final List<Consumabile> zaino;
@@ -57,20 +57,16 @@ public class Studente extends Persona{
     public void recuperaHP(int quantita) {
         this.saluteMentale = Math.min(saluteMentale + quantita, saluteMentaleMax);
     }
-
     public void equipaggiaItem(Equipaggiamento item) {
         inventario.put(item.getTipo(), new InventorySlot(item, 1));
     }
-
     public void aggiungiConsumabile(Consumabile consumabile) {
         zaino.add(consumabile);
     }
-
     public void usaConsumabile(Consumabile consumabile) {
         if (zaino.remove(consumabile))
             consumabile.applica(this);
     }
-
     public int getSaluteMentale() { return saluteMentale; }
     public int getSaluteMentaleMax() { return saluteMentaleMax; }
     public int getMonete() { return monete; }
@@ -79,5 +75,8 @@ public class Studente extends Persona{
     }
     public List<Consumabile> getZaino() {
         return Collections.unmodifiableList(zaino);
+    }
+    public Libretto getLibretto() {
+            return libretto;
     }
 }

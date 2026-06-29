@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,6 +31,10 @@ public class Libretto {
         return esamiSuperati.stream()
                 .map(EsameSuperato::getEsame)
                 .collect(Collectors.toUnmodifiableSet());
+    }
+
+    public Set<EsameSuperato> getDettaglioEsami() {
+        return Collections.unmodifiableSet(esamiSuperati);
     }
 
 }
