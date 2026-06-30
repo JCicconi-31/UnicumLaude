@@ -25,10 +25,10 @@ public class ProvaOrale implements FaseEsame {
 
         Professore professore = aula.getEsame().getProfessore();
         view.mostraMessaggio("Inizia la prova orale con il prof. " + professore.getNomeCompleto());
-
+        //fase concreta di "combattimento" tra Studente e Professore
         while (!professore.isKO())
             gestoreTurno.eseguiTurno(stato.getStudente(), professore, view);
-        
+
         view.mostraMessaggio("Prova orale superata!");
         return true;
     }
