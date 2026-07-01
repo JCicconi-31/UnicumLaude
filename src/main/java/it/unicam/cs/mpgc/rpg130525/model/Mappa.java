@@ -32,4 +32,8 @@ public class Mappa {
                 .stream()
                 .allMatch(prerequisito -> esamiSuperati.contains(prerequisito.getEsame()));
     }
+
+    public Set<Stanza> getStanze() {
+        return Collections.unmodifiableSet(collegamenti.keySet());
+    }
 }
