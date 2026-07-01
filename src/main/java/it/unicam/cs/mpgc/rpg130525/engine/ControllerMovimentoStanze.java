@@ -4,10 +4,10 @@ import it.unicam.cs.mpgc.rpg130525.model.*;
 
 import java.util.Set;
 
-public class ControllerMovimento {
+public class ControllerMovimentoStanze {
     private final Mappa mappa;
 
-    public ControllerMovimento(Mappa mappa){
+    public ControllerMovimentoStanze(Mappa mappa){
         if (mappa == null)
             throw new IllegalArgumentException("mappa nulla");
         this.mappa = mappa;

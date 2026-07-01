@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Test unitari per {@link ControllerMovimento}: spostamento fisico lungo i
+ * Test unitari per {@link ControllerMovimentoStanze}: spostamento fisico lungo i
  * corridoi e verifica della propedeuticità all'ingresso nelle aule d'esame.
  * <p>
  * <b>Dichiarazione uso AI:</b> questa classe di test è stata realizzata con
  * l'assistenza di un'intelligenza artificiale (Claude, Anthropic), come previsto
  * dalle indicazioni del corso sull'utilizzo di strumenti di AI generativa.
  */
-class ControllerMovimentoTest {
+class ControllerMovimentoStanzaTest {
 
     private Esame esame1;
     private Stanza atrio;
@@ -23,7 +23,7 @@ class ControllerMovimentoTest {
     private Stanza stanzaIsolata;
     private Studente studente;
     private StatoGioco stato;
-    private ControllerMovimento controller;
+    private ControllerMovimentoStanze controller;
 
     @BeforeEach
     void setUp() {
@@ -50,7 +50,7 @@ class ControllerMovimentoTest {
 
         studente = new Studente("Mario", "Rossi", 10, 5, 100, 50, new StudenteFullTime());
         stato = new StatoGioco(studente, atrio);
-        controller = new ControllerMovimento(mappa);
+        controller = new ControllerMovimentoStanze(mappa);
     }
 
     @Test
@@ -85,6 +85,6 @@ class ControllerMovimentoTest {
 
     @Test
     void costruttoreRifiutaMappaNull() {
-        assertThrows(IllegalArgumentException.class, () -> new ControllerMovimento(null));
+        assertThrows(IllegalArgumentException.class, () -> new ControllerMovimentoStanze(null));
     }
 }
