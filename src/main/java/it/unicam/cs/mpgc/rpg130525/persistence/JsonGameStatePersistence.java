@@ -61,8 +61,23 @@ public class JsonGameStatePersistence implements PersistenceManager {
     }
 
     private StatoGioco daDto(GameStateDto dto) {
-        //TODO
-        return null;
+        CareerStrategy carriera = carrieraDa(dto.tipoCarriera());
+        Studente s = new Studente(dto.nome(), dto.cognome(), dto.intelligenzaBase(), dto.resilienzaBase(), dto.saluteMentaleMaxBase(), dto.moneteBase(), carriera);
+        int delta = s.getSaluteMentaleMax() - dto.saluteMentaleAttuale();
+        if (delta > 0) s.subisciDanno(delta);
+        Map<Integer, Esame> esamiPerCodice = new HashMap<>();
+        Map<String, Stanza> stanzePerNome = new HashMap<>();
+        for (Stanza st : mappa.getStanze()) {
+            stanzePerNome.put(st.getNome(), st);
+            if (st.getEsame() != null)
+                esamiPerCodice.put(st.getEsame().getCodiceCorso(), st.getEsame());
+        }
+        for (var e : dto.esamiSuperati()) {
+            Esame esame = esamiPerCodice.get(e.codiceCorso());
+            if (esame != null)
+                s.getLibretto().addEsameSuperato(new EsameSuperato(esame, e.voto()));
+        }
+        return new StatoGioco(s, stanzePerNome.get(dto.nomeStanzaCorrente()));
     }
 
     private CareerStrategy carrieraDa(String tipo) {
