@@ -14,9 +14,7 @@ public class Studente extends Persona{
     private final List<Consumabile> zaino;
     private final CareerStrategy carriera;
 
-    public Studente(String nome, String cognome, int intelligenzaBase, int resilienzaBase,
-                    int saluteMentaleMax, int monete,
-                    CareerStrategy carriera) {
+    public Studente(String nome, String cognome, int intelligenzaBase, int resilienzaBase, int saluteMentaleMax, int monete, CareerStrategy carriera) {
         super(nome,cognome);
         if (intelligenzaBase <= 0)
             throw new IllegalArgumentException("Intelligenza deve essere positiva");
@@ -57,26 +55,41 @@ public class Studente extends Persona{
     public void recuperaHP(int quantita) {
         this.saluteMentale = Math.min(saluteMentale + quantita, saluteMentaleMax);
     }
+
     public void equipaggiaItem(Equipaggiamento item) {
         inventario.put(item.getTipo(), new InventorySlot(item, 1));
     }
+
     public void aggiungiConsumabile(Consumabile consumabile) {
         zaino.add(consumabile);
     }
+
     public void usaConsumabile(Consumabile consumabile) {
         if (zaino.remove(consumabile))
             consumabile.applica(this);
     }
+
     public int getSaluteMentale() { return saluteMentale; }
+
     public int getSaluteMentaleMax() { return saluteMentaleMax; }
+
     public int getMonete() { return monete; }
+
     public Map<TipoItem, InventorySlot> getInventario() {
         return Collections.unmodifiableMap(inventario);
     }
+
     public List<Consumabile> getZaino() {
         return Collections.unmodifiableList(zaino);
     }
+
     public Libretto getLibretto() {
             return libretto;
     }
+
+    public int getIntelligenzaBase() { return intelligenzaBase; }
+
+    public int getResilienzaBase()   { return resilienzaBase; }
+
+    public CareerStrategy getCarriera() { return carriera; }
 }
