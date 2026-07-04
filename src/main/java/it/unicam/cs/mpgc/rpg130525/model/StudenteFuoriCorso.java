@@ -11,4 +11,9 @@ public class StudenteFuoriCorso implements CareerStrategy{
     public int modificatoreMoneteIniziali() {
         return -10;
     }
+
+    @Override
+    public String getNome() {
+        return "Studente Fuori Corso";
+    }
 }

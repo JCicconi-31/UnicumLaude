@@ -11,4 +11,9 @@ public class StudenteFullTime implements CareerStrategy{
     public int modificatoreMoneteIniziali() {
         return 0;
     }
+
+    @Override
+    public String getNome() {
+        return "Studente Full-time";
+    }
 }

@@ -11,4 +11,9 @@ public class StudenteLavoratore implements CareerStrategy{
     public int modificatoreMoneteIniziali() {
         return +20;
     }
+
+    @Override
+    public String getNome() {
+        return "Studente Lavoratore";
+    }
 }
