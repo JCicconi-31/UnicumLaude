@@ -33,6 +33,11 @@ public class JsonGameStatePersistence implements PersistenceManager {
     }
 
     @Override
+    public boolean esisteSalvataggio() {
+        return Files.exists(file);
+    }
+
+    @Override
     public StatoGioco carica() {
         try (Reader r = Files.newBufferedReader(file)) {
             return daDto(gson.fromJson(r, GameStateDto.class));
