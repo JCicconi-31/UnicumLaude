@@ -36,6 +36,19 @@ class ProvaScrittaTest {
     private final CalcolatoreDanno calcolatore = new CalcolatoreDanno();
 
     /** Database con un solo corso e una sola domanda: l'estrazione è deterministica. */
+    /** Input finto che risponde sempre con l'indice dato; gli altri metodi non servono qui. */
+    private static GameInput rispostaFissa(int indice) {
+        return new GameInput() {
+            @Override public int chiediRisposta(Domanda domanda) { return indice; }
+            @Override public int scegli(String titolo, List<String> opzioni) {
+                throw new UnsupportedOperationException();
+            }
+            @Override public String chiediTesto(String prompt) {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
     private DatabaseDomande database() {
         Map<String, List<Domanda>> dati = Map.of("Programmazione", List.of(DOMANDA));
         return new DatabaseDomande(dati, new Random(0));
@@ -56,7 +69,7 @@ class ProvaScrittaTest {
     void rispostaCorrettaSuperaLaFaseSenzaDanno() {
         Studente s = nuovoStudente();
         StatoGioco stato = statoConProfessore(s, new Professore("Anna", "Verdi", 8, 50));
-        GameInput rispondeCorretto = domanda -> 1; // indice corretto
+        GameInput rispondeCorretto = rispostaFissa(1); // indice corretto
 
         ProvaScritta prova = new ProvaScritta(database(), rispondeCorretto, calcolatore);
 
@@ -68,7 +81,7 @@ class ProvaScrittaTest {
     void rispostaSbagliataFallisceLaFaseEInfliggeDanno() {
         Studente s = nuovoStudente();
         StatoGioco stato = statoConProfessore(s, new Professore("Anna", "Verdi", 8, 50)); // difficoltà 8
-        GameInput rispondeSbagliato = domanda -> 0; // indice errato
+        GameInput rispondeSbagliato = rispostaFissa(0); // indice errato
 
         ProvaScritta prova = new ProvaScritta(database(), rispondeSbagliato, calcolatore);
 
@@ -81,7 +94,7 @@ class ProvaScrittaTest {
         Studente s = nuovoStudente();
         s.subisciDanno(119); // salute portata a 1
         StatoGioco stato = statoConProfessore(s, new Professore("Anna", "Verdi", 50, 50));
-        GameInput rispondeSbagliato = domanda -> 0;
+        GameInput rispondeSbagliato = rispostaFissa(0);
 
         ProvaScritta prova = new ProvaScritta(database(), rispondeSbagliato, calcolatore);
 
@@ -93,7 +106,15 @@ class ProvaScrittaTest {
         Studente s = nuovoStudente();
         StatoGioco stato = statoConProfessore(s, new Professore("Anna", "Verdi", 8, 50));
         Domanda[] ricevuta = new Domanda[1];
-        GameInput registra = domanda -> { ricevuta[0] = domanda; return 1; };
+        GameInput registra = new GameInput() {
+            @Override public int chiediRisposta(Domanda domanda) { ricevuta[0] = domanda; return 1; }
+            @Override public int scegli(String titolo, List<String> opzioni) {
+                throw new UnsupportedOperationException();
+            }
+            @Override public String chiediTesto(String prompt) {
+                throw new UnsupportedOperationException();
+            }
+        };
 
         new ProvaScritta(database(), registra, calcolatore).esegui(stato, VIEW_MUTA);
 
@@ -102,7 +123,7 @@ class ProvaScrittaTest {
 
     @Test
     void costruttoreRifiutaParametriNull() {
-        GameInput input = domanda -> 0;
+        GameInput input = rispostaFissa(0);
         assertThrows(IllegalArgumentException.class, () -> new ProvaScritta(null, input, calcolatore));
         assertThrows(IllegalArgumentException.class, () -> new ProvaScritta(database(), null, calcolatore));
         assertThrows(IllegalArgumentException.class, () -> new ProvaScritta(database(), input, null));
