@@ -61,50 +61,77 @@ public class DatabaseDomande {
      * @return un {@code DatabaseDomande} pronto all'uso con le domande di MdP
      */
     public static DatabaseDomande seedMetodologie() {
-        Map<String, List<Domanda>> dati = Map.of(
-            "Metodologie di Programmazione", List.of(
-                new Domanda(
-                    "Cosa afferma il Single Responsibility Principle (SRP)?",
-                    List.of(
-                        "Una classe deve avere una sola ragione per cambiare",
-                        "Una classe non può avere più di un metodo pubblico",
-                        "Ogni classe deve implementare almeno un'interfaccia",
-                        "Una classe deve essere final per non essere estesa"
-                    ), 0),
-                new Domanda(
-                    "A cosa serve il pattern Strategy?",
-                    List.of(
-                        "A creare un'unica istanza condivisa di una classe",
-                        "A incapsulare comportamenti intercambiabili dietro un'astrazione",
-                        "A notificare automaticamente gli osservatori di un cambiamento",
-                        "A costruire oggetti complessi passo dopo passo"
-                    ), 1),
-                new Domanda(
-                    "Qual è il rapporto corretto tra equals() e hashCode() in Java?",
-                    List.of(
-                        "Sono indipendenti e si possono ridefinire separatamente",
-                        "Se due oggetti sono equals, devono avere lo stesso hashCode",
-                        "hashCode deve sempre restituire un valore diverso per ogni oggetto",
-                        "equals va ridefinito solo per le classi che estendono Object"
-                    ), 1),
-                new Domanda(
-                    "Cosa stabilisce l'Open/Closed Principle (OCP)?",
-                    List.of(
-                        "Il codice deve essere aperto in lettura ma chiuso in scrittura",
-                        "Ogni modulo deve esporre tutti i suoi campi come pubblici",
-                        "Il software deve essere aperto all'estensione ma chiuso alla modifica",
-                        "Le classi astratte non possono avere metodi concreti"
-                    ), 2),
-                new Domanda(
-                    "Perché si preferisce 'programmare verso un'interfaccia' anziché verso un'implementazione?",
-                    List.of(
-                        "Perché le interfacce vengono eseguite più velocemente a runtime",
-                        "Per ridurre l'accoppiamento e poter sostituire l'implementazione",
-                        "Perché le classi concrete non possono essere usate come tipo",
-                        "Per evitare di dover scrivere i costruttori"
-                    ), 1)
-            )
+        return new DatabaseDomande(Map.of("Metodologie di Programmazione", domandeMetodologie()));
+    }
+
+    /**
+     * Crea un database con le domande di tutti i corsi del mondo di gioco
+     * ("Programmazione" e "Metodologie di Programmazione").
+     *
+     * @return un {@code DatabaseDomande} pronto all'uso per la partita
+     */
+    public static DatabaseDomande seedCompleto() {
+        return new DatabaseDomande(Map.of(
+                "Metodologie di Programmazione", domandeMetodologie(),
+                "Programmazione", domandeProgrammazione()));
+    }
+
+    private static List<Domanda> domandeProgrammazione() {
+        return List.of(
+            new Domanda(
+                "Quale parola chiave dichiara una costante in Java?",
+                List.of("final", "const", "static", "immutable"), 0),
+            new Domanda(
+                "Cosa stampa System.out.println(3 / 2)?",
+                List.of("1", "1.5", "2", "errore di compilazione"), 0),
+            new Domanda(
+                "Quale collezione NON ammette elementi duplicati?",
+                List.of("List", "Set", "Queue", "Deque"), 1)
         );
-        return new DatabaseDomande(dati);
+    }
+
+    private static List<Domanda> domandeMetodologie() {
+        return List.of(
+                new Domanda(
+                        "Cosa afferma il Single Responsibility Principle (SRP)?",
+                        List.of(
+                                "Una classe deve avere una sola ragione per cambiare",
+                                "Una classe non può avere più di un metodo pubblico",
+                                "Ogni classe deve implementare almeno un'interfaccia",
+                                "Una classe deve essere final per non essere estesa"
+                        ), 0),
+                new Domanda(
+                        "A cosa serve il pattern Strategy?",
+                        List.of(
+                                "A creare un'unica istanza condivisa di una classe",
+                                "A incapsulare comportamenti intercambiabili dietro un'astrazione",
+                                "A notificare automaticamente gli osservatori di un cambiamento",
+                                "A costruire oggetti complessi passo dopo passo"
+                        ), 1),
+                new Domanda(
+                        "Qual è il rapporto corretto tra equals() e hashCode() in Java?",
+                        List.of(
+                                "Sono indipendenti e si possono ridefinire separatamente",
+                                "Se due oggetti sono equals, devono avere lo stesso hashCode",
+                                "hashCode deve sempre restituire un valore diverso per ogni oggetto",
+                                "equals va ridefinito solo per le classi che estendono Object"
+                        ), 1),
+                new Domanda(
+                        "Cosa stabilisce l'Open/Closed Principle (OCP)?",
+                        List.of(
+                                "Il codice deve essere aperto in lettura ma chiuso in scrittura",
+                                "Ogni modulo deve esporre tutti i suoi campi come pubblici",
+                                "Il software deve essere aperto all'estensione ma chiuso alla modifica",
+                                "Le classi astratte non possono avere metodi concreti"
+                        ), 2),
+                new Domanda(
+                        "Perché si preferisce 'programmare verso un'interfaccia' anziché verso un'implementazione?",
+                        List.of(
+                                "Perché le interfacce vengono eseguite più velocemente a runtime",
+                                "Per ridurre l'accoppiamento e poter sostituire l'implementazione",
+                                "Perché le classi concrete non possono essere usate come tipo",
+                                "Per evitare di dover scrivere i costruttori"
+                        ), 1)
+        );
     }
 }
