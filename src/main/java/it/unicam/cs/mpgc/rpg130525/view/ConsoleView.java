@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
-public class ConsoleView implements GameView, GameInput{
+public class ConsoleView implements GameView, GameInput {
     private final Scanner scanner;
     private final PrintStream out;
 
@@ -31,7 +31,7 @@ public class ConsoleView implements GameView, GameInput{
 
     @Override
     public void aggiornaStatoGiocatore(StudenteDto studente) {
-        out.printf("[%s] HP %d/%d | INT %d | RES %d | CFU %d | Monete %d%n",
+        out.printf("[%s] HP %d/%d | INTELLIGENZA %d | RESILIENZA %d | CFU %d | Monete %d%n",
                 studente.nomeCompleto(),
                 studente.saluteMentale(), studente.saluteMentaleMax(),
                 studente.intelligenzaEffettiva(), studente.resilienzaEffettiva(),
@@ -41,10 +41,30 @@ public class ConsoleView implements GameView, GameInput{
     @Override
     public int chiediRisposta(Domanda domanda) {
         out.println(domanda.getTesto());
-        List<String> opzioni = domanda.getOpzioni();
+        return leggiScelta(domanda.getOpzioni());
+    }
+
+    @Override
+    public int scegli(String titolo, List<String> opzioni) {
+        out.println(titolo);
+        return leggiScelta(opzioni);
+    }
+
+    @Override
+    public String chiediTesto(String prompt) {
+        while (true) {
+            out.print(prompt + ": ");
+            String riga = scanner.nextLine().trim();
+            if (!riga.isBlank())
+                return riga;
+            out.println("Il testo non puo' essere vuoto, riprova.");
+        }
+    }
+
+    //mostra le opzioni numerate in base 1 e legge un indice valido, restituendolo in base 0
+    private int leggiScelta(List<String> opzioni) {
         for (int i = 0; i < opzioni.size(); i++)
             out.println("  " + (i + 1) + ") " + opzioni.get(i));
-
         while (true) {
             out.print("Scegli (1-" + opzioni.size() + "): ");
             String riga = scanner.nextLine().trim();
