@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class JsonGameStatePersistence implements PersistenceManager {
     private final Path file;
@@ -56,8 +55,10 @@ public class JsonGameStatePersistence implements PersistenceManager {
         var esami = s.getLibretto().getDettaglioEsami().stream()
                 .map(e -> new GameStateDto.EsameSuperatoDto(e.getEsame().getCodiceCorso(), e.getVoto()))
                 .toList();
-        var inventario = s.getInventario().entrySet().stream()
-                .collect(Collectors.toMap(en -> en.getKey().name(), en -> en.getValue().getQuantita()));
+        Map<String, Integer> inventario = new HashMap<>();
+        s.getInventario().forEach((tipo, slot) -> inventario.put(tipo.name(), slot.getQuantita()));
+        for (Consumabile cons : s.getZaino())
+            inventario.merge(cons.getTipo().name(), 1, Integer::sum);
         return new GameStateDto(
                 s.getNome(), s.getCognome(),
                 s.getIntelligenzaBase(), s.getResilienzaBase(),
@@ -85,6 +86,14 @@ public class JsonGameStatePersistence implements PersistenceManager {
             Esame esame = esamiPerCodice.get(e.codiceCorso());
             if (esame != null)
                 s.getLibretto().addEsameSuperato(new EsameSuperato(esame, e.voto()));
+        }
+        for (var voce : dto.inventario().entrySet()) {
+            TipoItem tipo = TipoItem.valueOf(voce.getKey());
+            for (int i = 0; i < voce.getValue(); i++) {
+                Item item = CatalogoItem.crea(tipo);
+                if (item instanceof Equipaggiamento e)      s.equipaggiaItem(e);
+                else if (item instanceof Consumabile cons)  s.aggiungiConsumabile(cons);
+            }
         }
         return new StatoGioco(s, stanzePerNome.get(dto.nomeStanzaCorrente()));
     }
