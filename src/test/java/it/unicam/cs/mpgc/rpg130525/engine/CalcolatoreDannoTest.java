@@ -66,22 +66,11 @@ class CalcolatoreDannoTest {
     }
 
     @Test
-    void dannoSubitoDaNemicoMinoreEMitigatoDallaResilienza() {
-        assertEquals(5, calcolatore.dannoSubito(new Dubbio(10), nuovoStudente())); // 10 - 5
-    }
-
-    @Test
-    void dannoSubitoDaNemicoMinoreNonScendeSottoUno() {
-        assertEquals(1, calcolatore.dannoSubito(new Distrazione(2), nuovoStudente())); // 2 - 5 -> 1
-    }
-
-    @Test
     void parametriNulliVengonoRifiutati() {
         Studente s = nuovoStudente();
         Professore prof = new Professore("Anna", "Verdi", 8, 50);
         assertThrows(IllegalArgumentException.class, () -> calcolatore.dannoInflitto(null));
         assertThrows(IllegalArgumentException.class, () -> calcolatore.dannoSubito(prof, null));
-        assertThrows(IllegalArgumentException.class, () -> calcolatore.dannoSubito((Professore) null, s));
-        assertThrows(IllegalArgumentException.class, () -> calcolatore.dannoSubito((NemicoMinore) null, s));
+        assertThrows(IllegalArgumentException.class, () -> calcolatore.dannoSubito(null, s));
     }
 }

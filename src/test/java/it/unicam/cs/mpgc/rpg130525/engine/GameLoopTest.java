@@ -16,11 +16,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Test unitari per {@link GameLoop}: costruzione delle azioni disponibili,
- * movimento con vincolo di propedeuticità, esame con accredito CFU e vittoria,
- * Burnout con game over, riposo in aula studio e salvataggio all'uscita.
- * View, input e persistenza sono test double: l'input è una sequenza
- * prefissata di scelte, la persistenza registra le chiamate in memoria.
+ * Test unitari per {@link GameLoop}: movimento con vincolo di propedeuticità,
+ * esame con accredito CFU e vittoria, Burnout con game over, riposo, negozio
+ * (acquisto consumabili ed equipaggiamenti, con controllo delle monete), uso
+ * dei consumabili e salvataggio all'uscita. View, input e persistenza sono
+ * test double: l'input è una sequenza prefissata di scelte, la persistenza
+ * registra le chiamate in memoria.
  * <p>
  * <b>Dichiarazione uso AI:</b> questa classe di test è stata realizzata con
  * l'assistenza di un'intelligenza artificiale (Claude, Anthropic), come previsto
@@ -56,9 +57,7 @@ class GameLoopTest {
 
     private Mappa mappa;
     private Stanza atrio;
-    private Stanza aulaStudio;
     private Stanza la1;
-    private Stanza la2;
     private Esame esame1;
     private Studente studente;
     private StatoGioco stato;
@@ -72,9 +71,9 @@ class GameLoopTest {
         Esame esame2 = new Esame(2, "Metodologie", 6, prof);
 
         atrio = new Stanza("Atrio", TipoStanza.CORRIDOIO, null);
-        aulaStudio = new Stanza("Aula Studio", TipoStanza.AULA_STUDIO, null);
+        Stanza aulaStudio = new Stanza("Aula Studio", TipoStanza.AULA_STUDIO, null);
         la1 = new Stanza("Aula LA1", TipoStanza.AULA_ESAME, esame1);
-        la2 = new Stanza("Aula LA2", TipoStanza.AULA_ESAME, esame2);
+        Stanza la2 = new Stanza("Aula LA2", TipoStanza.AULA_ESAME, esame2);
 
         mappa = new Mappa();
         mappa.addStanza(atrio);
@@ -93,8 +92,12 @@ class GameLoopTest {
     }
 
     /**
-     * GameLoop con fasi d'esame stub. Nell'Atrio le azioni sono (ordinate):
-     * 0) Vai a: Aula LA1 - 1) Vai a: Aula LA2 - 2) Vai a: Aula Studio - 3) Salva ed esci
+     * GameLoop con fasi d'esame stub.
+     * <p>Azioni nell'Atrio (corridoio): 0) Vai a: Aula LA1 - 1) Vai a: Aula LA2 -
+     * 2) Vai a: Aula Studio - 3) Salva ed esci.
+     * <p>Azioni in Aula Studio: 0) Riposati - 1) Compra Caffè - 2) Compra AppuntiLezione -
+     * 3) Compra Libro - 4) Compra ChatGPT - [5) Usa &lt;item&gt; se lo zaino non è vuoto] -
+     * poi Vai a: Atrio - Salva ed esci.
      */
     private GameLoop loop(FaseEsame... fasi) {
         EsameController controller = new EsameController(List.of(fasi));
@@ -148,9 +151,47 @@ class GameLoopTest {
     @Test
     void ilRiposoInAulaStudioRecuperaSaluteMentale() {
         studente.subisciDanno(50); // HP: 120 -> 70
-        // vai in Aula Studio (2), riposati (0), poi salva ed esci (2)
-        loop((s, v) -> true).gioca(stato, view, script(2, 0, 2));
+        // vai in Aula Studio (2), riposati (0), poi salva ed esci (6)
+        loop((s, v) -> true).gioca(stato, view, script(2, 0, 6));
         assertEquals(90, studente.getSaluteMentale()); // 70 + 20 di riposo
+    }
+
+    @Test
+    void acquistoConsumabileScalaLeMoneteERiempieLoZaino() {
+        // Aula Studio (2), Compra Caffè (1, costo 10); ora lo zaino ha un item e
+        // compare "Usa Caffè" (5), quindi "Salva ed esci" scala all'indice 7
+        loop((s, v) -> true).gioca(stato, view, script(2, 1, 7));
+        assertEquals(40, studente.getMonete()); // 50 - 10
+        assertEquals(1, studente.getZaino().size());
+        assertEquals("Caffè", studente.getZaino().get(0).getNome());
+    }
+
+    @Test
+    void acquistoEquipaggiamentoAumentaLeStatisticheEffettive() {
+        // Aula Studio (2), Compra Libro (3, costo 25, +3 Intelligenza), Salva ed esci (6)
+        loop((s, v) -> true).gioca(stato, view, script(2, 3, 6));
+        assertEquals(25, studente.getMonete()); // 50 - 25
+        assertEquals(13, studente.getIntelligenzaEffettiva()); // 10 base + 3 Libro
+    }
+
+    @Test
+    void acquistoConMoneteInsufficientiVieneRifiutato() {
+        studente.spendiMonete(45); // restano 5 monete
+        // Aula Studio (2), prova a Comprare Caffè (1, costo 10 > 5), Salva ed esci (6)
+        loop((s, v) -> true).gioca(stato, view, script(2, 1, 6));
+        assertEquals(5, studente.getMonete());        // nessun addebito
+        assertTrue(studente.getZaino().isEmpty());
+        assertTrue(view.messaggi.stream().anyMatch(m -> m.contains("insufficienti")));
+    }
+
+    @Test
+    void usoConsumabileRecuperaSaluteMentaleELoRimuoveDalloZaino() {
+        studente.subisciDanno(50); // HP: 120 -> 70
+        // Aula Studio (2), Compra Caffè (1); ora compare "Usa Caffè" all'indice 5;
+        // usa Caffè (5, +20 HP) -> lo zaino torna vuoto, quindi "Salva ed esci" torna a 6
+        loop((s, v) -> true).gioca(stato, view, script(2, 1, 5, 6));
+        assertEquals(90, studente.getSaluteMentale()); // 70 + 20 del caffè
+        assertTrue(studente.getZaino().isEmpty());     // consumato
     }
 
     @Test

@@ -10,6 +10,21 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Ciclo di gioco guidato dal giocatore: a ogni iterazione mostra la posizione
+ * corrente, propone le azioni possibili (sostenere l'esame dell'aula, riposarsi
+ * in aula studio, spostarsi verso una stanza adiacente, salvare e uscire) ed
+ * esegue quella scelta. La partita termina con la Laurea al raggiungimento
+ * della soglia di CFU, con il Burnout, o con l'uscita volontaria.
+ * <p>
+ * La classe dipende solo dai contratti astratti (GameView, GameInput,
+ * PersistenceManager) ed è quindi identica per console e interfaccia grafica.
+ * <p>
+ * <b>Dichiarazione uso AI:</b> questa classe è stata realizzata con l'assistenza
+ * di un'intelligenza artificiale (Claude, Anthropic), come previsto dalle
+ * indicazioni del corso sull'utilizzo di strumenti di AI generativa.
+ */
+
 public class GameLoop {
     private static final int RECUPERO_RIPOSO = 20;
 
