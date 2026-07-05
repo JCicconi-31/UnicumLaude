@@ -92,4 +92,15 @@ public class Studente extends Persona{
     public int getResilienzaBase()   { return resilienzaBase; }
 
     public CareerStrategy getCarriera() { return carriera; }
+
+    public void spendiMonete(int costo){
+        if (costo > getMonete())
+            throw new IllegalArgumentException("costo maggiore monete possedute");
+        this.monete = monete - costo;
+    }
+    public void guadagnaMonete(int guadagno){
+        if (guadagno < 0)
+            throw new IllegalArgumentException("Numero negativo di monete");
+        this.monete = monete + guadagno;
+    }
 }
