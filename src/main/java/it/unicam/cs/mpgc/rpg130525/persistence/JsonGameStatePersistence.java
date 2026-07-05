@@ -6,9 +6,13 @@ import it.unicam.cs.mpgc.rpg130525.model.*;
 import it.unicam.cs.mpgc.rpg130525.port.PersistenceException;
 import it.unicam.cs.mpgc.rpg130525.port.PersistenceManager;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JsonGameStatePersistence implements PersistenceManager {

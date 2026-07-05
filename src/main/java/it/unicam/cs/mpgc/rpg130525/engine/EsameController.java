@@ -1,7 +1,11 @@
 package it.unicam.cs.mpgc.rpg130525.engine;
 
-import it.unicam.cs.mpgc.rpg130525.model.*;
+import it.unicam.cs.mpgc.rpg130525.model.BurnoutException;
+import it.unicam.cs.mpgc.rpg130525.model.Esame;
+import it.unicam.cs.mpgc.rpg130525.model.EsameSuperato;
+import it.unicam.cs.mpgc.rpg130525.model.StatoGioco;
 import it.unicam.cs.mpgc.rpg130525.port.GameView;
+
 import java.util.List;
 
 public class EsameController {

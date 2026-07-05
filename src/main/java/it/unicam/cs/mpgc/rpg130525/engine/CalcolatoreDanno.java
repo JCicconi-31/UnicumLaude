@@ -1,7 +1,7 @@
 package it.unicam.cs.mpgc.rpg130525.engine;
 
-import it.unicam.cs.mpgc.rpg130525.model.Studente;
 import it.unicam.cs.mpgc.rpg130525.model.Professore;
+import it.unicam.cs.mpgc.rpg130525.model.Studente;
 
 public class CalcolatoreDanno {
     public int dannoInflitto(Studente studente) {
