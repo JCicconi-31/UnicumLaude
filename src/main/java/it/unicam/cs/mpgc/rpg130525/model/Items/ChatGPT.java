@@ -1,5 +1,9 @@
 package it.unicam.cs.mpgc.rpg130525.model.Items;
-import it.unicam.cs.mpgc.rpg130525.model.*;
+
+import it.unicam.cs.mpgc.rpg130525.model.Equipaggiamento;
+import it.unicam.cs.mpgc.rpg130525.model.Stat;
+import it.unicam.cs.mpgc.rpg130525.model.TipoItem;
+
 import java.util.Map;
 
 public class ChatGPT implements Equipaggiamento {

@@ -1,5 +1,8 @@
 package it.unicam.cs.mpgc.rpg130525.model.Items;
-import it.unicam.cs.mpgc.rpg130525.model.*;
+
+import it.unicam.cs.mpgc.rpg130525.model.Consumabile;
+import it.unicam.cs.mpgc.rpg130525.model.Studente;
+import it.unicam.cs.mpgc.rpg130525.model.TipoItem;
 
 public class Caffe implements Consumabile {
     private final int recuperoHp;
