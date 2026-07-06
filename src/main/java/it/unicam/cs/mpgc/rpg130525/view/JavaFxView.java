@@ -1,9 +1,7 @@
 package it.unicam.cs.mpgc.rpg130525.view;
 
 import it.unicam.cs.mpgc.rpg130525.model.Domanda;
-import it.unicam.cs.mpgc.rpg130525.port.GameInput;
-import it.unicam.cs.mpgc.rpg130525.port.GameView;
-import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
+import it.unicam.cs.mpgc.rpg130525.port.*;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,6 +37,16 @@ public class JavaFxView implements GameView, GameInput {
                 s.nomeCompleto(), s.saluteMentale(), s.saluteMentaleMax(),
                 s.intelligenzaEffettiva(), s.resilienzaEffettiva(),
                 s.cfu(), s.monete())));
+    }
+
+    @Override
+    public void aggiornaStatoProfessore(ProfessoreDto professoreDto) {
+        // la schermata esame renderizzerà qui la barra HP del professore
+    }
+
+    @Override
+    public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
+        // la schermata mappa renderizzerà qui i nodi del polo
     }
 
     @Override

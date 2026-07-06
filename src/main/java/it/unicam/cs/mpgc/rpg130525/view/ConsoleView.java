@@ -1,9 +1,7 @@
 package it.unicam.cs.mpgc.rpg130525.view;
 
 import it.unicam.cs.mpgc.rpg130525.model.Domanda;
-import it.unicam.cs.mpgc.rpg130525.port.GameInput;
-import it.unicam.cs.mpgc.rpg130525.port.GameView;
-import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
+import it.unicam.cs.mpgc.rpg130525.port.*;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -36,6 +34,17 @@ public class ConsoleView implements GameView, GameInput {
                 studente.saluteMentale(), studente.saluteMentaleMax(),
                 studente.intelligenzaEffettiva(), studente.resilienzaEffettiva(),
                 studente.cfu(), studente.monete());
+    }
+
+    @Override
+    public void aggiornaStatoProfessore(ProfessoreDto professoreDto) {
+        out.printf("Prof. %s - Resistenza didattica: %d/%d%n",
+                professoreDto.nome(), professoreDto.hp(), professoreDto.hpMax());
+    }
+
+    @Override
+    public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
+        // vuoto: in console la lista di azioni comunica già posizione e destinazioni
     }
 
     @Override
