@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.rpg130525.engine;
 import it.unicam.cs.mpgc.rpg130525.model.Professore;
 import it.unicam.cs.mpgc.rpg130525.model.Studente;
 import it.unicam.cs.mpgc.rpg130525.port.GameView;
+import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
 import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
 
 public class GestoreTurno {
@@ -20,7 +21,8 @@ public class GestoreTurno {
 
         int dannoInflitto = calcolatore.dannoInflitto(studente);
         professore.subisciDanno(dannoInflitto);
-        view.mostraMessaggio("Rispondi e infliggi " + dannoInflitto + " danno concettuale - resistenza professore residua: " + professore.getHpProfessore());
+        view.aggiornaStatoProfessore(ProfessoreDto.da(professore));
+        view.mostraMessaggio("Rispondi e infliggi " + dannoInflitto + " danno concettuale");
         if (professore.isKO())
             return;
         int dannoSubito = calcolatore.dannoSubito(professore, studente);

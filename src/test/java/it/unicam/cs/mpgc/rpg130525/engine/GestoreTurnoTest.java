@@ -7,6 +7,7 @@ import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
 import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,6 +66,42 @@ class GestoreTurnoTest {
         Professore prof = new Professore("Anna", "Verdi", 50, 100); // sopravvive al colpo e ribatte forte
 
         assertThrows(BurnoutException.class, () -> gestore.eseguiTurno(s, prof, VIEW_MUTA));
+    }
+
+    /** View che registra le notifiche sugli HP del professore. */
+    private static final class BossRecordingView implements GameView {
+        final List<ProfessoreDto> notifiche = new ArrayList<>();
+        @Override public void mostraMessaggio(String messaggio) { }
+        @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
+        @Override public void aggiornaStatoProfessore(ProfessoreDto p) { notifiche.add(p); }
+        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
+    }
+
+    @Test
+    void ogniTurnoNotificaAllaViewGliHpAggiornatiDelProfessore() {
+        Studente s = nuovoStudente(); // intelligenza 10
+        Professore prof = new Professore("Anna", "Verdi", 4, 25);
+        BossRecordingView view = new BossRecordingView();
+
+        gestore.eseguiTurno(s, prof, view);
+
+        assertFalse(view.notifiche.isEmpty(), "la view deve ricevere gli HP del professore");
+        ProfessoreDto ultima = view.notifiche.get(view.notifiche.size() - 1);
+        assertEquals(15, ultima.hp());    // 25 - 10 di danno
+        assertEquals(25, ultima.hpMax());
+    }
+
+    @Test
+    void laNotificaArrivaAncheNelTurnoDelColpoFinale() {
+        Studente s = nuovoStudente();
+        Professore prof = new Professore("Anna", "Verdi", 4, 10); // cade in un colpo
+        BossRecordingView view = new BossRecordingView();
+
+        gestore.eseguiTurno(s, prof, view);
+
+        // la barra deve arrivare a 0 anche quando il turno termina col KO
+        assertFalse(view.notifiche.isEmpty());
+        assertEquals(0, view.notifiche.get(view.notifiche.size() - 1).hp());
     }
 
     @Test

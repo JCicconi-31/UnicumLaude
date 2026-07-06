@@ -4,6 +4,7 @@ import it.unicam.cs.mpgc.rpg130525.model.Professore;
 import it.unicam.cs.mpgc.rpg130525.model.Stanza;
 import it.unicam.cs.mpgc.rpg130525.model.StatoGioco;
 import it.unicam.cs.mpgc.rpg130525.port.GameView;
+import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
 
 public class ProvaOrale implements FaseEsame {
     private final GestoreTurno gestoreTurno;
@@ -25,6 +26,7 @@ public class ProvaOrale implements FaseEsame {
 
         Professore professore = aula.getEsame().getProfessore();
         view.mostraMessaggio("Inizia la prova orale con il prof. " + professore.getNomeCompleto());
+        view.aggiornaStatoProfessore(ProfessoreDto.da(professore));
         //fase concreta di "combattimento" tra Studente e Professore
         while (!professore.isKO())
             gestoreTurno.eseguiTurno(stato.getStudente(), professore, view);

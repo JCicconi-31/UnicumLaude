@@ -34,10 +34,23 @@ class GameLoopTest {
     /** View che registra i messaggi, per verificare vittoria/burnout/vincoli. */
     private static final class RecordingView implements GameView {
         final List<String> messaggi = new ArrayList<>();
+        List<StanzaDto> ultimaMappa;
+        String ultimaPosizione;
         @Override public void mostraMessaggio(String messaggio) { messaggi.add(messaggio); }
         @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
         @Override public void aggiornaStatoProfessore(ProfessoreDto professoreDto) { }
-        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
+        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
+            ultimaMappa = stanze;
+            ultimaPosizione = posizioneCorrente;
+        }
+    }
+
+    /** Estrae dallo snapshot della mappa lo stato della stanza col nome dato. */
+    private static StanzaDto.Stato statoDi(List<StanzaDto> stanze, String nome) {
+        return stanze.stream()
+                .filter(s -> s.nome().equals(nome))
+                .findFirst().orElseThrow()
+                .stato();
     }
 
     /** Input che restituisce una sequenza prefissata di scelte. */
@@ -196,6 +209,27 @@ class GameLoopTest {
         loop((s, v) -> true).gioca(stato, view, script(2, 1, 5, 6));
         assertEquals(90, studente.getSaluteMentale()); // 70 + 20 del caffè
         assertTrue(studente.getZaino().isEmpty());     // consumato
+    }
+
+    @Test
+    void laMappaNotificataRifletteGliStatiDerivati() {
+        // salva ed esci subito: la view ha comunque ricevuto lo snapshot iniziale
+        loop((s, v) -> true).gioca(stato, view, script(3));
+
+        assertEquals("Atrio", view.ultimaPosizione);
+        assertEquals(StanzaDto.Stato.DISPONIBILE, statoDi(view.ultimaMappa, "Aula LA1"));
+        assertEquals(StanzaDto.Stato.BLOCCATA, statoDi(view.ultimaMappa, "Aula LA2")); // prerequisito LA1
+        assertEquals(StanzaDto.Stato.DISPONIBILE, statoDi(view.ultimaMappa, "Aula Studio"));
+    }
+
+    @Test
+    void dopoLEsameLaMappaMostraSuperataESbloccaLaSuccessiva() {
+        // vai in LA1 (0), supera l'esame (0), poi salva ed esci (1)
+        loop((s, v) -> true).gioca(stato, view, script(0, 0, 1));
+
+        assertEquals("Aula LA1", view.ultimaPosizione);
+        assertEquals(StanzaDto.Stato.SUPERATA, statoDi(view.ultimaMappa, "Aula LA1"));
+        assertEquals(StanzaDto.Stato.DISPONIBILE, statoDi(view.ultimaMappa, "Aula LA2")); // sbloccata
     }
 
     @Test
