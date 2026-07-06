@@ -2,6 +2,8 @@ package it.unicam.cs.mpgc.rpg130525.engine;
 
 import it.unicam.cs.mpgc.rpg130525.model.*;
 import it.unicam.cs.mpgc.rpg130525.port.GameView;
+import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
+import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
 import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,8 @@ class EsameControllerTest {
         final List<String> messaggi = new ArrayList<>();
         @Override public void mostraMessaggio(String messaggio) { messaggi.add(messaggio); }
         @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
+        @Override public void aggiornaStatoProfessore(ProfessoreDto professoreDto) { }
+        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
     }
 
     private static final GameView VIEW_MUTA = new RecordingView();

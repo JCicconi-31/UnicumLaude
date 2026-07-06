@@ -2,8 +2,12 @@ package it.unicam.cs.mpgc.rpg130525.engine;
 
 import it.unicam.cs.mpgc.rpg130525.model.*;
 import it.unicam.cs.mpgc.rpg130525.port.GameView;
+import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
+import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
 import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,6 +26,8 @@ class GestoreTurnoTest {
     private static final GameView VIEW_MUTA = new GameView() {
         @Override public void mostraMessaggio(String messaggio) { }
         @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
+        @Override public void aggiornaStatoProfessore(ProfessoreDto professoreDto) { }
+        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
     };
 
     private final GestoreTurno gestore = new GestoreTurno(new CalcolatoreDanno());

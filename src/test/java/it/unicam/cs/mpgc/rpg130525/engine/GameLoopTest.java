@@ -4,6 +4,8 @@ import it.unicam.cs.mpgc.rpg130525.model.*;
 import it.unicam.cs.mpgc.rpg130525.port.GameInput;
 import it.unicam.cs.mpgc.rpg130525.port.GameView;
 import it.unicam.cs.mpgc.rpg130525.port.PersistenceManager;
+import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
+import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
 import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +36,8 @@ class GameLoopTest {
         final List<String> messaggi = new ArrayList<>();
         @Override public void mostraMessaggio(String messaggio) { messaggi.add(messaggio); }
         @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
+        @Override public void aggiornaStatoProfessore(ProfessoreDto professoreDto) { }
+        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
     }
 
     /** Input che restituisce una sequenza prefissata di scelte. */
