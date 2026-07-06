@@ -1,14 +1,12 @@
 package it.unicam.cs.mpgc.rpg130525.engine;
 
 import it.unicam.cs.mpgc.rpg130525.model.*;
-import it.unicam.cs.mpgc.rpg130525.port.GameInput;
-import it.unicam.cs.mpgc.rpg130525.port.GameView;
-import it.unicam.cs.mpgc.rpg130525.port.PersistenceManager;
-import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
+import it.unicam.cs.mpgc.rpg130525.port.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Ciclo di gioco guidato dal giocatore: a ogni iterazione mostra la posizione
@@ -61,6 +59,7 @@ public class GameLoop {
             Stanza corrente = stato.getPosizioneCorrente();
             List<Azione> azioni = costruisciAzioni(corrente, studente);
             List<String> etichette = azioni.stream().map(Azione::etichetta).toList();
+            view.aggiornaMappa(costruisciMappaDto(studente), stato.getPosizioneCorrente().getNome());
             Azione scelta = azioni.get(input.scegli("Sei in: " + corrente.getNome(), etichette));
 
             switch (scelta.tipo()) {
@@ -138,6 +137,26 @@ public class GameLoop {
         } catch (PrerequisitiNonRispettatiException e) {
             view.mostraMessaggio(e.getMessage());
         }
+    }
+
+    private List<StanzaDto> costruisciMappaDto(Studente studente) {
+        return mappa.getStanze().stream()
+                .sorted(Comparator.comparing(Stanza::getNome))
+                .map(st -> new StanzaDto(
+                        st.getNome(),
+                        st.getTipo(),
+                        statoDi(st, studente),
+                        mappa.getAdiacenti(st).stream().map(Stanza::getNome).sorted().toList()))
+                .toList();
+    }
+
+    private StanzaDto.Stato statoDi(Stanza stanza, Studente studente) {
+        Set<Esame> superati = studente.getLibretto().getEsamiSuperati();
+        if (stanza.getTipo() == TipoStanza.AULA_ESAME && superati.contains(stanza.getEsame()))
+            return StanzaDto.Stato.SUPERATA;
+        if (mappa.isDisponibile(stanza, superati))
+            return StanzaDto.Stato.DISPONIBILE;
+        return StanzaDto.Stato.BLOCCATA;
     }
 
     private enum Tipo { ESAME, RIPOSO, ACQUISTO, USA_ITEM, MOVIMENTO, ESCI }
