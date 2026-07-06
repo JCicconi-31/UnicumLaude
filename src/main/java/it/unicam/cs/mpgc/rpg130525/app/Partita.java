@@ -53,7 +53,7 @@ public final class Partita {
         int cfuPerLaurea = programmazione.getCfuAssociati() + metodologie.getCfuAssociati();
 
         // 2. Persistenza e motore, cablati sui contratti astratti
-        Path fileSalvataggio = Path.of(System.getProperty("java.io.tmpdir"), "unicumlaude-save.json");
+        Path fileSalvataggio = Path.of(System.getProperty("user.home"), ".unicumlaude", "datiPartita.json");
         PersistenceManager persistence = new JsonGameStatePersistence(fileSalvataggio, mappa);
 
         CalcolatoreDanno calcolatore = new CalcolatoreDanno();

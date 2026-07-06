@@ -33,4 +33,5 @@ tasks.test {
 
 tasks.named<JavaExec>("run") {
     standardInput = System.`in`
+    jvmArgs("-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8")
 }

@@ -28,8 +28,11 @@ public class JsonGameStatePersistence implements PersistenceManager {
 
     @Override
     public void salva(StatoGioco stato) {
-        try (Writer w = Files.newBufferedWriter(file)) {
-            gson.toJson(versoDto(stato), w);
+        try {
+            Files.createDirectories(file.getParent());
+            try (Writer w = Files.newBufferedWriter(file)) {
+                gson.toJson(versoDto(stato), w);
+            }
         } catch (IOException e) {
             throw new PersistenceException("salvataggio fallito", e);
         }
