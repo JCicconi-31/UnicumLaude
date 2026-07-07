@@ -3,10 +3,8 @@ package it.unicam.cs.mpgc.rpg130525.view;
 import it.unicam.cs.mpgc.rpg130525.model.Domanda;
 import it.unicam.cs.mpgc.rpg130525.port.*;
 import javafx.application.Platform;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
@@ -16,13 +14,19 @@ public class JavaFxView implements GameView, GameInput {
     private final TextArea log;
     private final Label statoGiocatore;
     private final VBox pannelloRisposte;
+    private final Label nomeProfessore;
+    private final ProgressBar barraProfessore;
+    private final HBox rigaProfessore;
 
-    public JavaFxView(TextArea log, Label statoGiocatore, VBox pannelloRisposte) {
-        if (log == null || statoGiocatore == null || pannelloRisposte == null)
+    public JavaFxView(TextArea log, Label statoGiocatore, VBox pannelloRisposte, Label nomeProfessore, ProgressBar barraProfessore, HBox rigaProfessore) {
+        if (log == null || statoGiocatore == null || pannelloRisposte == null || nomeProfessore == null || barraProfessore == null || rigaProfessore == null)
             throw new IllegalArgumentException("componenti grafici nulli");
         this.log = log;
         this.statoGiocatore = statoGiocatore;
         this.pannelloRisposte = pannelloRisposte;
+        this.nomeProfessore = nomeProfessore;
+        this.barraProfessore = barraProfessore;
+        this.rigaProfessore = rigaProfessore;
     }
 
     @Override
@@ -41,7 +45,11 @@ public class JavaFxView implements GameView, GameInput {
 
     @Override
     public void aggiornaStatoProfessore(ProfessoreDto professoreDto) {
-        // la schermata esame renderizzerà qui la barra HP del professore
+        Platform.runLater(() -> {
+            nomeProfessore.setText("Prof. " + professoreDto.nome() + "  " + professoreDto.hp() + "/" + professoreDto.hpMax());
+            barraProfessore.setProgress(professoreDto.hp() / (double) professoreDto.hpMax());
+            rigaProfessore.setVisible(professoreDto.hp() > 0);
+        });
     }
 
     @Override

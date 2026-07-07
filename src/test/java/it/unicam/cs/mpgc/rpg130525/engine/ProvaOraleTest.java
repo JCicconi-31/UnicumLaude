@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.rpg130525.engine;
 
 import it.unicam.cs.mpgc.rpg130525.model.*;
+import it.unicam.cs.mpgc.rpg130525.port.GameInput;
 import it.unicam.cs.mpgc.rpg130525.port.GameView;
 import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
 import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
@@ -31,7 +32,19 @@ class ProvaOraleTest {
         @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
     };
 
-    private final ProvaOrale provaOrale = new ProvaOrale(new GestoreTurno(new CalcolatoreDanno()));
+    /** Input che conferma sempre la prima azione: fa avanzare i turni dell'orale. */
+    private static final GameInput INPUT_AVANTI = new GameInput() {
+        @Override public int chiediRisposta(Domanda domanda) {
+            throw new UnsupportedOperationException("non usato nella prova orale");
+        }
+        @Override public int scegli(String titolo, List<String> opzioni) { return 0; }
+        @Override public String chiediTesto(String prompt) {
+            throw new UnsupportedOperationException("non usato nella prova orale");
+        }
+    };
+
+    private final ProvaOrale provaOrale =
+            new ProvaOrale(new GestoreTurno(new CalcolatoreDanno()), INPUT_AVANTI);
 
     private Studente nuovoStudente() {
         return new Studente("Mario", "Rossi", 10, 5, 100, 50, new StudenteFullTime()); // intel 10, resil 5, HP 120
@@ -104,7 +117,9 @@ class ProvaOraleTest {
     }
 
     @Test
-    void costruttoreRifiutaGestoreNull() {
-        assertThrows(IllegalArgumentException.class, () -> new ProvaOrale(null));
+    void costruttoreRifiutaParametriNull() {
+        assertThrows(IllegalArgumentException.class, () -> new ProvaOrale(null, INPUT_AVANTI));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ProvaOrale(new GestoreTurno(new CalcolatoreDanno()), null));
     }
 }

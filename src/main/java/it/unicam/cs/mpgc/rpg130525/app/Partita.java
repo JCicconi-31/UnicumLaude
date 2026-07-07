@@ -58,7 +58,7 @@ public final class Partita {
 
         CalcolatoreDanno calcolatore = new CalcolatoreDanno();
         FaseEsame provaScritta = new ProvaScritta(DatabaseDomande.seedCompleto(), input, calcolatore);
-        FaseEsame provaOrale = new ProvaOrale(new GestoreTurno(calcolatore));
+        FaseEsame provaOrale = new ProvaOrale(new GestoreTurno(calcolatore), input);
         EsameController esameController = new EsameController(List.of(provaScritta, provaOrale));
         ControllerMovimentoStanze movimento = new ControllerMovimentoStanze(mappa);
         GameLoop gameLoop = new GameLoop(mappa, movimento, esameController, persistence, cfuPerLaurea);
