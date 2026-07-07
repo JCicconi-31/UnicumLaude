@@ -3,23 +3,43 @@ package it.unicam.cs.mpgc.rpg130525.view;
 import it.unicam.cs.mpgc.rpg130525.model.Domanda;
 import it.unicam.cs.mpgc.rpg130525.port.*;
 import javafx.application.Platform;
+import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class JavaFxView implements GameView, GameInput {
+    private static final Map<String, Point2D> POSIZIONI = Map.of(
+            "Atrio",       new Point2D(150, 190),
+            "Aula Studio", new Point2D(60, 90),
+            "Aula LA1",    new Point2D(150, 40),
+            "Aula LA2",    new Point2D(240, 90));
+
     private final TextArea log;
     private final Label statoGiocatore;
     private final VBox pannelloRisposte;
     private final Label nomeProfessore;
     private final ProgressBar barraProfessore;
     private final HBox rigaProfessore;
+    private final Pane pannelloMappa;
 
-    public JavaFxView(TextArea log, Label statoGiocatore, VBox pannelloRisposte, Label nomeProfessore, ProgressBar barraProfessore, HBox rigaProfessore) {
-        if (log == null || statoGiocatore == null || pannelloRisposte == null || nomeProfessore == null || barraProfessore == null || rigaProfessore == null)
+    private List<String> opzioniPendenti;
+    private CompletableFuture<Integer> sceltaPendente;
+
+    public JavaFxView(TextArea log, Label statoGiocatore, VBox pannelloRisposte,
+                      Label nomeProfessore, ProgressBar barraProfessore, HBox rigaProfessore,
+                      Pane pannelloMappa) {
+        if (log == null || statoGiocatore == null || pannelloRisposte == null
+                || nomeProfessore == null || barraProfessore == null || rigaProfessore == null
+                || pannelloMappa == null)
             throw new IllegalArgumentException("componenti grafici nulli");
         this.log = log;
         this.statoGiocatore = statoGiocatore;
@@ -27,6 +47,7 @@ public class JavaFxView implements GameView, GameInput {
         this.nomeProfessore = nomeProfessore;
         this.barraProfessore = barraProfessore;
         this.rigaProfessore = rigaProfessore;
+        this.pannelloMappa = pannelloMappa;
     }
 
     @Override
@@ -54,7 +75,57 @@ public class JavaFxView implements GameView, GameInput {
 
     @Override
     public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
-        // la schermata mappa renderizzerà qui i nodi del polo
+        Platform.runLater(() -> {
+            pannelloMappa.getChildren().clear();
+            for (StanzaDto st : stanze) {
+                Point2D da = POSIZIONI.get(st.nome());
+                if (da == null) continue;
+                for (String vicina : st.adiacenti()) {
+                    Point2D a = POSIZIONI.get(vicina);
+                    if (a == null) continue;
+                    Line corridoio = new Line(da.getX(), da.getY(), a.getX(), a.getY());
+                    corridoio.setStroke(Color.DARKGRAY);
+                    pannelloMappa.getChildren().add(corridoio);
+                }
+            }
+            for (StanzaDto st : stanze) {
+                Point2D p = POSIZIONI.get(st.nome());
+                if (p == null) continue;
+                Circle nodo = new Circle(p.getX(), p.getY(), 18, coloreDi(st.stato()));
+                nodo.setStroke(Color.BLACK);
+                nodo.setOnMouseClicked(e -> clickSuStanza(st.nome()));
+
+                Label etichetta = new Label(st.nome());
+                etichetta.setLayoutX(p.getX() - 30);
+                etichetta.setLayoutY(p.getY() + 22);
+
+                pannelloMappa.getChildren().addAll(nodo, etichetta);
+
+                if (st.nome().equals(posizioneCorrente)) {
+                    Circle giocatore = new Circle(p.getX(), p.getY(), 7, Color.ROYALBLUE);
+                    giocatore.setMouseTransparent(true);
+                    pannelloMappa.getChildren().add(giocatore);
+                }
+            }
+        });
+    }
+
+    private Color coloreDi(StanzaDto.Stato stato) {
+        return switch (stato) {
+            case BLOCCATA    -> Color.LIGHTGRAY;
+            case DISPONIBILE -> Color.GOLD;
+            case SUPERATA    -> Color.LIGHTGREEN;
+        };
+    }
+
+    private void clickSuStanza(String nome) {
+        if (sceltaPendente == null || sceltaPendente.isDone())
+            return;
+        int indice = opzioniPendenti.indexOf("Vai a: " + nome);
+        if (indice < 0)
+            return;
+        pannelloRisposte.getChildren().clear();
+        sceltaPendente.complete(indice);
     }
 
     @Override
@@ -71,6 +142,8 @@ public class JavaFxView implements GameView, GameInput {
     public int scegli(String titolo, List<String> opzioni) {
         CompletableFuture<Integer> scelta = new CompletableFuture<>();
         Platform.runLater(() -> {
+            opzioniPendenti = opzioni;
+            sceltaPendente = scelta;
             log.appendText(titolo + "\n");
             mostraBottoni(opzioni, scelta);
         });

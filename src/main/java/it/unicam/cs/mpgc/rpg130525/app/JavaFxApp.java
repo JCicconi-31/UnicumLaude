@@ -8,10 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class JavaFxApp extends Application {
@@ -32,6 +29,9 @@ public class JavaFxApp extends Application {
         ProgressBar barraProfessore = new ProgressBar(1.0);
         barraProfessore.setMaxWidth(Double.MAX_VALUE);
         HBox rigaProfessore = new HBox(10, nomeProfessore, barraProfessore);
+        Pane pannelloMappa = new Pane();
+        pannelloMappa.setPrefSize(300, 260);
+        root.setRight(pannelloMappa);
         HBox.setHgrow(barraProfessore, Priority.ALWAYS);
         rigaProfessore.setVisible(false);
         VBox pannelloSuperiore = new VBox(5, statoGiocatore, rigaProfessore);
@@ -46,7 +46,7 @@ public class JavaFxApp extends Application {
         stage.setTitle("UniCum Laude");
         stage.show();
 
-        JavaFxView view = new JavaFxView(log, statoGiocatore, pannelloRisposte, nomeProfessore, barraProfessore, rigaProfessore);
+        JavaFxView view = new JavaFxView(log, statoGiocatore, pannelloRisposte, nomeProfessore, barraProfessore, rigaProfessore, pannelloMappa);
         Thread motore = new Thread(() -> {
             Partita.esegui(view, view);
             // partita finita (salvataggio, laurea o burnout): un'ultima conferma per lasciar leggere i messaggi finali, poi si chiude la finestra
