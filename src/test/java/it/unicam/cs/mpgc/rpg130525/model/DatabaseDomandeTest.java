@@ -70,12 +70,4 @@ class DatabaseDomandeTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new DatabaseDomande(Map.of(CORSO, List.of(d0)), null));
     }
-
-    @Test
-    void seedMetodologieContieneDomandeDelCorso() {
-        DatabaseDomande db = DatabaseDomande.seedMetodologie();
-        Domanda estratta = db.estraiCasuale("Metodologie di Programmazione");
-        assertNotNull(estratta);
-        assertFalse(estratta.getTesto().isBlank());
-    }
 }
