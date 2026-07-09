@@ -36,4 +36,18 @@ public class Mappa {
     public Set<Stanza> getStanze() {
         return Collections.unmodifiableSet(collegamenti.keySet());
     }
+
+    public Optional<Stanza> getStanza(String nome) {
+        return collegamenti.keySet().stream()
+                .filter(s -> s.getNome().equals(nome))
+                .findFirst();
+    }
+
+    public int cfuTotali() {
+        return collegamenti.keySet().stream()
+                .map(Stanza::getEsame)
+                .filter(Objects::nonNull)
+                .mapToInt(Esame::getCfuAssociati)
+                .sum();
+    }
 }

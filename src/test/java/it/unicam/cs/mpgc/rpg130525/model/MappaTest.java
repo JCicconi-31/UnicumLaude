@@ -73,4 +73,34 @@ class MappaTest {
         assertThrows(UnsupportedOperationException.class,
                 () -> mappa.getAdiacenti(prog).add(prog));
     }
+
+    @Test
+    void getStanzaTrovaLaStanzaPerNome() {
+        Mappa mappa = new Mappa();
+        Stanza prog = aulaEsame(esame(1)); // nome "Aula 1"
+        mappa.addStanza(prog);
+        assertTrue(mappa.getStanza("Aula 1").isPresent());
+        assertSame(prog, mappa.getStanza("Aula 1").get());
+    }
+
+    @Test
+    void getStanzaAssenteRestituisceOptionalVuoto() {
+        Mappa mappa = new Mappa();
+        mappa.addStanza(aulaEsame(esame(1)));
+        assertTrue(mappa.getStanza("Inesistente").isEmpty());
+    }
+
+    @Test
+    void cfuTotaliSommaSoloLeAuleConEsame() {
+        Mappa mappa = new Mappa();
+        mappa.addStanza(new Stanza("Atrio", TipoStanza.CORRIDOIO, null)); // nessun esame: ignorata
+        mappa.addStanza(aulaEsame(esame(1)));                             // 6 CFU
+        mappa.addStanza(aulaEsame(esame(2)));                             // 6 CFU
+        assertEquals(12, mappa.cfuTotali());
+    }
+
+    @Test
+    void cfuTotaliDiUnaMappaVuotaEZero() {
+        assertEquals(0, new Mappa().cfuTotali());
+    }
 }

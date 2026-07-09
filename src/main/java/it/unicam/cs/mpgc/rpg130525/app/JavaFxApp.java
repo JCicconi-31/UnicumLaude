@@ -19,7 +19,7 @@ public class JavaFxApp extends Application {
         log.setEditable(false);
         log.setWrapText(true);
 
-        Label statoGiocatore = new Label("Benvenuto in UniCum Laude!");
+        Label statoGiocatore = new Label("Benvenuto in Unicum Laude!");
         VBox pannelloRisposte = new VBox(8);
         pannelloRisposte.setPadding(new Insets(10));
 
@@ -43,7 +43,7 @@ public class JavaFxApp extends Application {
         BorderPane.setMargin(statoGiocatore, new Insets(10));
 
         stage.setScene(new Scene(root, 640, 480));
-        stage.setTitle("UniCum Laude");
+        stage.setTitle("Unicum Laude");
         stage.show();
 
         JavaFxView view = new JavaFxView(log, statoGiocatore, pannelloRisposte, nomeProfessore, barraProfessore, rigaProfessore, pannelloMappa);

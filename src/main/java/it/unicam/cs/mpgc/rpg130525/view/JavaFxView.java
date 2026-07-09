@@ -12,17 +12,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class JavaFxView implements GameView, GameInput {
-    private static final Map<String, Point2D> POSIZIONI = Map.of(
-            "Atrio",       new Point2D(150, 190),
-            "Aula Studio", new Point2D(60, 90),
-            "Aula LA1",    new Point2D(150, 40),
-            "Aula LA2",    new Point2D(240, 90));
-
     private final TextArea log;
     private final Label statoGiocatore;
     private final VBox pannelloRisposte;
@@ -77,30 +72,27 @@ public class JavaFxView implements GameView, GameInput {
     public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
         Platform.runLater(() -> {
             pannelloMappa.getChildren().clear();
+            Map<String, Point2D> posizioni = disponiInCerchio(stanze);
             for (StanzaDto st : stanze) {
-                Point2D da = POSIZIONI.get(st.nome());
-                if (da == null) continue;
+                Point2D da = posizioni.get(st.nome());
                 for (String vicina : st.adiacenti()) {
-                    Point2D a = POSIZIONI.get(vicina);
+                    Point2D a = posizioni.get(vicina);
                     if (a == null) continue;
                     Line corridoio = new Line(da.getX(), da.getY(), a.getX(), a.getY());
                     corridoio.setStroke(Color.DARKGRAY);
                     pannelloMappa.getChildren().add(corridoio);
                 }
             }
+
             for (StanzaDto st : stanze) {
-                Point2D p = POSIZIONI.get(st.nome());
-                if (p == null) continue;
-                Circle nodo = new Circle(p.getX(), p.getY(), 18, coloreDi(st.stato()));
+                Point2D p = posizioni.get(st.nome());
+                Circle nodo = new Circle(p.getX(), p.getY(), 18, coloreStanza(st.stato()));
                 nodo.setStroke(Color.BLACK);
                 nodo.setOnMouseClicked(e -> clickSuStanza(st.nome()));
-
                 Label etichetta = new Label(st.nome());
                 etichetta.setLayoutX(p.getX() - 30);
                 etichetta.setLayoutY(p.getY() + 22);
-
                 pannelloMappa.getChildren().addAll(nodo, etichetta);
-
                 if (st.nome().equals(posizioneCorrente)) {
                     Circle giocatore = new Circle(p.getX(), p.getY(), 7, Color.ROYALBLUE);
                     giocatore.setMouseTransparent(true);
@@ -109,8 +101,23 @@ public class JavaFxView implements GameView, GameInput {
             }
         });
     }
+    /*
+    * Metodo sviluppato usando AI
+    * */
+    private Map<String, Point2D> disponiInCerchio(List<StanzaDto> stanze) {
+        Map<String, Point2D> posizioni = new HashMap<>();
+        double centroX = 150, centroY = 130, raggio = 95;
+        int n = stanze.size();
+        for (int i = 0; i < n; i++) {
+            double angolo = 2 * Math.PI * i / n - Math.PI / 2;
+            double x = centroX + raggio * Math.cos(angolo);
+            double y = centroY + raggio * Math.sin(angolo);
+            posizioni.put(stanze.get(i).nome(), new Point2D(x, y));
+        }
+        return posizioni;
+    }
 
-    private Color coloreDi(StanzaDto.Stato stato) {
+    private Color coloreStanza(StanzaDto.Stato stato) {
         return switch (stato) {
             case BLOCCATA    -> Color.LIGHTGRAY;
             case DISPONIBILE -> Color.GOLD;
