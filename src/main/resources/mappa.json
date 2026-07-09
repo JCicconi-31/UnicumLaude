@@ -1,0 +1,66 @@
+{
+  "stanze": [
+    {
+      "nome": "Atrio",
+      "tipoStanza": "CORRIDOIO",
+      "esame": null,
+      "adiacenze": ["Aula Studio 1", "Aula LA1"],
+      "propedeuticita": []
+    },
+    {
+      "nome": "Aula Studio 1",
+      "tipoStanza": "AULA_STUDIO",
+      "esame": null,
+      "adiacenze": ["Atrio"],
+      "propedeuticita": []
+    },
+    {
+      "nome": "Aula LA1",
+      "tipoStanza": "AULA_ESAME",
+      "esame": {
+        "codiceCorso": 1,
+        "nome": "Programmazione",
+        "cfu": 12,
+        "professore": { "nome": "Michele", "cognome": "Loreti", "hp": 25, "attacco": 10 }
+      },
+      "adiacenze": ["Atrio", "Aula B1"],
+      "propedeuticita": []
+    },
+    {
+      "nome": "Aula B1",
+      "tipoStanza": "AULA_ESAME",
+      "esame": {
+        "codiceCorso": 2,
+        "nome": "Metodologie di Programmazione",
+        "cfu": 12,
+        "professore": { "nome": "Fornari", "cognome": "Fabrizio", "hp": 30, "attacco": 4 }
+      },
+      "adiacenze": ["Aula LA1", "Aula AA1"],
+      "propedeuticita": ["Aula LA1"]
+    },
+    {
+      "nome": "Aula AA1",
+      "tipoStanza": "AULA_ESAME",
+      "esame": {
+        "codiceCorso": 3,
+        "nome": "Architettura degli elaboratori - Laboratorio",
+        "cfu": 12,
+        "professore": { "nome": "Massimo", "cognome": "Trojani", "hp": 50, "attacco": 20 }
+      },
+      "adiacenze": ["Aula B1", "Aula magna"],
+      "propedeuticita": ["Aula B1"]
+    },
+    {
+      "nome": "Aula magna",
+      "tipoStanza": "AULA_ESAME",
+      "esame": {
+        "codiceCorso": 4,
+        "nome": "Discussione tesi",
+        "cfu": 6,
+        "professore": { "nome": "Graziano", "cognome": "Leoni", "hp": 25, "attacco": 8 }
+      },
+      "adiacenze": ["Aula AA1"],
+      "propedeuticita": ["Aula AA1"]
+    }
+  ]
+}
