@@ -1,0 +1,41 @@
+{
+  "corsi": [
+    {
+      "nomeCorso": "Programmazione",
+      "domande": [
+        { "testo": "Quale parola chiave dichiara una costante in Java?", "opzioni": ["final", "const", "static", "immutable"], "indiceCorretta": 0 },
+        { "testo": "Cosa stampa System.out.println(3 / 2)?", "opzioni": ["1", "1.5", "2", "errore di compilazione"], "indiceCorretta": 0 },
+        { "testo": "Quale collezione NON ammette elementi duplicati?", "opzioni": ["List", "Set", "Queue", "Deque"], "indiceCorretta": 1 },
+        { "testo": "Qual è il tipo primitivo per un valore booleano in Java?", "opzioni": ["bool", "boolean", "Boolean", "bit"], "indiceCorretta": 1 }
+      ]
+    },
+    {
+      "nomeCorso": "Metodologie di Programmazione",
+      "domande": [
+        { "testo": "Cosa afferma il Single Responsibility Principle (SRP)?", "opzioni": ["Una classe deve avere una sola ragione per cambiare", "Una classe non può avere più di un metodo pubblico", "Ogni classe deve implementare almeno un'interfaccia", "Una classe deve essere final per non essere estesa"], "indiceCorretta": 0 },
+        { "testo": "A cosa serve il pattern Strategy?", "opzioni": ["A creare un'unica istanza condivisa di una classe", "A incapsulare comportamenti intercambiabili dietro un'astrazione", "A notificare automaticamente gli osservatori di un cambiamento", "A costruire oggetti complessi passo dopo passo"], "indiceCorretta": 1 },
+        { "testo": "Qual è il rapporto corretto tra equals() e hashCode() in Java?", "opzioni": ["Sono indipendenti e si possono ridefinire separatamente", "Se due oggetti sono equals, devono avere lo stesso hashCode", "hashCode deve sempre restituire un valore diverso per ogni oggetto", "equals va ridefinito solo per le classi che estendono Object"], "indiceCorretta": 1 },
+        { "testo": "Cosa stabilisce l'Open/Closed Principle (OCP)?", "opzioni": ["Il codice deve essere aperto in lettura ma chiuso in scrittura", "Ogni modulo deve esporre tutti i suoi campi come pubblici", "Il software deve essere aperto all'estensione ma chiuso alla modifica", "Le classi astratte non possono avere metodi concreti"], "indiceCorretta": 2 },
+        { "testo": "Perché si preferisce 'programmare verso un'interfaccia'?", "opzioni": ["Perché le interfacce vengono eseguite più velocemente", "Per ridurre l'accoppiamento e poter sostituire l'implementazione", "Perché le classi concrete non possono essere usate come tipo", "Per evitare di dover scrivere i costruttori"], "indiceCorretta": 1 }
+      ]
+    },
+    {
+      "nomeCorso": "Architettura degli elaboratori - Laboratorio",
+      "domande": [
+        { "testo": "Quale componente della CPU esegue le operazioni aritmetiche e logiche?", "opzioni": ["ALU", "Cache", "Bus di sistema", "Program Counter"], "indiceCorretta": 0 },
+        { "testo": "Come si rappresenta il numero decimale 10 in binario?", "opzioni": ["1010", "1100", "1001", "1110"], "indiceCorretta": 0 },
+        { "testo": "A cosa serve il registro Program Counter (PC)?", "opzioni": ["A contare i programmi in esecuzione", "A contenere l'indirizzo della prossima istruzione", "A memorizzare i risultati della ALU", "A gestire la memoria cache"], "indiceCorretta": 1 },
+        { "testo": "Quanti valori distinti può rappresentare un byte (8 bit)?", "opzioni": ["128", "255", "256", "512"], "indiceCorretta": 2 }
+      ]
+    },
+    {
+      "nomeCorso": "Discussione tesi",
+      "domande": [
+        { "testo": "Quale principio SOLID riguarda la sostituibilità dei sottotipi?", "opzioni": ["Single Responsibility", "Liskov Substitution", "Interface Segregation", "Dependency Inversion"], "indiceCorretta": 1 },
+        { "testo": "In UML, quale relazione indica un 'is-a'?", "opzioni": ["Associazione", "Aggregazione", "Ereditarietà", "Dipendenza"], "indiceCorretta": 2 },
+        { "testo": "Cosa favorisce la Dependency Injection?", "opzioni": ["L'accoppiamento forte", "Il basso accoppiamento e la testabilità", "La duplicazione del codice", "L'uso di variabili globali"], "indiceCorretta": 1 },
+        { "testo": "Cosa rappresenta il Composition Root in un'applicazione?", "opzioni": ["Un pattern per la persistenza su file", "Il punto unico in cui si assemblano le dipendenze", "Un algoritmo di ordinamento", "Una struttura dati ad albero"], "indiceCorretta": 1 }
+      ]
+    }
+  ]
+}
