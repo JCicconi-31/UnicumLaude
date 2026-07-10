@@ -15,7 +15,7 @@ public class ProvaOrale implements FaseEsame {
 
     public ProvaOrale(GestoreTurno gestoreTurno, GameInput input) {
         if (gestoreTurno == null || input == null)
-            throw new IllegalArgumentException("parametri nullo");
+            throw new IllegalArgumentException("parametri nulli");
         this.gestoreTurno = gestoreTurno;
         this.input = input;
     }

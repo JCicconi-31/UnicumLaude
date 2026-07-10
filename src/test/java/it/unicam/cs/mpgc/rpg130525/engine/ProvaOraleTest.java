@@ -90,7 +90,7 @@ class ProvaOraleTest {
         // Stesso professore per entrambi (istanze separate perché mutabili).
         Studente base = nuovoStudente();
         Studente potenziato = nuovoStudente();
-        potenziato.equipaggiaItem(equip(TipoItem.Libro, Map.of(Stat.Intelligenza, 5))); // intel 10 -> 15
+        potenziato.equipaggiaItem(equip(TipoItem.LIBRO, Map.of(Stat.INTELLIGENZA, 5))); // intel 10 -> 15
 
         provaOrale.esegui(statoConProfessore(base, new Professore("Anna", "Verdi", 3, 30)), VIEW_MUTA);
         provaOrale.esegui(statoConProfessore(potenziato, new Professore("Anna", "Verdi", 3, 30)), VIEW_MUTA);

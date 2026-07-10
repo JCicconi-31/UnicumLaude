@@ -10,15 +10,15 @@ public class ChatGPT implements Equipaggiamento {
     private final Map<Stat, Integer> modificatori;
 
     public ChatGPT() {
-        this.modificatori = Map.of(Stat.Intelligenza, 5);
+        this.modificatori = Map.of(Stat.INTELLIGENZA, 5);
     }
 
     @Override
     public Map<Stat, Integer> getModificatori() { return modificatori; }
 
     @Override
-    public String getNome() { return "ChatGPT"; }
+    public String getNome() { return "CHATGPT"; }
 
     @Override
-    public TipoItem getTipo() { return TipoItem.ChatGPT; }
+    public TipoItem getTipo() { return TipoItem.CHATGPT; }
 }

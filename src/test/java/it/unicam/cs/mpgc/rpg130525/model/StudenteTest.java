@@ -40,7 +40,7 @@ class StudenteTest {
     @Test
     void unEquipaggiamentoAumentaLIntelligenzaEffettiva() {
         Studente s = nuovoStudente();
-        s.equipaggiaItem(equip(TipoItem.Libro, Map.of(Stat.Intelligenza, 5)));
+        s.equipaggiaItem(equip(TipoItem.LIBRO, Map.of(Stat.INTELLIGENZA, 5)));
         assertEquals(15, s.getIntelligenzaEffettiva());
         assertEquals(5, s.getResilienzaEffettiva());
     }
@@ -48,8 +48,8 @@ class StudenteTest {
     @Test
     void unEquipaggiamentoPuoAvereUnModificatoreNegativo() {
         Studente s = nuovoStudente();
-        // tipo ChatGPT: +8 intelligenza ma -4 resilienza
-        s.equipaggiaItem(equip(TipoItem.ChatGPT, Map.of(Stat.Intelligenza, 8, Stat.Resilienza, -4)));
+        // tipo CHATGPT: +8 intelligenza ma -4 resilienza
+        s.equipaggiaItem(equip(TipoItem.CHATGPT, Map.of(Stat.INTELLIGENZA, 8, Stat.RESILIENZA, -4)));
         assertEquals(18, s.getIntelligenzaEffettiva());
         assertEquals(1, s.getResilienzaEffettiva());
     }
@@ -57,8 +57,8 @@ class StudenteTest {
     @Test
     void piuEquipaggiamentiDiTipoDiversoSommanoIModificatori() {
         Studente s = nuovoStudente();
-        s.equipaggiaItem(equip(TipoItem.Libro, Map.of(Stat.Intelligenza, 5)));
-        s.equipaggiaItem(equip(TipoItem.ChatGPT, Map.of(Stat.Intelligenza, 8, Stat.Resilienza, -4)));
+        s.equipaggiaItem(equip(TipoItem.LIBRO, Map.of(Stat.INTELLIGENZA, 5)));
+        s.equipaggiaItem(equip(TipoItem.CHATGPT, Map.of(Stat.INTELLIGENZA, 8, Stat.RESILIENZA, -4)));
         assertEquals(23, s.getIntelligenzaEffettiva()); // 10 + 5 + 8
         assertEquals(1, s.getResilienzaEffettiva());    // 5 - 4
     }
@@ -66,8 +66,8 @@ class StudenteTest {
     @Test
     void equipaggiareLoStessoTipoSostituisceLoSlotPrecedente() {
         Studente s = nuovoStudente();
-        s.equipaggiaItem(equip(TipoItem.Libro, Map.of(Stat.Intelligenza, 5)));
-        s.equipaggiaItem(equip(TipoItem.Libro, Map.of(Stat.Intelligenza, 3))); // stesso tipo
+        s.equipaggiaItem(equip(TipoItem.LIBRO, Map.of(Stat.INTELLIGENZA, 5)));
+        s.equipaggiaItem(equip(TipoItem.LIBRO, Map.of(Stat.INTELLIGENZA, 3))); // stesso tipo
         assertEquals(13, s.getIntelligenzaEffettiva()); // 10 + 3, non 10 + 5 + 3
     }
 

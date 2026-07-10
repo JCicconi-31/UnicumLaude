@@ -112,8 +112,8 @@ class GameLoopTest {
      * GameLoop con fasi d'esame stub.
      * <p>Azioni nell'Atrio (corridoio): 0) Vai a: Aula LA1 - 1) Vai a: Aula LA2 -
      * 2) Vai a: Aula Studio - 3) Salva ed esci.
-     * <p>Azioni in Aula Studio: 0) Riposati - 1) Compra Caffè - 2) Compra AppuntiLezione -
-     * 3) Compra Libro - 4) Compra ChatGPT - [5) Usa &lt;item&gt; se lo zaino non è vuoto] -
+     * <p>Azioni in Aula Studio: 0) Riposati - 1) Compra CAFFE - 2) Compra APPUNTI_LEZIONE -
+     * 3) Compra LIBRO - 4) Compra CHATGPT - [5) Usa &lt;item&gt; se lo zaino non è vuoto] -
      * poi Vai a: Atrio - Salva ed esci.
      */
     private GameLoop loop(FaseEsame... fasi) {
@@ -177,26 +177,26 @@ class GameLoopTest {
 
     @Test
     void acquistoConsumabileScalaLeMoneteERiempieLoZaino() {
-        // Aula Studio (2), Compra Caffè (1, costo 10); ora lo zaino ha un item e
-        // compare "Usa Caffè" (5), quindi "Salva ed esci" scala all'indice 7
+        // Aula Studio (2), Compra CAFFE (1, costo 10); ora lo zaino ha un item e
+        // compare "Usa CAFFE" (5), quindi "Salva ed esci" scala all'indice 7
         loop((s, v) -> true).gioca(stato, view, script(2, 1, 7));
         assertEquals(40, studente.getMonete()); // 50 - 10
         assertEquals(1, studente.getZaino().size());
-        assertEquals("Caffè", studente.getZaino().get(0).getNome());
+        assertEquals("CAFFE", studente.getZaino().get(0).getNome());
     }
 
     @Test
     void acquistoEquipaggiamentoAumentaLeStatisticheEffettive() {
-        // Aula Studio (2), Compra Libro (3, costo 25, +3 Intelligenza), Salva ed esci (6)
+        // Aula Studio (2), Compra LIBRO (3, costo 25, +3 INTELLIGENZA), Salva ed esci (6)
         loop((s, v) -> true).gioca(stato, view, script(2, 3, 6));
         assertEquals(25, studente.getMonete()); // 50 - 25
-        assertEquals(13, studente.getIntelligenzaEffettiva()); // 10 base + 3 Libro
+        assertEquals(13, studente.getIntelligenzaEffettiva()); // 10 base + 3 LIBRO
     }
 
     @Test
     void acquistoConMoneteInsufficientiVieneRifiutato() {
         studente.spendiMonete(45); // restano 5 monete
-        // Aula Studio (2), prova a Comprare Caffè (1, costo 10 > 5), Salva ed esci (6)
+        // Aula Studio (2), prova a Comprare CAFFE (1, costo 10 > 5), Salva ed esci (6)
         loop((s, v) -> true).gioca(stato, view, script(2, 1, 6));
         assertEquals(5, studente.getMonete());        // nessun addebito
         assertTrue(studente.getZaino().isEmpty());
@@ -206,8 +206,8 @@ class GameLoopTest {
     @Test
     void usoConsumabileRecuperaSaluteMentaleELoRimuoveDalloZaino() {
         studente.subisciDanno(50); // HP: 120 -> 70
-        // Aula Studio (2), Compra Caffè (1); ora compare "Usa Caffè" all'indice 5;
-        // usa Caffè (5, +20 HP) -> lo zaino torna vuoto, quindi "Salva ed esci" torna a 6
+        // Aula Studio (2), Compra CAFFE (1); ora compare "Usa CAFFE" all'indice 5;
+        // usa CAFFE (5, +20 HP) -> lo zaino torna vuoto, quindi "Salva ed esci" torna a 6
         loop((s, v) -> true).gioca(stato, view, script(2, 1, 5, 6));
         assertEquals(90, studente.getSaluteMentale()); // 70 + 20 del caffè
         assertTrue(studente.getZaino().isEmpty());     // consumato

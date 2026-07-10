@@ -19,8 +19,8 @@ public class Caffe implements Consumabile {
     }
 
     @Override
-    public String getNome() { return "Caffè"; }
+    public String getNome() { return "CAFFE"; }
 
     @Override
-    public TipoItem getTipo() { return TipoItem.Caffè; }
+    public TipoItem getTipo() { return TipoItem.CAFFE; }
 }

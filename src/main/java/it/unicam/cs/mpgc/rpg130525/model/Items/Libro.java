@@ -7,14 +7,14 @@ import java.util.Map;
 
 public class Libro implements Equipaggiamento {
     @Override public Map<Stat, Integer> getModificatori() {
-        return Map.of(Stat.Intelligenza, 3);
+        return Map.of(Stat.INTELLIGENZA, 3);
     }
 
     @Override public String getNome() {
-        return "Libro di Testo";
+        return "LIBRO di Testo";
     }
 
     @Override public TipoItem getTipo() {
-        return TipoItem.Libro;
+        return TipoItem.LIBRO;
     }
 }

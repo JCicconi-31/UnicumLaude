@@ -17,7 +17,7 @@ public class Studente extends Persona{
     public Studente(String nome, String cognome, int intelligenzaBase, int resilienzaBase, int saluteMentaleMax, int monete, CareerStrategy carriera) {
         super(nome,cognome);
         if (intelligenzaBase <= 0)
-            throw new IllegalArgumentException("Intelligenza deve essere positiva");
+            throw new IllegalArgumentException("INTELLIGENZA deve essere positiva");
         if (saluteMentaleMax <= 0)
             throw new IllegalArgumentException("HP max deve essere positivo");
         if (carriera == null)
@@ -40,13 +40,13 @@ public class Studente extends Persona{
 
     public int getIntelligenzaEffettiva() {
         return intelligenzaBase + inventario.values().stream()
-                .mapToInt(slot -> slot.modificatoreSu(Stat.Intelligenza))
+                .mapToInt(slot -> slot.modificatoreSu(Stat.INTELLIGENZA))
                 .sum();
     }
 
     public int getResilienzaEffettiva() {
         return resilienzaBase + inventario.values().stream()
-                .mapToInt(slot -> slot.modificatoreSu(Stat.Resilienza))
+                .mapToInt(slot -> slot.modificatoreSu(Stat.RESILIENZA))
                 .sum();
     }
 

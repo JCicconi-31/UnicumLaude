@@ -98,9 +98,9 @@ class JsonGameStatePersistenceTest {
     @Test
     void roundTripRipristinaInventarioEquipaggiatoEZaino() {
         Studente s = new Studente("Mario", "Rossi", 10, 5, 100, 50, new StudenteFullTime());
-        s.equipaggiaItem((Equipaggiamento) CatalogoItem.crea(TipoItem.Libro)); // +3 Intelligenza
-        s.aggiungiConsumabile((Consumabile) CatalogoItem.crea(TipoItem.Caffè));
-        s.aggiungiConsumabile((Consumabile) CatalogoItem.crea(TipoItem.Caffè));
+        s.equipaggiaItem((Equipaggiamento) CatalogoItem.crea(TipoItem.LIBRO)); // +3 INTELLIGENZA
+        s.aggiungiConsumabile((Consumabile) CatalogoItem.crea(TipoItem.CAFFE));
+        s.aggiungiConsumabile((Consumabile) CatalogoItem.crea(TipoItem.CAFFE));
         StatoGioco stato = new StatoGioco(s, aula2);
 
         JsonGameStatePersistence persistence = new JsonGameStatePersistence(fileSalvataggio(), mappa);
@@ -108,8 +108,8 @@ class JsonGameStatePersistenceTest {
 
         Studente caricato = persistence.carica().getStudente();
 
-        assertEquals(13, caricato.getIntelligenzaEffettiva()); // 10 base + 3 del Libro equipaggiato
-        assertEquals(2, caricato.getZaino().size());           // i due Caffè ripristinati nello zaino
+        assertEquals(13, caricato.getIntelligenzaEffettiva()); // 10 base + 3 del LIBRO equipaggiato
+        assertEquals(2, caricato.getZaino().size());           // i due CAFFE ripristinati nello zaino
     }
 
     @Test

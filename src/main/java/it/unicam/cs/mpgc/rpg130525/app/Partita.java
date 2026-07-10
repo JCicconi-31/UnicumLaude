@@ -21,6 +21,11 @@ public final class Partita {
     private static final String FILE_MAPPA = "mappa.json";
     private static final String FILE_DOMANDE = "domandeEsami.json";
     private static final String STANZA_INIZIALE = "Atrio";
+    private static final int INTELLIGENZA_INIZIALE=10;
+    private static final int RESILIENZA_INIZIALE=5;
+    private static final int HP_INIZIALE=100;
+    private static final int MONETE_INIZIALI=50;
+
 
     private Partita() { }
 
@@ -75,7 +80,7 @@ public final class Partita {
                 .map(c -> c.getNome() + " (" + c.getDescrizione() + ")")
                 .toList();
         CareerStrategy carriera = carriere.get(input.scegli("Scegli la tua carriera", voci));
-        Studente studente = new Studente(nome, cognome, 10, 5, 100, 50, carriera);
+        Studente studente = new Studente(nome, cognome, INTELLIGENZA_INIZIALE, RESILIENZA_INIZIALE, HP_INIZIALE, MONETE_INIZIALI, carriera);
         return new StatoGioco(studente, posizioneIniziale);
     }
 }

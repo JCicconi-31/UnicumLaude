@@ -4,6 +4,8 @@ import it.unicam.cs.mpgc.rpg130525.model.Professore;
 import it.unicam.cs.mpgc.rpg130525.model.Studente;
 
 public class CalcolatoreDanno {
+    private static final int DANNO_MINIMO = 1;
+
     public int dannoInflitto(Studente studente) {
         if (studente == null)
             throw new IllegalArgumentException("studente passato null");
@@ -14,7 +16,7 @@ public class CalcolatoreDanno {
         if (professore == null || studente == null)
             throw new IllegalArgumentException("impossibile calcolare danno subito su una o più entity null");
         if (studente.getSaluteMentale() > 0) {
-            return Math.max(1, professore.getDifficolta() - studente.getResilienzaEffettiva());
+            return Math.max(DANNO_MINIMO, professore.getDifficolta() - studente.getResilienzaEffettiva());
         }
         return 0;
     }

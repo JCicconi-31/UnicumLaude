@@ -22,7 +22,7 @@ public class JsonLoaderDomande implements LoaderDomande {
 
     public JsonLoaderDomande(InputStream input) {
         if (input == null)
-            throw new IllegalArgumentException("input nulla");
+            throw new IllegalArgumentException("input nullo");
         this.input = input;
     }
 

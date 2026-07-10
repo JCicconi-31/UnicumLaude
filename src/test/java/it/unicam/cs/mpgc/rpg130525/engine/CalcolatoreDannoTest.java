@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test unitari per {@link CalcolatoreDanno}: danno inflitto dallo studente,
  * danno subito dai boss (Professori) e dai nemici minori, con la mitigazione
- * della Resilienza.
+ * della RESILIENZA.
  * <p>
  * <b>Dichiarazione uso AI:</b> questa classe di test è stata realizzata con
  * l'assistenza di un'intelligenza artificiale (Claude, Anthropic), come previsto
@@ -41,7 +41,7 @@ class CalcolatoreDannoTest {
     @Test
     void unEquipaggiamentoAumentaIlDannoInflitto() {
         Studente s = nuovoStudente();
-        s.equipaggiaItem(equip(TipoItem.Libro, Map.of(Stat.Intelligenza, 5)));
+        s.equipaggiaItem(equip(TipoItem.LIBRO, Map.of(Stat.INTELLIGENZA, 5)));
         assertEquals(15, calcolatore.dannoInflitto(s));
     }
 

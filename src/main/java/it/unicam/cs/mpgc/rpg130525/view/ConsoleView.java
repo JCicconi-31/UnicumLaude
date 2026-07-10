@@ -66,7 +66,7 @@ public class ConsoleView implements GameView, GameInput {
             String riga = scanner.nextLine().trim();
             if (!riga.isBlank())
                 return riga;
-            out.println("Il testo non puo' essere vuoto, riprova.");
+            out.println("Il testo non può essere vuoto, riprova.");
         }
     }
 

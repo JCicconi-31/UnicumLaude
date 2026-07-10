@@ -12,6 +12,8 @@ import java.util.Random;
 public class EsameController {
     private final List<FaseEsame> fasi;
     private final Random random;
+    private static final int VOTO_MINIMO=18;
+    private static final int VOTO_MASSIMO=30;
 
     public EsameController(List<FaseEsame> fasi) {
         this(fasi, new Random());
@@ -40,7 +42,7 @@ public class EsameController {
          * non vale una nuova astrazione. Se in futuro la valutazione avrà una logica ben precisa tipo media, lode,
          * bonus, allora sì andrà in un GeneratoreVoto separato per SRP.
          */
-        int voto = 18 + random.nextInt(13);
+        int voto = VOTO_MINIMO + random.nextInt(VOTO_MASSIMO - VOTO_MINIMO + 1);
         stato.getStudente().getLibretto().addEsameSuperato(new EsameSuperato(esame, voto));
         return true;
     }

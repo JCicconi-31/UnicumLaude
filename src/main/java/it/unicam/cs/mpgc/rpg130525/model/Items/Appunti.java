@@ -7,12 +7,12 @@ import java.util.Map;
 
 public class Appunti implements Equipaggiamento {
     @Override public Map<Stat, Integer> getModificatori() {
-        return Map.of(Stat.Intelligenza, 2);
+        return Map.of(Stat.INTELLIGENZA, 2);
     }
     @Override public String getNome() {
         return "Appunti";
     }
     @Override public TipoItem getTipo() {
-        return TipoItem.AppuntiLezione;
+        return TipoItem.APPUNTI_LEZIONE;
     }
 }

@@ -10,19 +10,19 @@ public final class CatalogoItem {
 
     public static Item crea(TipoItem tipo) {
         return switch (tipo) {
-            case Caffè          -> new Caffe(20);
-            case AppuntiLezione -> new Appunti();
-            case Libro          -> new Libro();
-            case ChatGPT        -> new ChatGPT();
+            case CAFFE -> new Caffe(20);
+            case APPUNTI_LEZIONE -> new Appunti();
+            case LIBRO -> new Libro();
+            case CHATGPT -> new ChatGPT();
         };
     }
 
     public static int prezzo(TipoItem tipo) {
         return switch (tipo) {
-            case Caffè          -> 10;
-            case AppuntiLezione -> 15;
-            case Libro          -> 25;
-            case ChatGPT        -> 40;
+            case CAFFE -> 10;
+            case APPUNTI_LEZIONE -> 15;
+            case LIBRO -> 25;
+            case CHATGPT -> 40;
         };
     }
 }
