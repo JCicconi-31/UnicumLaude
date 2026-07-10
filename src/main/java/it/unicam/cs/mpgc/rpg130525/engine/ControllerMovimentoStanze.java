@@ -2,8 +2,6 @@ package it.unicam.cs.mpgc.rpg130525.engine;
 
 import it.unicam.cs.mpgc.rpg130525.model.*;
 
-import java.util.Set;
-
 public class ControllerMovimentoStanze {
     private final Mappa mappa;
 
@@ -13,15 +11,15 @@ public class ControllerMovimentoStanze {
         this.mappa = mappa;
     }
 
-    public void spostati(StatoGioco stato, Stanza destinazione) throws PrerequisitiNonRispettatiException {
+    public void spostati(StatoGioco stato, Stanza destinazione) throws MovimentoNonConsentitoException {
         if (stato == null || destinazione == null)
             throw new IllegalArgumentException("parametri passati null");
         if (!mappa.getAdiacenti(stato.getPosizioneCorrente()).contains(destinazione))
-            throw new PrerequisitiNonRispettatiException("nessun corridoio tra " + stato.getPosizioneCorrente().getNome() + " e " + destinazione.getNome());
+            throw new MovimentoNonConsentitoException("nessun corridoio tra " + stato.getPosizioneCorrente().getNome() + " e " + destinazione.getNome());
         if (destinazione.getTipo() == TipoStanza.AULA_ESAME) {
             boolean disponibile = mappa.isDisponibile(destinazione, stato.getStudente().getLibretto().getEsamiSuperati());
             if (!disponibile)
-                throw new PrerequisitiNonRispettatiException(destinazione.getNome());
+                throw new MovimentoNonConsentitoException(destinazione.getNome());
         }
         stato.spostaIn(destinazione);
     }

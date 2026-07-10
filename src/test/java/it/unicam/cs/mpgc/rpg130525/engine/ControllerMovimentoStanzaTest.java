@@ -54,19 +54,19 @@ class ControllerMovimentoStanzaTest {
     }
 
     @Test
-    void spostamentoVersoUnAulaSenzaPrerequisitiAggiornaLaPosizione() throws PrerequisitiNonRispettatiException {
+    void spostamentoVersoUnAulaSenzaPrerequisitiAggiornaLaPosizione() throws MovimentoNonConsentitoException {
         controller.spostati(stato, aula1);
         assertEquals(aula1, stato.getPosizioneCorrente());
     }
 
     @Test
     void spostamentoBloccatoSeIPrerequisitiNonSonoSoddisfatti() {
-        assertThrows(PrerequisitiNonRispettatiException.class, () -> controller.spostati(stato, aula2));
+        assertThrows(MovimentoNonConsentitoException.class, () -> controller.spostati(stato, aula2));
         assertEquals(atrio, stato.getPosizioneCorrente()); // posizione invariata
     }
 
     @Test
-    void dopoAverSuperatoIlPrerequisitoLAulaDiventaAccessibile() throws PrerequisitiNonRispettatiException {
+    void dopoAverSuperatoIlPrerequisitoLAulaDiventaAccessibile() throws MovimentoNonConsentitoException {
         studente.getLibretto().addEsameSuperato(new EsameSuperato(esame1, 30));
         controller.spostati(stato, aula2);
         assertEquals(aula2, stato.getPosizioneCorrente());
@@ -74,7 +74,7 @@ class ControllerMovimentoStanzaTest {
 
     @Test
     void spostamentoVersoStanzaNonAdiacenteVieneRifiutato() {
-        assertThrows(PrerequisitiNonRispettatiException.class, () -> controller.spostati(stato, stanzaIsolata));
+        assertThrows(MovimentoNonConsentitoException.class, () -> controller.spostati(stato, stanzaIsolata));
     }
 
     @Test

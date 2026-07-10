@@ -22,6 +22,10 @@ public class Studente extends Persona{
             throw new IllegalArgumentException("HP max deve essere positivo");
         if (carriera == null)
             throw new IllegalArgumentException("carriera nulla");
+        if (resilienzaBase < 0)
+            throw new IllegalArgumentException("resilienza non può essere negativa");
+        if (monete < 0)
+            throw new IllegalArgumentException("le monete non possono essere negative");
 
         this.carriera = carriera;
         this.intelligenzaBase = intelligenzaBase;
@@ -99,10 +103,5 @@ public class Studente extends Persona{
         if (costo > getMonete())
             throw new IllegalArgumentException("costo maggiore monete possedute");
         this.monete = monete - costo;
-    }
-    public void guadagnaMonete(int guadagno){
-        if (guadagno < 0)
-            throw new IllegalArgumentException("Numero negativo di monete");
-        this.monete = monete + guadagno;
     }
 }
