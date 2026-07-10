@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -97,6 +98,21 @@ class EsameControllerTest {
         assertFalse(controller.sostieniEsame(stato, view));
         assertEquals(0, libretto().getCfuOttenuti()); // nessuna registrazione dopo il burnout
         assertTrue(view.messaggi.stream().anyMatch(m -> m.contains("Burnout")));
+    }
+
+    @Test
+    void ilVotoRegistratoUsaLaSorgenteDiCasualitaIniettata() {
+        // Random stub: nextInt(13) -> 12, quindi voto = 18 + 12 = 30 (deterministico)
+        Random randomFisso = new Random() {
+            @Override public int nextInt(int bound) { return 12; }
+        };
+        FaseEsame faseSuperata = (s, v) -> true;
+        EsameController controller = new EsameController(List.of(faseSuperata), randomFisso);
+
+        controller.sostieniEsame(stato, VIEW_MUTA);
+
+        EsameSuperato registrato = libretto().getDettaglioEsami().iterator().next();
+        assertEquals(30, registrato.getVoto());
     }
 
     @Test
