@@ -134,7 +134,7 @@ public class GameLoop {
     private void muovi(StatoGioco stato, Stanza destinazione, GameView view) {
         try {
             movimento.spostati(stato, destinazione);
-        } catch (PrerequisitiNonRispettatiException e) {
+        } catch (MovimentoNonConsentitoException e) {
             view.mostraMessaggio(e.getMessage());
         }
     }
