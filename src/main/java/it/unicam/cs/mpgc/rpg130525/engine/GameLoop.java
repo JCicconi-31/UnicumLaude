@@ -115,8 +115,7 @@ public class GameLoop {
         }
         studente.spendiMonete(prezzo);
         Item item = CatalogoItem.crea(tipo);
-        if (item instanceof Consumabile c) studente.aggiungiConsumabile(c);
-        else if (item instanceof Equipaggiamento e) studente.equipaggiaItem(e);
+        item.aggiungiA(studente);
         view.mostraMessaggio("Hai acquistato: " + item.getNome());
     }
 

@@ -94,8 +94,7 @@ public class JsonGameStatePersistence implements PersistenceManager {
             TipoItem tipo = TipoItem.valueOf(voce.getKey());
             for (int i = 0; i < voce.getValue(); i++) {
                 Item item = CatalogoItem.crea(tipo);
-                if (item instanceof Equipaggiamento e)      s.equipaggiaItem(e);
-                else if (item instanceof Consumabile cons)  s.aggiungiConsumabile(cons);
+                item.aggiungiA(s);
             }
         }
         return new StatoGioco(s, stanzePerNome.get(dto.nomeStanzaCorrente()));

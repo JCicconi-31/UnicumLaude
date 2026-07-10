@@ -13,6 +13,5 @@ public class InventorySlot {
         return item.getModificatori().getOrDefault(stat, 0) * quantita;
     }
 
-    public Equipaggiamento getItem() { return item; }
     public int getQuantita() { return quantita; }
 }
