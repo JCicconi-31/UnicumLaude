@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class EsameSuperato {
     private final Esame esame;
-    int voto;
+    private final int voto;
 
     public EsameSuperato(Esame esame, int voto) {
         if (esame == null)

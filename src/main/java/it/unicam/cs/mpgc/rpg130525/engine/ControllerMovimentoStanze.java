@@ -16,9 +16,8 @@ public class ControllerMovimentoStanze {
     public void spostati(StatoGioco stato, Stanza destinazione) throws PrerequisitiNonRispettatiException {
         if (stato == null || destinazione == null)
             throw new IllegalArgumentException("parametri passati null");
-        Set<Stanza> stanzeAdiacenti = mappa.getAdiacenti(stato.getPosizioneCorrente());
         if (!mappa.getAdiacenti(stato.getPosizioneCorrente()).contains(destinazione))
-            throw new IllegalArgumentException("nessun corridoio tra " + stato.getPosizioneCorrente().getNome() + " e " + destinazione.getNome());
+            throw new PrerequisitiNonRispettatiException("nessun corridoio tra " + stato.getPosizioneCorrente().getNome() + " e " + destinazione.getNome());
         if (destinazione.getTipo() == TipoStanza.AULA_ESAME) {
             boolean disponibile = mappa.isDisponibile(destinazione, stato.getStudente().getLibretto().getEsamiSuperati());
             if (!disponibile)

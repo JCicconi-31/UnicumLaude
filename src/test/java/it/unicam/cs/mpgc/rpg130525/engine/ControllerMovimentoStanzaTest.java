@@ -74,7 +74,7 @@ class ControllerMovimentoStanzaTest {
 
     @Test
     void spostamentoVersoStanzaNonAdiacenteVieneRifiutato() {
-        assertThrows(IllegalArgumentException.class, () -> controller.spostati(stato, stanzaIsolata));
+        assertThrows(PrerequisitiNonRispettatiException.class, () -> controller.spostati(stato, stanzaIsolata));
     }
 
     @Test

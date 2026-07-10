@@ -28,7 +28,7 @@ public class EsameController {
             return false;
         }
         Esame esame = stato.getPosizioneCorrente().getEsame();
-        stato.getStudente().getLibretto().addEsameSuperato(new EsameSuperato(esame, (int)(Math.random() * 12) + 18));
+        stato.getStudente().getLibretto().addEsameSuperato(new EsameSuperato(esame, (int)(Math.random() * 12) + 19));
         return true;
     }
 }

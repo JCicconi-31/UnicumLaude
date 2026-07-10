@@ -20,6 +20,8 @@ public class Studente extends Persona{
             throw new IllegalArgumentException("Intelligenza deve essere positiva");
         if (saluteMentaleMax <= 0)
             throw new IllegalArgumentException("HP max deve essere positivo");
+        if (carriera == null)
+            throw new IllegalArgumentException("carriera nulla");
 
         this.carriera = carriera;
         this.intelligenzaBase = intelligenzaBase;

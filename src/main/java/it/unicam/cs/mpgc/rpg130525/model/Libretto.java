@@ -19,7 +19,7 @@ public class Libretto {
         return false;
     }
 
-    public void aggiungiCFU(int quantita) {
+    private void aggiungiCFU(int quantita) {
         this.cfuOttenuti += quantita;
     }
 

@@ -148,7 +148,9 @@ class GameLoopTest {
 
     @Test
     void alRaggiungimentoDellaSogliaCfuScattaLaLaurea() {
-        studente.getLibretto().aggiungiCFU(6); // già a metà percorso
+        // già a metà percorso: 6 CFU da un esame pregresso, tramite l'API pubblica (non la vecchia backdoor)
+        studente.getLibretto().addEsameSuperato(
+                new EsameSuperato(new Esame(99, "Corso Pregresso", 6, new Professore("Test", "Prof", 4, 30)), 28));
         // vai in LA1 e supera l'esame: 6 + 6 = 12 = soglia -> laurea, il loop termina da solo
         loop((s, v) -> true).gioca(stato, view, script(0, 0));
         assertTrue(view.messaggi.stream().anyMatch(m -> m.contains("LAUREA")));

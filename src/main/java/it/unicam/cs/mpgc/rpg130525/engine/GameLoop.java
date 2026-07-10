@@ -59,7 +59,7 @@ public class GameLoop {
             Stanza corrente = stato.getPosizioneCorrente();
             List<Azione> azioni = costruisciAzioni(corrente, studente);
             List<String> etichette = azioni.stream().map(Azione::etichetta).toList();
-            view.aggiornaMappa(costruisciMappaDto(studente), stato.getPosizioneCorrente().getNome());
+            view.aggiornaMappa(costruisciMappaDto(studente), corrente.getNome());
             Azione scelta = azioni.get(input.scegli("Sei in: " + corrente.getNome(), etichette));
 
             switch (scelta.tipo()) {
