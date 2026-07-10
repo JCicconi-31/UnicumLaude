@@ -49,7 +49,9 @@ class JsonGameStatePersistenceTest {
         mappa.addPropedeuticita(aula1, aula2);
     }
 
-    /** Studente Lavoratore (HP -10, monete +20) con un esame superato e HP ridotti, in LA2. */
+    /**
+     * Studente Lavoratore (HP -10, monete +20) con un esame superato e HP ridotti, in LA2.
+     */
     private StatoGioco statoConProgresso() {
         Studente s = new Studente("Mario", "Rossi", 10, 5, 100, 50, new StudenteLavoratore());
         // HP max = 100 - 10 = 90 ; monete = 50 + 20 = 70
@@ -123,7 +125,7 @@ class JsonGameStatePersistenceTest {
         assertSame(aula2, caricato.getPosizioneCorrente());
         // anche l'esame nel libretto è riagganciato all'istanza della mappa
         EsameSuperato superato = caricato.getStudente().getLibretto().getDettaglioEsami().iterator().next();
-        assertSame(esame1, superato.getEsame());
+        assertSame(esame1, superato.esame());
     }
 
     @Test

@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test unitari per {@link DatabaseDomande}.
@@ -26,7 +27,9 @@ class DatabaseDomandeTest {
     private final Domanda d0 = new Domanda("prima", List.of("a", "b"), 0);
     private final Domanda d1 = new Domanda("seconda", List.of("a", "b"), 1);
 
-    /** Stub di Random che restituisce sempre un indice fisso. */
+    /**
+     * Stub di Random che restituisce sempre un indice fisso.
+     */
     private static Random randomCheRestituisce(int valore) {
         return new Random() {
             @Override

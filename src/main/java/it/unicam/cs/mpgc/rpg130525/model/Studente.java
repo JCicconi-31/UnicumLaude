@@ -2,30 +2,24 @@ package it.unicam.cs.mpgc.rpg130525.model;
 
 import java.util.*;
 
-public class Studente extends Persona{
+public class Studente extends Persona {
     private final int intelligenzaBase;
     private final int resilienzaBase;
-    private int saluteMentale;
     private final int saluteMentaleMax;
-    private int monete;
     private final Libretto libretto;
-
     private final EnumMap<TipoItem, InventorySlot> inventario;
     private final List<Consumabile> zaino;
     private final CareerStrategy carriera;
+    private int saluteMentale;
+    private int monete;
 
     public Studente(String nome, String cognome, int intelligenzaBase, int resilienzaBase, int saluteMentaleMax, int monete, CareerStrategy carriera) {
-        super(nome,cognome);
-        if (intelligenzaBase <= 0)
-            throw new IllegalArgumentException("INTELLIGENZA deve essere positiva");
-        if (saluteMentaleMax <= 0)
-            throw new IllegalArgumentException("HP max deve essere positivo");
-        if (carriera == null)
-            throw new IllegalArgumentException("carriera nulla");
-        if (resilienzaBase < 0)
-            throw new IllegalArgumentException("resilienza non può essere negativa");
-        if (monete < 0)
-            throw new IllegalArgumentException("le monete non possono essere negative");
+        super(nome, cognome);
+        if (intelligenzaBase <= 0) throw new IllegalArgumentException("INTELLIGENZA deve essere positiva");
+        if (saluteMentaleMax <= 0) throw new IllegalArgumentException("HP max deve essere positivo");
+        if (carriera == null) throw new IllegalArgumentException("carriera nulla");
+        if (resilienzaBase < 0) throw new IllegalArgumentException("resilienza non può essere negativa");
+        if (monete < 0) throw new IllegalArgumentException("le monete non possono essere negative");
 
         this.carriera = carriera;
         this.intelligenzaBase = intelligenzaBase;
@@ -39,15 +33,11 @@ public class Studente extends Persona{
     }
 
     public int getIntelligenzaEffettiva() {
-        return intelligenzaBase + inventario.values().stream()
-                .mapToInt(slot -> slot.modificatoreSu(Stat.INTELLIGENZA))
-                .sum();
+        return intelligenzaBase + inventario.values().stream().mapToInt(slot -> slot.modificatoreSu(Stat.INTELLIGENZA)).sum();
     }
 
     public int getResilienzaEffettiva() {
-        return resilienzaBase + inventario.values().stream()
-                .mapToInt(slot -> slot.modificatoreSu(Stat.RESILIENZA))
-                .sum();
+        return resilienzaBase + inventario.values().stream().mapToInt(slot -> slot.modificatoreSu(Stat.RESILIENZA)).sum();
     }
 
     public void subisciDanno(int danno) {
@@ -71,15 +61,20 @@ public class Studente extends Persona{
     }
 
     public void usaConsumabile(Consumabile consumabile) {
-        if (zaino.remove(consumabile))
-            consumabile.applica(this);
+        if (zaino.remove(consumabile)) consumabile.applica(this);
     }
 
-    public int getSaluteMentale() { return saluteMentale; }
+    public int getSaluteMentale() {
+        return saluteMentale;
+    }
 
-    public int getSaluteMentaleMax() { return saluteMentaleMax; }
+    public int getSaluteMentaleMax() {
+        return saluteMentaleMax;
+    }
 
-    public int getMonete() { return monete; }
+    public int getMonete() {
+        return monete;
+    }
 
     public Map<TipoItem, InventorySlot> getInventario() {
         return Collections.unmodifiableMap(inventario);
@@ -90,18 +85,23 @@ public class Studente extends Persona{
     }
 
     public Libretto getLibretto() {
-            return libretto;
+        return libretto;
     }
 
-    public int getIntelligenzaBase() { return intelligenzaBase; }
+    public int getIntelligenzaBase() {
+        return intelligenzaBase;
+    }
 
-    public int getResilienzaBase()   { return resilienzaBase; }
+    public int getResilienzaBase() {
+        return resilienzaBase;
+    }
 
-    public CareerStrategy getCarriera() { return carriera; }
+    public CareerStrategy getCarriera() {
+        return carriera;
+    }
 
-    public void spendiMonete(int costo){
-        if (costo > getMonete())
-            throw new IllegalArgumentException("costo maggiore monete possedute");
+    public void spendiMonete(int costo) {
+        if (costo > getMonete()) throw new IllegalArgumentException("costo maggiore monete possedute");
         this.monete = monete - costo;
     }
 }

@@ -90,11 +90,11 @@ public class GameLoop {
         List<Azione> azioni = new ArrayList<>();
         if (corrente.getTipo() == TipoStanza.AULA_ESAME
                 && !studente.getLibretto().getEsamiSuperati().contains(corrente.getEsame()))
-            azioni.add(Azione.esame("Sostieni l'esame di " + corrente.getEsame().getNomeCorso()));
+            azioni.add(Azione.esame("Sostieni l'esame di " + corrente.getEsame().nomeCorso()));
         if (corrente.getTipo() == TipoStanza.AULA_STUDIO) {
             azioni.add(Azione.riposo("Riposati (recuperi " + RECUPERO_RIPOSO + " HP)"));
             for (TipoItem tipo : TipoItem.values())
-                azioni.add(Azione.acquisto(tipo,"compra: " + tipo + " (" + CatalogoItem.prezzo(tipo) + " monete)"));
+                azioni.add(Azione.acquisto(tipo, "compra: " + tipo + " (" + CatalogoItem.prezzo(tipo) + " monete)"));
         }
 
         for (Consumabile c : studente.getZaino())
@@ -158,7 +158,7 @@ public class GameLoop {
         return StanzaDto.Stato.BLOCCATA;
     }
 
-    private enum Tipo { ESAME, RIPOSO, ACQUISTO, USA_ITEM, MOVIMENTO, ESCI }
+    private enum Tipo {ESAME, RIPOSO, ACQUISTO, USA_ITEM, MOVIMENTO, ESCI}
 
     private record Azione(String etichetta, Tipo tipo, Stanza destinazione, TipoItem tipoItem,
                           Consumabile consumabile) {

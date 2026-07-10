@@ -5,12 +5,7 @@ import it.unicam.cs.mpgc.rpg130525.model.*;
 import it.unicam.cs.mpgc.rpg130525.persistence.JsonGameStatePersistence;
 import it.unicam.cs.mpgc.rpg130525.persistence.JsonLoaderDomande;
 import it.unicam.cs.mpgc.rpg130525.persistence.JsonLoaderMondo;
-import it.unicam.cs.mpgc.rpg130525.port.GameInput;
-import it.unicam.cs.mpgc.rpg130525.port.GameView;
-import it.unicam.cs.mpgc.rpg130525.port.LoaderDomande;
-import it.unicam.cs.mpgc.rpg130525.port.LoaderMondo;
-import it.unicam.cs.mpgc.rpg130525.port.PersistenceException;
-import it.unicam.cs.mpgc.rpg130525.port.PersistenceManager;
+import it.unicam.cs.mpgc.rpg130525.port.*;
 
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -21,13 +16,14 @@ public final class Partita {
     private static final String FILE_MAPPA = "mappa.json";
     private static final String FILE_DOMANDE = "domandeEsami.json";
     private static final String STANZA_INIZIALE = "Atrio";
-    private static final int INTELLIGENZA_INIZIALE=10;
-    private static final int RESILIENZA_INIZIALE=5;
-    private static final int HP_INIZIALE=100;
-    private static final int MONETE_INIZIALI=50;
+    private static final int INTELLIGENZA_INIZIALE = 10;
+    private static final int RESILIENZA_INIZIALE = 5;
+    private static final int HP_INIZIALE = 100;
+    private static final int MONETE_INIZIALI = 50;
 
 
-    private Partita() { }
+    private Partita() {
+    }
 
     public static void esegui(GameView view, GameInput input) {
         if (view == null || input == null)

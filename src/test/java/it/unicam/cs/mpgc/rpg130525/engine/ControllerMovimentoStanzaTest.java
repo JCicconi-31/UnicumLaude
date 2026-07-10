@@ -4,7 +4,8 @@ import it.unicam.cs.mpgc.rpg130525.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test unitari per {@link ControllerMovimentoStanze}: spostamento fisico lungo i

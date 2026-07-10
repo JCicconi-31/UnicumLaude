@@ -12,8 +12,8 @@ import java.util.Random;
 public class EsameController {
     private final List<FaseEsame> fasi;
     private final Random random;
-    private static final int VOTO_MINIMO=18;
-    private static final int VOTO_MASSIMO=30;
+    private static final int VOTO_MINIMO = 18;
+    private static final int VOTO_MASSIMO = 30;
 
     public EsameController(List<FaseEsame> fasi) {
         this(fasi, new Random());

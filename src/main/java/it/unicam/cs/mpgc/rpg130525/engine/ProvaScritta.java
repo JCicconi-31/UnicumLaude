@@ -23,13 +23,13 @@ public class ProvaScritta implements FaseEsame {
     @Override
     public boolean esegui(StatoGioco stato, GameView view) {
         Esame esame = stato.getPosizioneCorrente().getEsame();
-        Domanda domanda = database.estraiCasuale(esame.getNomeCorso());
+        Domanda domanda = database.estraiCasuale(esame.nomeCorso());
         int scelta = input.chiediRisposta(domanda);
         if (domanda.isCorretta(scelta)) {
             view.mostraMessaggio("Risposta corretta!");
             return true;
         }
-        int danno = calcolatoreDanno.dannoSubito(esame.getProfessore(), stato.getStudente());
+        int danno = calcolatoreDanno.dannoSubito(esame.professore(), stato.getStudente());
         stato.getStudente().subisciDanno(danno);
         view.mostraMessaggio("Risposta errata: subisci " + danno + " stress");
         return false;

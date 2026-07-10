@@ -14,11 +14,17 @@ public class ChatGPT implements Equipaggiamento {
     }
 
     @Override
-    public Map<Stat, Integer> getModificatori() { return modificatori; }
+    public Map<Stat, Integer> getModificatori() {
+        return modificatori;
+    }
 
     @Override
-    public String getNome() { return "CHATGPT"; }
+    public String getNome() {
+        return "CHATGPT";
+    }
 
     @Override
-    public TipoItem getTipo() { return TipoItem.CHATGPT; }
+    public TipoItem getTipo() {
+        return TipoItem.CHATGPT;
+    }
 }

@@ -1,30 +1,12 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
-public class Esame {
-    private final int codiceCorso;
-    private final String nomeCorso;
-    private final int cfuAssociati;
-    private final Professore professore;
-
-    public Esame(int codiceCorso, String nomeCorso, int cfuAssociati, Professore professore) {
-        if (codiceCorso < 0)
-            throw new IllegalArgumentException("codice corso non valido");
-        if (nomeCorso == null || nomeCorso.isBlank())
-            throw new IllegalArgumentException("nome esame non valido");
-        if (cfuAssociati <= 0 || cfuAssociati > 18)
-            throw new IllegalArgumentException("numero CFU non valido");
-        if (professore == null)
-            throw new IllegalArgumentException("professore non valido");
-        this.codiceCorso = codiceCorso;
-        this.nomeCorso = nomeCorso;
-        this.cfuAssociati = cfuAssociati;
-        this.professore = professore;
+public record Esame(int codiceCorso, String nomeCorso, int cfuAssociati, Professore professore) {
+    public Esame {
+        if (codiceCorso < 0) throw new IllegalArgumentException("codice corso non valido");
+        if (nomeCorso == null || nomeCorso.isBlank()) throw new IllegalArgumentException("nome esame non valido");
+        if (cfuAssociati <= 0 || cfuAssociati > 18) throw new IllegalArgumentException("numero CFU non valido");
+        if (professore == null) throw new IllegalArgumentException("professore non valido");
     }
-
-    public int getCodiceCorso() { return codiceCorso; }
-    public String getNomeCorso() { return nomeCorso; }
-    public int getCfuAssociati() { return cfuAssociati; }
-    public Professore getProfessore() { return professore; }
 
     @Override
     public boolean equals(Object o) {

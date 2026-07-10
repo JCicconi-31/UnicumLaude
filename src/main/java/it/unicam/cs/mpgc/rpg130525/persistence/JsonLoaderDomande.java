@@ -21,8 +21,7 @@ public class JsonLoaderDomande implements LoaderDomande {
     private final Gson gson = new Gson();
 
     public JsonLoaderDomande(InputStream input) {
-        if (input == null)
-            throw new IllegalArgumentException("input nullo");
+        if (input == null) throw new IllegalArgumentException("input nullo");
         this.input = input;
     }
 

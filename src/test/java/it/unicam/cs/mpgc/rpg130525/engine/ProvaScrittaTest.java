@@ -1,11 +1,7 @@
 package it.unicam.cs.mpgc.rpg130525.engine;
 
 import it.unicam.cs.mpgc.rpg130525.model.*;
-import it.unicam.cs.mpgc.rpg130525.port.GameInput;
-import it.unicam.cs.mpgc.rpg130525.port.GameView;
-import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
-import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
-import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
+import it.unicam.cs.mpgc.rpg130525.port.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -27,27 +23,49 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProvaScrittaTest {
 
     private static final GameView VIEW_MUTA = new GameView() {
-        @Override public void mostraMessaggio(String messaggio) { }
-        @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
-        @Override public void aggiornaStatoProfessore(ProfessoreDto professoreDto) { }
-        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
+        @Override
+        public void mostraMessaggio(String messaggio) {
+        }
+
+        @Override
+        public void aggiornaStatoGiocatore(StudenteDto studente) {
+        }
+
+        @Override
+        public void aggiornaStatoProfessore(ProfessoreDto professoreDto) {
+        }
+
+        @Override
+        public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
+        }
     };
 
-    /** La domanda di test: l'opzione corretta è l'indice 1. */
+    /**
+     * La domanda di test: l'opzione corretta è l'indice 1.
+     */
     private static final Domanda DOMANDA =
             new Domanda("Quale principio riguarda l'estensibilità?", List.of("SRP", "OCP", "DIP"), 1);
 
     private final CalcolatoreDanno calcolatore = new CalcolatoreDanno();
 
     /** Database con un solo corso e una sola domanda: l'estrazione è deterministica. */
-    /** Input finto che risponde sempre con l'indice dato; gli altri metodi non servono qui. */
+    /**
+     * Input finto che risponde sempre con l'indice dato; gli altri metodi non servono qui.
+     */
     private static GameInput rispostaFissa(int indice) {
         return new GameInput() {
-            @Override public int chiediRisposta(Domanda domanda) { return indice; }
-            @Override public int scegli(String titolo, List<String> opzioni) {
+            @Override
+            public int chiediRisposta(Domanda domanda) {
+                return indice;
+            }
+
+            @Override
+            public int scegli(String titolo, List<String> opzioni) {
                 throw new UnsupportedOperationException();
             }
-            @Override public String chiediTesto(String prompt) {
+
+            @Override
+            public String chiediTesto(String prompt) {
                 throw new UnsupportedOperationException();
             }
         };
@@ -62,7 +80,9 @@ class ProvaScrittaTest {
         return new Studente("Mario", "Rossi", 10, 5, 100, 50, new StudenteFullTime()); // resil 5, HP 120
     }
 
-    /** Stato con lo studente in un'aula del corso "Programmazione". */
+    /**
+     * Stato con lo studente in un'aula del corso "Programmazione".
+     */
     private StatoGioco statoConProfessore(Studente studente, Professore prof) {
         Esame esame = new Esame(1, "Programmazione", 6, prof);
         Stanza aula = new Stanza("LA1", TipoStanza.AULA_ESAME, esame);
@@ -111,11 +131,19 @@ class ProvaScrittaTest {
         StatoGioco stato = statoConProfessore(s, new Professore("Anna", "Verdi", 8, 50));
         Domanda[] ricevuta = new Domanda[1];
         GameInput registra = new GameInput() {
-            @Override public int chiediRisposta(Domanda domanda) { ricevuta[0] = domanda; return 1; }
-            @Override public int scegli(String titolo, List<String> opzioni) {
+            @Override
+            public int chiediRisposta(Domanda domanda) {
+                ricevuta[0] = domanda;
+                return 1;
+            }
+
+            @Override
+            public int scegli(String titolo, List<String> opzioni) {
                 throw new UnsupportedOperationException();
             }
-            @Override public String chiediTesto(String prompt) {
+
+            @Override
+            public String chiediTesto(String prompt) {
                 throw new UnsupportedOperationException();
             }
         };

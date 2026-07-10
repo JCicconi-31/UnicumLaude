@@ -5,8 +5,7 @@ public abstract class Persona {
     protected String cognome;
 
     public Persona(String nome, String cognome) {
-        if (nome == null || cognome == null)
-            throw new IllegalArgumentException("parametri null");
+        if (nome == null || cognome == null) throw new IllegalArgumentException("parametri null");
         this.nome = nome;
         this.cognome = cognome;
     }

@@ -47,7 +47,7 @@ public class Mappa {
         return collegamenti.keySet().stream()
                 .map(Stanza::getEsame)
                 .filter(Objects::nonNull)
-                .mapToInt(Esame::getCfuAssociati)
+                .mapToInt(Esame::cfuAssociati)
                 .sum();
     }
 }

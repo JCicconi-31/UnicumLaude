@@ -20,10 +20,8 @@ public class Domanda {
     private final int indiceCorretta;
 
     public Domanda(String testo, List<String> opzioni, int indiceCorretta) {
-        if (testo == null || testo.isBlank())
-            throw new IllegalArgumentException("testo domanda non valido");
-        if (opzioni == null || opzioni.size() < 2)
-            throw new IllegalArgumentException("servono almeno due opzioni");
+        if (testo == null || testo.isBlank()) throw new IllegalArgumentException("testo domanda non valido");
+        if (opzioni == null || opzioni.size() < 2) throw new IllegalArgumentException("servono almeno due opzioni");
         if (indiceCorretta < 0 || indiceCorretta >= opzioni.size())
             throw new IllegalArgumentException("indice risposta corretta fuori range");
         this.testo = testo;
@@ -41,7 +39,11 @@ public class Domanda {
         return rispostaScelta == indiceCorretta;
     }
 
-    public String getTesto() { return testo; }
+    public String getTesto() {
+        return testo;
+    }
 
-    public List<String> getOpzioni() { return opzioni; } // già immutabile (List.copyOf)
+    public List<String> getOpzioni() {
+        return opzioni;
+    } // già immutabile (List.copyOf)
 }

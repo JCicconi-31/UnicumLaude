@@ -2,25 +2,10 @@ package it.unicam.cs.mpgc.rpg130525.model;
 
 import java.util.Objects;
 
-public class EsameSuperato {
-    private final Esame esame;
-    private final int voto;
-
-    public EsameSuperato(Esame esame, int voto) {
-        if (esame == null)
-            throw new IllegalArgumentException("Esame non valido");
-        if (voto < 18 || voto > 31)
-            throw new IllegalArgumentException("Voto non valido");
-        this.esame = esame;
-        this.voto = voto;
-    }
-
-    public int getVoto() {
-        return voto;
-    }
-
-    public Esame getEsame() {
-        return esame;
+public record EsameSuperato(Esame esame, int voto) {
+    public EsameSuperato {
+        if (esame == null) throw new IllegalArgumentException("Esame non valido");
+        if (voto < 18 || voto > 31) throw new IllegalArgumentException("Voto non valido");
     }
 
     @Override

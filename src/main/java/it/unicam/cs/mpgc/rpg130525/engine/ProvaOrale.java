@@ -29,7 +29,7 @@ public class ProvaOrale implements FaseEsame {
         if (aula.getEsame() == null)
             throw new IllegalStateException("la stanza non ha un esame associato");
 
-        Professore professore = aula.getEsame().getProfessore();
+        Professore professore = aula.getEsame().professore();
         view.mostraMessaggio("Inizia la prova orale con il prof. " + professore.getNomeCompleto());
         view.aggiornaStatoProfessore(ProfessoreDto.da(professore));
         //fase concreta di "combattimento" tra Studente e Professore

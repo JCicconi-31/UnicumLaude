@@ -6,7 +6,8 @@ import it.unicam.cs.mpgc.rpg130525.model.Items.ChatGPT;
 import it.unicam.cs.mpgc.rpg130525.model.Items.Libro;
 
 public final class CatalogoItem {
-    private CatalogoItem() { }
+    private CatalogoItem() {
+    }
 
     public static Item crea(TipoItem tipo) {
         return switch (tipo) {

@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test unitari per {@link Studente}, in particolare il calcolo delle statistiche
@@ -16,12 +17,25 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class StudenteTest {
 
-    /** Equipaggiamento fittizio per i test: un tipo e una mappa di modificatori. */
+    /**
+     * Equipaggiamento fittizio per i test: un tipo e una mappa di modificatori.
+     */
     private static Equipaggiamento equip(TipoItem tipo, Map<Stat, Integer> modificatori) {
         return new Equipaggiamento() {
-            @Override public Map<Stat, Integer> getModificatori() { return modificatori; }
-            @Override public String getNome() { return tipo.name(); }
-            @Override public TipoItem getTipo() { return tipo; }
+            @Override
+            public Map<Stat, Integer> getModificatori() {
+                return modificatori;
+            }
+
+            @Override
+            public String getNome() {
+                return tipo.name();
+            }
+
+            @Override
+            public TipoItem getTipo() {
+                return tipo;
+            }
         };
     }
 

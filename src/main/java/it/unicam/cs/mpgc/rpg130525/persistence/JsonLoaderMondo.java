@@ -19,8 +19,7 @@ public class JsonLoaderMondo implements LoaderMondo {
     private final Gson gson = new Gson();
 
     public JsonLoaderMondo(InputStream input) {
-        if (input == null)
-            throw new IllegalArgumentException("input nullo");
+        if (input == null) throw new IllegalArgumentException("input nullo");
         this.input = input;
     }
 
@@ -38,12 +37,10 @@ public class JsonLoaderMondo implements LoaderMondo {
         //gestisce propedeuticità e i corridoi
         for (MappaConfigDto.StanzaDto dto : config.stanze()) {
             Stanza corrente = perNome.get(dto.nome());
-            if (dto.adiacenze() != null)
-                for (String nome : dto.adiacenze())
-                    mappa.addCorridoio(corrente, richiedi(perNome, nome, dto.nome()));
-            if (dto.propedeuticita() != null)
-                for (String nome : dto.propedeuticita())
-                    mappa.addPropedeuticita(richiedi(perNome, nome, dto.nome()), corrente);
+            if (dto.adiacenze() != null) for (String nome : dto.adiacenze())
+                mappa.addCorridoio(corrente, richiedi(perNome, nome, dto.nome()));
+            if (dto.propedeuticita() != null) for (String nome : dto.propedeuticita())
+                mappa.addPropedeuticita(richiedi(perNome, nome, dto.nome()), corrente);
         }
         return mappa;
     }
@@ -71,8 +68,7 @@ public class JsonLoaderMondo implements LoaderMondo {
     private Esame costruisciEsame(MappaConfigDto.EsameDto dto) {
         if (dto == null) return null;
         MappaConfigDto.ProfessoreDto p = dto.professore();
-        if (p == null)
-            throw new PersistenceException("esame '" + dto.nome() + "' senza professore", null);
+        if (p == null) throw new PersistenceException("esame '" + dto.nome() + "' senza professore", null);
         Professore professore = new Professore(p.nome(), p.cognome(), p.attacco(), p.hp());
         return new Esame(dto.codiceCorso(), dto.nome(), dto.cfu(), professore);
     }

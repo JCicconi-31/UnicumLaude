@@ -1,12 +1,7 @@
 package it.unicam.cs.mpgc.rpg130525.engine;
 
 import it.unicam.cs.mpgc.rpg130525.model.*;
-import it.unicam.cs.mpgc.rpg130525.port.GameInput;
-import it.unicam.cs.mpgc.rpg130525.port.GameView;
-import it.unicam.cs.mpgc.rpg130525.port.PersistenceManager;
-import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
-import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
-import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
+import it.unicam.cs.mpgc.rpg130525.port.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,21 +26,37 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class GameLoopTest {
 
-    /** View che registra i messaggi, per verificare vittoria/burnout/vincoli. */
+    /**
+     * View che registra i messaggi, per verificare vittoria/burnout/vincoli.
+     */
     private static final class RecordingView implements GameView {
         final List<String> messaggi = new ArrayList<>();
         List<StanzaDto> ultimaMappa;
         String ultimaPosizione;
-        @Override public void mostraMessaggio(String messaggio) { messaggi.add(messaggio); }
-        @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
-        @Override public void aggiornaStatoProfessore(ProfessoreDto professoreDto) { }
-        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
+
+        @Override
+        public void mostraMessaggio(String messaggio) {
+            messaggi.add(messaggio);
+        }
+
+        @Override
+        public void aggiornaStatoGiocatore(StudenteDto studente) {
+        }
+
+        @Override
+        public void aggiornaStatoProfessore(ProfessoreDto professoreDto) {
+        }
+
+        @Override
+        public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
             ultimaMappa = stanze;
             ultimaPosizione = posizioneCorrente;
         }
     }
 
-    /** Estrae dallo snapshot della mappa lo stato della stanza col nome dato. */
+    /**
+     * Estrae dallo snapshot della mappa lo stato della stanza col nome dato.
+     */
     private static StanzaDto.Stato statoDi(List<StanzaDto> stanze, String nome) {
         return stanze.stream()
                 .filter(s -> s.nome().equals(nome))
@@ -53,23 +64,50 @@ class GameLoopTest {
                 .stato();
     }
 
-    /** Input che restituisce una sequenza prefissata di scelte. */
+    /**
+     * Input che restituisce una sequenza prefissata di scelte.
+     */
     private static GameInput script(int... scelte) {
         Deque<Integer> coda = new ArrayDeque<>();
         for (int s : scelte) coda.add(s);
         return new GameInput() {
-            @Override public int chiediRisposta(Domanda domanda) { return coda.remove(); }
-            @Override public int scegli(String titolo, List<String> opzioni) { return coda.remove(); }
-            @Override public String chiediTesto(String prompt) { return "test"; }
+            @Override
+            public int chiediRisposta(Domanda domanda) {
+                return coda.remove();
+            }
+
+            @Override
+            public int scegli(String titolo, List<String> opzioni) {
+                return coda.remove();
+            }
+
+            @Override
+            public String chiediTesto(String prompt) {
+                return "test";
+            }
         };
     }
 
-    /** Persistenza in memoria: registra il salvataggio senza toccare il disco. */
+    /**
+     * Persistenza in memoria: registra il salvataggio senza toccare il disco.
+     */
     private static final class PersistenzaInMemoria implements PersistenceManager {
         StatoGioco salvato;
-        @Override public void salva(StatoGioco stato) { salvato = stato; }
-        @Override public StatoGioco carica() { return salvato; }
-        @Override public boolean esisteSalvataggio() { return salvato != null; }
+
+        @Override
+        public void salva(StatoGioco stato) {
+            salvato = stato;
+        }
+
+        @Override
+        public StatoGioco carica() {
+            return salvato;
+        }
+
+        @Override
+        public boolean esisteSalvataggio() {
+            return salvato != null;
+        }
     }
 
     private Mappa mappa;

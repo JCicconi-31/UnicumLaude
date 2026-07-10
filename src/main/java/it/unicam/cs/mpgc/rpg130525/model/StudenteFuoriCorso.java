@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
-public class StudenteFuoriCorso implements CareerStrategy{
+public class StudenteFuoriCorso implements CareerStrategy {
 
     @Override
     public int modificatoreHpMax() {

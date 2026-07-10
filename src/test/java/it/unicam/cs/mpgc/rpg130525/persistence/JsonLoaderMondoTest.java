@@ -1,6 +1,9 @@
 package it.unicam.cs.mpgc.rpg130525.persistence;
 
-import it.unicam.cs.mpgc.rpg130525.model.*;
+import it.unicam.cs.mpgc.rpg130525.model.Esame;
+import it.unicam.cs.mpgc.rpg130525.model.Mappa;
+import it.unicam.cs.mpgc.rpg130525.model.Professore;
+import it.unicam.cs.mpgc.rpg130525.model.Stanza;
 import it.unicam.cs.mpgc.rpg130525.port.PersistenceException;
 import org.junit.jupiter.api.Test;
 
@@ -92,10 +95,10 @@ class JsonLoaderMondoTest {
     void esameEProfessoreMappatiCorrettamente() {
         Mappa mappa = new JsonLoaderMondo(sorgente(MAPPA_JSON)).caricaMappa();
         Esame esame = stanza(mappa, "Aula LA1").getEsame();
-        assertEquals(1, esame.getCodiceCorso());
-        assertEquals("Programmazione", esame.getNomeCorso());
-        assertEquals(6, esame.getCfuAssociati());
-        Professore prof = esame.getProfessore();
+        assertEquals(1, esame.codiceCorso());
+        assertEquals("Programmazione", esame.nomeCorso());
+        assertEquals(6, esame.cfuAssociati());
+        Professore prof = esame.professore();
         assertEquals("Ada Lovelace", prof.getNomeCompleto());
         assertEquals(3, prof.getDifficolta()); // 'attacco' nel JSON -> difficolta nel dominio
         assertEquals(25, prof.getHpMax());      // 'hp' nel JSON -> hpMax nel dominio

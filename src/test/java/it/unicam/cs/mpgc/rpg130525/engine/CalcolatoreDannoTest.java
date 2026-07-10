@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test unitari per {@link CalcolatoreDanno}: danno inflitto dallo studente,
@@ -20,16 +21,29 @@ class CalcolatoreDannoTest {
 
     private final CalcolatoreDanno calcolatore = new CalcolatoreDanno();
 
-    /** Studente con intelligenza 10 e resilienza 5. */
+    /**
+     * Studente con intelligenza 10 e resilienza 5.
+     */
     private Studente nuovoStudente() {
         return new Studente("Mario", "Rossi", 10, 5, 100, 50, new StudenteFullTime());
     }
 
     private static Equipaggiamento equip(TipoItem tipo, Map<Stat, Integer> modificatori) {
         return new Equipaggiamento() {
-            @Override public Map<Stat, Integer> getModificatori() { return modificatori; }
-            @Override public String getNome() { return tipo.name(); }
-            @Override public TipoItem getTipo() { return tipo; }
+            @Override
+            public Map<Stat, Integer> getModificatori() {
+                return modificatori;
+            }
+
+            @Override
+            public String getNome() {
+                return tipo.name();
+            }
+
+            @Override
+            public TipoItem getTipo() {
+                return tipo;
+            }
         };
     }
 

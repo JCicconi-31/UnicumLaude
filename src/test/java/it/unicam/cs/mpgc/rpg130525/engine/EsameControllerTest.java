@@ -26,13 +26,28 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class EsameControllerTest {
 
-    /** View che registra i messaggi mostrati, per verificare la notifica del Burnout. */
+    /**
+     * View che registra i messaggi mostrati, per verificare la notifica del Burnout.
+     */
     private static final class RecordingView implements GameView {
         final List<String> messaggi = new ArrayList<>();
-        @Override public void mostraMessaggio(String messaggio) { messaggi.add(messaggio); }
-        @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
-        @Override public void aggiornaStatoProfessore(ProfessoreDto professoreDto) { }
-        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
+
+        @Override
+        public void mostraMessaggio(String messaggio) {
+            messaggi.add(messaggio);
+        }
+
+        @Override
+        public void aggiornaStatoGiocatore(StudenteDto studente) {
+        }
+
+        @Override
+        public void aggiornaStatoProfessore(ProfessoreDto professoreDto) {
+        }
+
+        @Override
+        public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
+        }
     }
 
     private static final GameView VIEW_MUTA = new RecordingView();
@@ -70,7 +85,10 @@ class EsameControllerTest {
         EsameController controller = new EsameController(List.of(
                 (s, v) -> true,
                 (s, v) -> false, // fallisce qui
-                (s, v) -> { terzaEseguita[0] = true; return true; }));
+                (s, v) -> {
+                    terzaEseguita[0] = true;
+                    return true;
+                }));
 
         assertFalse(controller.sostieniEsame(stato, VIEW_MUTA));
         assertFalse(terzaEseguita[0]); // short-circuit: la fase dopo il fallimento non parte
@@ -82,8 +100,14 @@ class EsameControllerTest {
     void leFasiVengonoEseguiteNellOrdineDellaLista() {
         List<String> log = new ArrayList<>();
         EsameController controller = new EsameController(List.of(
-                (s, v) -> { log.add("scritta"); return true; },
-                (s, v) -> { log.add("orale"); return true; }));
+                (s, v) -> {
+                    log.add("scritta");
+                    return true;
+                },
+                (s, v) -> {
+                    log.add("orale");
+                    return true;
+                }));
 
         controller.sostieniEsame(stato, VIEW_MUTA);
         assertEquals(List.of("scritta", "orale"), log);
@@ -93,7 +117,9 @@ class EsameControllerTest {
     void ilBurnoutVieneCatturatoNotificatoERitornaFalse() {
         RecordingView view = new RecordingView();
         EsameController controller = new EsameController(List.of(
-                (s, v) -> { throw new BurnoutException("energie esaurite"); }));
+                (s, v) -> {
+                    throw new BurnoutException("energie esaurite");
+                }));
 
         assertFalse(controller.sostieniEsame(stato, view));
         assertEquals(0, libretto().getCfuOttenuti()); // nessuna registrazione dopo il burnout
@@ -104,7 +130,10 @@ class EsameControllerTest {
     void ilVotoRegistratoUsaLaSorgenteDiCasualitaIniettata() {
         // Random stub: nextInt(13) -> 12, quindi voto = 18 + 12 = 30 (deterministico)
         Random randomFisso = new Random() {
-            @Override public int nextInt(int bound) { return 12; }
+            @Override
+            public int nextInt(int bound) {
+                return 12;
+            }
         };
         FaseEsame faseSuperata = (s, v) -> true;
         EsameController controller = new EsameController(List.of(faseSuperata), randomFisso);
@@ -112,7 +141,7 @@ class EsameControllerTest {
         controller.sostieniEsame(stato, VIEW_MUTA);
 
         EsameSuperato registrato = libretto().getDettaglioEsami().iterator().next();
-        assertEquals(30, registrato.getVoto());
+        assertEquals(30, registrato.voto());
     }
 
     @Test

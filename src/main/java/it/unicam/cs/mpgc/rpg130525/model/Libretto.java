@@ -9,11 +9,10 @@ public class Libretto {
     private final Set<EsameSuperato> esamiSuperati = new HashSet<>();
     private int cfuOttenuti = 0;
 
-    public boolean addEsameSuperato(EsameSuperato esame){
-        if (esame == null)
-            throw new IllegalArgumentException("esame passato null");
-        if (esamiSuperati.add(esame)){
-            aggiungiCFU(esame.getEsame().getCfuAssociati());
+    public boolean addEsameSuperato(EsameSuperato esame) {
+        if (esame == null) throw new IllegalArgumentException("esame passato null");
+        if (esamiSuperati.add(esame)) {
+            aggiungiCFU(esame.esame().cfuAssociati());
             return true;
         }
         return false;
@@ -23,14 +22,12 @@ public class Libretto {
         this.cfuOttenuti += quantita;
     }
 
-    public int getCfuOttenuti(){
+    public int getCfuOttenuti() {
         return cfuOttenuti;
     }
 
     public Set<Esame> getEsamiSuperati() {
-        return esamiSuperati.stream()
-                .map(EsameSuperato::getEsame)
-                .collect(Collectors.toUnmodifiableSet());
+        return esamiSuperati.stream().map(EsameSuperato::esame).collect(Collectors.toUnmodifiableSet());
     }
 
     public Set<EsameSuperato> getDettaglioEsami() {

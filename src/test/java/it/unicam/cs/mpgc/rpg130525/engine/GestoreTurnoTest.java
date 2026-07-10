@@ -1,6 +1,9 @@
 package it.unicam.cs.mpgc.rpg130525.engine;
 
-import it.unicam.cs.mpgc.rpg130525.model.*;
+import it.unicam.cs.mpgc.rpg130525.model.BurnoutException;
+import it.unicam.cs.mpgc.rpg130525.model.Professore;
+import it.unicam.cs.mpgc.rpg130525.model.Studente;
+import it.unicam.cs.mpgc.rpg130525.model.StudenteFullTime;
 import it.unicam.cs.mpgc.rpg130525.port.GameView;
 import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
 import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
@@ -23,12 +26,25 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class GestoreTurnoTest {
 
-    /** View "muta": non visualizza nulla, isola il test dall'interfaccia. */
+    /**
+     * View "muta": non visualizza nulla, isola il test dall'interfaccia.
+     */
     private static final GameView VIEW_MUTA = new GameView() {
-        @Override public void mostraMessaggio(String messaggio) { }
-        @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
-        @Override public void aggiornaStatoProfessore(ProfessoreDto professoreDto) { }
-        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
+        @Override
+        public void mostraMessaggio(String messaggio) {
+        }
+
+        @Override
+        public void aggiornaStatoGiocatore(StudenteDto studente) {
+        }
+
+        @Override
+        public void aggiornaStatoProfessore(ProfessoreDto professoreDto) {
+        }
+
+        @Override
+        public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
+        }
     };
 
     private final GestoreTurno gestore = new GestoreTurno(new CalcolatoreDanno());
@@ -68,13 +84,28 @@ class GestoreTurnoTest {
         assertThrows(BurnoutException.class, () -> gestore.eseguiTurno(s, prof, VIEW_MUTA));
     }
 
-    /** View che registra le notifiche sugli HP del professore. */
+    /**
+     * View che registra le notifiche sugli HP del professore.
+     */
     private static final class BossRecordingView implements GameView {
         final List<ProfessoreDto> notifiche = new ArrayList<>();
-        @Override public void mostraMessaggio(String messaggio) { }
-        @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
-        @Override public void aggiornaStatoProfessore(ProfessoreDto p) { notifiche.add(p); }
-        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
+
+        @Override
+        public void mostraMessaggio(String messaggio) {
+        }
+
+        @Override
+        public void aggiornaStatoGiocatore(StudenteDto studente) {
+        }
+
+        @Override
+        public void aggiornaStatoProfessore(ProfessoreDto p) {
+            notifiche.add(p);
+        }
+
+        @Override
+        public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
+        }
     }
 
     @Test

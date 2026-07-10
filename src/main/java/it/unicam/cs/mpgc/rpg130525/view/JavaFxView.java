@@ -29,12 +29,8 @@ public class JavaFxView implements GameView, GameInput {
     private List<String> opzioniPendenti;
     private CompletableFuture<Integer> sceltaPendente;
 
-    public JavaFxView(TextArea log, Label statoGiocatore, VBox pannelloRisposte,
-                      Label nomeProfessore, ProgressBar barraProfessore, HBox rigaProfessore,
-                      Pane pannelloMappa) {
-        if (log == null || statoGiocatore == null || pannelloRisposte == null
-                || nomeProfessore == null || barraProfessore == null || rigaProfessore == null
-                || pannelloMappa == null)
+    public JavaFxView(TextArea log, Label statoGiocatore, VBox pannelloRisposte, Label nomeProfessore, ProgressBar barraProfessore, HBox rigaProfessore, Pane pannelloMappa) {
+        if (log == null || statoGiocatore == null || pannelloRisposte == null || nomeProfessore == null || barraProfessore == null || rigaProfessore == null || pannelloMappa == null)
             throw new IllegalArgumentException("componenti grafici nulli");
         this.log = log;
         this.statoGiocatore = statoGiocatore;
@@ -52,11 +48,7 @@ public class JavaFxView implements GameView, GameInput {
 
     @Override
     public void aggiornaStatoGiocatore(StudenteDto s) {
-        Platform.runLater(() -> statoGiocatore.setText(String.format(
-                "[%s] HP %d/%d | INTELLIGENZA %d | RESILIENZA %d | CFU %d | Monete %d",
-                s.nomeCompleto(), s.saluteMentale(), s.saluteMentaleMax(),
-                s.intelligenzaEffettiva(), s.resilienzaEffettiva(),
-                s.cfu(), s.monete())));
+        Platform.runLater(() -> statoGiocatore.setText(String.format("[%s] HP %d/%d | INTELLIGENZA %d | RESILIENZA %d | CFU %d | Monete %d", s.nomeCompleto(), s.saluteMentale(), s.saluteMentaleMax(), s.intelligenzaEffettiva(), s.resilienzaEffettiva(), s.cfu(), s.monete())));
     }
 
     @Override
@@ -101,9 +93,10 @@ public class JavaFxView implements GameView, GameInput {
             }
         });
     }
+
     /*
-    * Metodo sviluppato usando AI
-    * */
+     * Metodo sviluppato usando AI
+     * */
     private Map<String, Point2D> disponiInCerchio(List<StanzaDto> stanze) {
         Map<String, Point2D> posizioni = new HashMap<>();
         double centroX = 150, centroY = 130, raggio = 95;
@@ -119,18 +112,16 @@ public class JavaFxView implements GameView, GameInput {
 
     private Color coloreStanza(StanzaDto.Stato stato) {
         return switch (stato) {
-            case BLOCCATA    -> Color.LIGHTGRAY;
+            case BLOCCATA -> Color.LIGHTGRAY;
             case DISPONIBILE -> Color.GOLD;
-            case SUPERATA    -> Color.LIGHTGREEN;
+            case SUPERATA -> Color.LIGHTGREEN;
         };
     }
 
     private void clickSuStanza(String nome) {
-        if (sceltaPendente == null || sceltaPendente.isDone())
-            return;
+        if (sceltaPendente == null || sceltaPendente.isDone()) return;
         int indice = opzioniPendenti.indexOf("Vai a: " + nome);
-        if (indice < 0)
-            return;
+        if (indice < 0) return;
         pannelloRisposte.getChildren().clear();
         sceltaPendente.complete(indice);
     }

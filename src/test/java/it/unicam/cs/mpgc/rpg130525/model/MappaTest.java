@@ -20,7 +20,7 @@ class MappaTest {
     }
 
     private Stanza aulaEsame(Esame esame) {
-        return new Stanza("Aula " + esame.getCodiceCorso(), TipoStanza.AULA_ESAME, esame);
+        return new Stanza("Aula " + esame.codiceCorso(), TipoStanza.AULA_ESAME, esame);
     }
 
     @Test

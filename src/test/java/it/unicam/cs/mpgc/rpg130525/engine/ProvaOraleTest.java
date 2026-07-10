@@ -1,11 +1,7 @@
 package it.unicam.cs.mpgc.rpg130525.engine;
 
 import it.unicam.cs.mpgc.rpg130525.model.*;
-import it.unicam.cs.mpgc.rpg130525.port.GameInput;
-import it.unicam.cs.mpgc.rpg130525.port.GameView;
-import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
-import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
-import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
+import it.unicam.cs.mpgc.rpg130525.port.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -26,19 +22,39 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProvaOraleTest {
 
     private static final GameView VIEW_MUTA = new GameView() {
-        @Override public void mostraMessaggio(String messaggio) { }
-        @Override public void aggiornaStatoGiocatore(StudenteDto studente) { }
-        @Override public void aggiornaStatoProfessore(ProfessoreDto professoreDto) { }
-        @Override public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) { }
+        @Override
+        public void mostraMessaggio(String messaggio) {
+        }
+
+        @Override
+        public void aggiornaStatoGiocatore(StudenteDto studente) {
+        }
+
+        @Override
+        public void aggiornaStatoProfessore(ProfessoreDto professoreDto) {
+        }
+
+        @Override
+        public void aggiornaMappa(List<StanzaDto> stanze, String posizioneCorrente) {
+        }
     };
 
-    /** Input che conferma sempre la prima azione: fa avanzare i turni dell'orale. */
+    /**
+     * Input che conferma sempre la prima azione: fa avanzare i turni dell'orale.
+     */
     private static final GameInput INPUT_AVANTI = new GameInput() {
-        @Override public int chiediRisposta(Domanda domanda) {
+        @Override
+        public int chiediRisposta(Domanda domanda) {
             throw new UnsupportedOperationException("non usato nella prova orale");
         }
-        @Override public int scegli(String titolo, List<String> opzioni) { return 0; }
-        @Override public String chiediTesto(String prompt) {
+
+        @Override
+        public int scegli(String titolo, List<String> opzioni) {
+            return 0;
+        }
+
+        @Override
+        public String chiediTesto(String prompt) {
             throw new UnsupportedOperationException("non usato nella prova orale");
         }
     };
@@ -50,7 +66,9 @@ class ProvaOraleTest {
         return new Studente("Mario", "Rossi", 10, 5, 100, 50, new StudenteFullTime()); // intel 10, resil 5, HP 120
     }
 
-    /** Costruisce uno stato con lo studente in un'aula d'esame governata dal professore dato. */
+    /**
+     * Costruisce uno stato con lo studente in un'aula d'esame governata dal professore dato.
+     */
     private StatoGioco statoConProfessore(Studente studente, Professore prof) {
         Esame esame = new Esame(1, "Metodologie di Programmazione", 6, prof);
         Stanza aula = new Stanza("LA1", TipoStanza.AULA_ESAME, esame);
@@ -59,9 +77,20 @@ class ProvaOraleTest {
 
     private static Equipaggiamento equip(TipoItem tipo, Map<Stat, Integer> modificatori) {
         return new Equipaggiamento() {
-            @Override public Map<Stat, Integer> getModificatori() { return modificatori; }
-            @Override public String getNome() { return tipo.name(); }
-            @Override public TipoItem getTipo() { return tipo; }
+            @Override
+            public Map<Stat, Integer> getModificatori() {
+                return modificatori;
+            }
+
+            @Override
+            public String getNome() {
+                return tipo.name();
+            }
+
+            @Override
+            public TipoItem getTipo() {
+                return tipo;
+            }
         };
     }
 

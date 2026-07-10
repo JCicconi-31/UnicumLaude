@@ -20,8 +20,7 @@ public class JsonGameStatePersistence implements PersistenceManager {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public JsonGameStatePersistence(Path file, Mappa mappa) {
-        if (file == null || mappa == null)
-            throw new IllegalArgumentException("file o mappa nulli");
+        if (file == null || mappa == null) throw new IllegalArgumentException("file o mappa nulli");
         this.file = file;
         this.mappa = mappa;
     }
@@ -55,22 +54,12 @@ public class JsonGameStatePersistence implements PersistenceManager {
     private GameStateDto versoDto(StatoGioco stato) {
         Studente s = stato.getStudente();
         CareerStrategy c = s.getCarriera();
-        var esami = s.getLibretto().getDettaglioEsami().stream()
-                .map(e -> new GameStateDto.EsameSuperatoDto(e.getEsame().getCodiceCorso(), e.getVoto()))
-                .toList();
+        var esami = s.getLibretto().getDettaglioEsami().stream().map(e -> new GameStateDto.EsameSuperatoDto(e.esame().codiceCorso(), e.voto())).toList();
         Map<String, Integer> inventario = new HashMap<>();
         s.getInventario().forEach((tipo, slot) -> inventario.put(tipo.name(), slot.getQuantita()));
         for (Consumabile cons : s.getZaino())
             inventario.merge(cons.getTipo().name(), 1, Integer::sum);
-        return new GameStateDto(
-                s.getNome(), s.getCognome(),
-                s.getIntelligenzaBase(), s.getResilienzaBase(),
-                s.getSaluteMentaleMax() - c.modificatoreHpMax(),
-                s.getMonete() - c.modificatoreMoneteIniziali(),
-                c.getClass().getSimpleName(),
-                s.getSaluteMentale(),
-                stato.getPosizioneCorrente().getNome(),
-                esami, inventario);
+        return new GameStateDto(s.getNome(), s.getCognome(), s.getIntelligenzaBase(), s.getResilienzaBase(), s.getSaluteMentaleMax() - c.modificatoreHpMax(), s.getMonete() - c.modificatoreMoneteIniziali(), c.getClass().getSimpleName(), s.getSaluteMentale(), stato.getPosizioneCorrente().getNome(), esami, inventario);
     }
 
     private StatoGioco daDto(GameStateDto dto) {
@@ -82,13 +71,11 @@ public class JsonGameStatePersistence implements PersistenceManager {
         Map<String, Stanza> stanzePerNome = new HashMap<>();
         for (Stanza st : mappa.getStanze()) {
             stanzePerNome.put(st.getNome(), st);
-            if (st.getEsame() != null)
-                esamiPerCodice.put(st.getEsame().getCodiceCorso(), st.getEsame());
+            if (st.getEsame() != null) esamiPerCodice.put(st.getEsame().codiceCorso(), st.getEsame());
         }
         for (var e : dto.esamiSuperati()) {
             Esame esame = esamiPerCodice.get(e.codiceCorso());
-            if (esame != null)
-                s.getLibretto().addEsameSuperato(new EsameSuperato(esame, e.voto()));
+            if (esame != null) s.getLibretto().addEsameSuperato(new EsameSuperato(esame, e.voto()));
         }
         for (var voce : dto.inventario().entrySet()) {
             TipoItem tipo = TipoItem.valueOf(voce.getKey());
@@ -102,7 +89,7 @@ public class JsonGameStatePersistence implements PersistenceManager {
 
     private CareerStrategy carrieraDa(String tipo) {
         return switch (tipo) {
-            case "StudenteFullTime"   -> new StudenteFullTime();
+            case "StudenteFullTime" -> new StudenteFullTime();
             case "StudenteLavoratore" -> new StudenteLavoratore();
             case "StudenteFuoriCorso" -> new StudenteFuoriCorso();
             default -> throw new PersistenceException("carriera sconosciuta: " + tipo, null);

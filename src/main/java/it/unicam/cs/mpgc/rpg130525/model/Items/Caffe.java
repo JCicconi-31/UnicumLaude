@@ -8,8 +8,7 @@ public class Caffe implements Consumabile {
     private final int recuperoHp;
 
     public Caffe(int recuperoHp) {
-        if (recuperoHp <= 0)
-            throw new IllegalArgumentException("recupero HP non valido");
+        if (recuperoHp <= 0) throw new IllegalArgumentException("recupero HP non valido");
         this.recuperoHp = recuperoHp;
     }
 
@@ -19,8 +18,12 @@ public class Caffe implements Consumabile {
     }
 
     @Override
-    public String getNome() { return "CAFFE"; }
+    public String getNome() {
+        return "CAFFE";
+    }
 
     @Override
-    public TipoItem getTipo() { return TipoItem.CAFFE; }
+    public TipoItem getTipo() {
+        return TipoItem.CAFFE;
+    }
 }

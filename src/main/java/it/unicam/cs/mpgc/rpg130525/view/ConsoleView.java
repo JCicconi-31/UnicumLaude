@@ -16,8 +16,7 @@ public class ConsoleView implements GameView, GameInput {
     }
 
     public ConsoleView(Scanner scanner, PrintStream out) {
-        if (scanner == null || out == null)
-            throw new IllegalArgumentException("scanner o out nulli");
+        if (scanner == null || out == null) throw new IllegalArgumentException("scanner o out nulli");
         this.scanner = scanner;
         this.out = out;
     }
@@ -29,17 +28,12 @@ public class ConsoleView implements GameView, GameInput {
 
     @Override
     public void aggiornaStatoGiocatore(StudenteDto studente) {
-        out.printf("[%s] HP %d/%d | INTELLIGENZA %d | RESILIENZA %d | CFU %d | Monete %d%n",
-                studente.nomeCompleto(),
-                studente.saluteMentale(), studente.saluteMentaleMax(),
-                studente.intelligenzaEffettiva(), studente.resilienzaEffettiva(),
-                studente.cfu(), studente.monete());
+        out.printf("[%s] HP %d/%d | INTELLIGENZA %d | RESILIENZA %d | CFU %d | Monete %d%n", studente.nomeCompleto(), studente.saluteMentale(), studente.saluteMentaleMax(), studente.intelligenzaEffettiva(), studente.resilienzaEffettiva(), studente.cfu(), studente.monete());
     }
 
     @Override
     public void aggiornaStatoProfessore(ProfessoreDto professoreDto) {
-        out.printf("Prof. %s - Resistenza didattica: %d/%d%n",
-                professoreDto.nome(), professoreDto.hp(), professoreDto.hpMax());
+        out.printf("Prof. %s - Resistenza didattica: %d/%d%n", professoreDto.nome(), professoreDto.hp(), professoreDto.hpMax());
     }
 
     @Override
@@ -64,8 +58,7 @@ public class ConsoleView implements GameView, GameInput {
         while (true) {
             out.print(prompt + ": ");
             String riga = scanner.nextLine().trim();
-            if (!riga.isBlank())
-                return riga;
+            if (!riga.isBlank()) return riga;
             out.println("Il testo non può essere vuoto, riprova.");
         }
     }
@@ -79,9 +72,9 @@ public class ConsoleView implements GameView, GameInput {
             String riga = scanner.nextLine().trim();
             try {
                 int scelta = Integer.parseInt(riga) - 1;
-                if (scelta >= 0 && scelta < opzioni.size())
-                    return scelta;
-            } catch (NumberFormatException ignored) {}
+                if (scelta >= 0 && scelta < opzioni.size()) return scelta;
+            } catch (NumberFormatException ignored) {
+            }
             out.println("input non valido, riprova.");
         }
     }

@@ -27,13 +27,11 @@ public class DatabaseDomande {
 
     /**
      * @param domandePerCorso mappa corso → domande
-     * @param random sorgente di casualità (iniettabile per i test deterministici)
+     * @param random          sorgente di casualità (iniettabile per i test deterministici)
      */
     public DatabaseDomande(Map<String, List<Domanda>> domandePerCorso, Random random) {
-        if (domandePerCorso == null)
-            throw new IllegalArgumentException("database nullo");
-        if (random == null)
-            throw new IllegalArgumentException("random nullo");
+        if (domandePerCorso == null) throw new IllegalArgumentException("database nullo");
+        if (random == null) throw new IllegalArgumentException("random nullo");
         this.domandePerCorso = Map.copyOf(domandePerCorso); // immutabile dopo la costruzione
         this.random = random;
     }

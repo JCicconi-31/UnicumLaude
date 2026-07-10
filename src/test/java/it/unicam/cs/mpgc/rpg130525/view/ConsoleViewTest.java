@@ -27,7 +27,9 @@ class ConsoleViewTest {
 
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-    /** ConsoleView con input simulato dalla stringa e output catturato nel buffer. */
+    /**
+     * ConsoleView con input simulato dalla stringa e output catturato nel buffer.
+     */
     private ConsoleView view(String input) {
         return new ConsoleView(new Scanner(input),
                 new PrintStream(out, true, StandardCharsets.UTF_8));
