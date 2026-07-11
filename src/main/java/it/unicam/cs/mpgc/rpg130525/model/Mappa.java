@@ -2,6 +2,11 @@ package it.unicam.cs.mpgc.rpg130525.model;
 
 import java.util.*;
 
+/**
+ * Grafo delle stanze del gioco: gestisce i corridoi (archi non orientati), le
+ * propedeuticità (vincoli d'accesso) e le interrogazioni sul mondo (ricerca per
+ * nome, CFU totali, disponibilità di una stanza).
+ */
 public class Mappa {
     private final Map<Stanza, Set<Stanza>> collegamenti = new HashMap<>();
     private final Map<Stanza, Set<Stanza>> propedeuticita = new HashMap<>();
@@ -26,7 +31,12 @@ public class Mappa {
         return Collections.unmodifiableSet(collegamenti.getOrDefault(stanza, Set.of()));
     }
 
-    //verifica se una stanza è accessibile secondo gli esami superati dal giocatore.
+    /**
+     * Verifica se una stanza è accessibile dati gli esami superati dal giocatore.
+     *
+     * @return true se tutte le propedeuticità della stanza sono soddisfatte
+     * (una stanza senza propedeuticità è sempre disponibile)
+     */
     public boolean isDisponibile(Stanza stanza, Set<Esame> esamiSuperati) {
         return propedeuticita.getOrDefault(stanza, Set.of())
                 .stream()

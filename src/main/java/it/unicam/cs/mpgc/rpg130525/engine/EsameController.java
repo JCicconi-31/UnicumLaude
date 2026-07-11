@@ -9,6 +9,10 @@ import it.unicam.cs.mpgc.rpg130525.port.GameView;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Gestisce in sequenza le fasi d'esame, quando tutte sono completate, registra
+ * l'esame nel libretto con un voto casuale (sorgente iniettabile per i test).
+ */
 public class EsameController {
     private final List<FaseEsame> fasi;
     private final Random random;

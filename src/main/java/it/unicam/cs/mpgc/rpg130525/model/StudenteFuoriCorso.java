@@ -1,5 +1,8 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
+/**
+ * Carriera Fuori corso: penalità sia agli HP massimi sia alle monete iniziali.
+ */
 public class StudenteFuoriCorso implements CareerStrategy {
 
     @Override

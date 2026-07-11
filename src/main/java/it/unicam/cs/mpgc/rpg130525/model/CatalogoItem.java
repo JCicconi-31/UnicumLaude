@@ -5,6 +5,10 @@ import it.unicam.cs.mpgc.rpg130525.model.Items.Caffe;
 import it.unicam.cs.mpgc.rpg130525.model.Items.ChatGPT;
 import it.unicam.cs.mpgc.rpg130525.model.Items.Libro;
 
+/**
+ * Gestore centrale degli item: crea le istanze concrete e ne espone il prezzo
+ * per tipo, mantenendo in un unico punto la conoscenza delle classi concrete.
+ */
 public final class CatalogoItem {
     private CatalogoItem() {
     }

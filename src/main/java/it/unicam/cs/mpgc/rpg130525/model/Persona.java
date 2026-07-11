@@ -1,5 +1,9 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
+/**
+ * Base astratta delle persone del gioco (studente e professore): incapsula nome
+ * e cognome.
+ */
 public abstract class Persona {
     protected String nome;
     protected String cognome;

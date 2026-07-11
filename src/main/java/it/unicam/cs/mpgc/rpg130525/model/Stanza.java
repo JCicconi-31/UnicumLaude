@@ -1,5 +1,9 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
+/**
+ * Nodo della mappa: ha un nome, un tipo e, se è un'aula d'esame, l'esame
+ * associato (obbligatorio in quel caso).
+ */
 public class Stanza {
     private final String nome;
     private final TipoStanza tipo;

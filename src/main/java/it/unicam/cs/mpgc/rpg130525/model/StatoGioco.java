@@ -1,5 +1,9 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
+/**
+ * Stato dinamico della partita: lo studente e la sua posizione corrente sulla
+ * mappa, gli unici dati che cambiano durante il gioco.
+ */
 public class StatoGioco {
     private final Studente studente;
     private Stanza posizioneCorrente;

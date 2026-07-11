@@ -14,6 +14,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Implementazione di {@link LoaderMondo} basata su Gson: costruisce la
+ * {@code Mappa} di dominio dalla configurazione JSON in due momenti — prima
+ * istanzia tutte le stanze, poi collega corridoi e propedeuticità per nome.
+ */
 public class JsonLoaderMondo implements LoaderMondo {
     private final InputStream input;
     private final Gson gson = new Gson();
@@ -28,13 +33,20 @@ public class JsonLoaderMondo implements LoaderMondo {
         MappaConfigDto config = leggiConfigurazione();
         Map<String, Stanza> perNome = new LinkedHashMap<>();
         Mappa mappa = new Mappa();
-        //crea tutte le stanze
+        creaStanze(config, mappa, perNome);
+        collegaCorridoiEPropedeuticita(config, mappa, perNome);
+        return mappa;
+    }
+
+    private void creaStanze(MappaConfigDto config, Mappa mappa, Map<String, Stanza> perNome) {
         for (MappaConfigDto.StanzaDto dto : config.stanze()) {
             Stanza stanza = costruisciStanza(dto);
             mappa.addStanza(stanza);
             perNome.put(dto.nome(), stanza);
         }
-        //gestisce propedeuticità e i corridoi
+    }
+
+    private void collegaCorridoiEPropedeuticita(MappaConfigDto config, Mappa mappa, Map<String, Stanza> perNome) {
         for (MappaConfigDto.StanzaDto dto : config.stanze()) {
             Stanza corrente = perNome.get(dto.nome());
             if (dto.adiacenze() != null) for (String nome : dto.adiacenze())
@@ -42,7 +54,6 @@ public class JsonLoaderMondo implements LoaderMondo {
             if (dto.propedeuticita() != null) for (String nome : dto.propedeuticita())
                 mappa.addPropedeuticita(richiedi(perNome, nome, dto.nome()), corrente);
         }
-        return mappa;
     }
 
     private MappaConfigDto leggiConfigurazione() {

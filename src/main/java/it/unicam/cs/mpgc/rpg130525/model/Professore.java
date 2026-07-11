@@ -1,5 +1,9 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
+/**
+ * Avversario di un'aula d'esame: ha una difficoltà (danno inflitto) e degli HP
+ * che calano durante la prova orale finché non va KO.
+ */
 public class Professore extends Persona {
     private final int difficolta;
     private final int hpMax;

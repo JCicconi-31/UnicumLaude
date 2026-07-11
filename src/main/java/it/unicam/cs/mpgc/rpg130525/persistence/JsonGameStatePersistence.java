@@ -12,8 +12,14 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementazione di {@link PersistenceManager} basata su Gson: salva e carica
+ * lo stato di gioco su un file JSON, riagganciando in fase di caricamento stanze
+ * ed esami alle istanze reali della mappa.
+ */
 public class JsonGameStatePersistence implements PersistenceManager {
     private final Path file;
     private final Mappa mappa;
@@ -54,37 +60,60 @@ public class JsonGameStatePersistence implements PersistenceManager {
     private GameStateDto versoDto(StatoGioco stato) {
         Studente s = stato.getStudente();
         CareerStrategy c = s.getCarriera();
-        var esami = s.getLibretto().getDettaglioEsami().stream().map(e -> new GameStateDto.EsameSuperatoDto(e.esame().codiceCorso(), e.voto())).toList();
+        return new GameStateDto(s.getNome(), s.getCognome(), s.getIntelligenzaBase(), s.getResilienzaBase(),
+                s.getSaluteMentaleMax() - c.modificatoreHpMax(), s.getMonete() - c.modificatoreMoneteIniziali(),
+                c.getClass().getSimpleName(), s.getSaluteMentale(), stato.getPosizioneCorrente().getNome(),
+                esamiVersoDto(s), inventarioVersoDto(s));
+    }
+
+    private List<GameStateDto.EsameSuperatoDto> esamiVersoDto(Studente studente) {
+        return studente.getLibretto().getDettaglioEsami().stream()
+                .map(e -> new GameStateDto.EsameSuperatoDto(e.esame().codiceCorso(), e.voto()))
+                .toList();
+    }
+
+    private Map<String, Integer> inventarioVersoDto(Studente studente) {
         Map<String, Integer> inventario = new HashMap<>();
-        s.getInventario().forEach((tipo, slot) -> inventario.put(tipo.name(), slot.getQuantita()));
-        for (Consumabile cons : s.getZaino())
+        studente.getInventario().forEach((tipo, slot) -> inventario.put(tipo.name(), slot.getQuantita()));
+        for (Consumabile cons : studente.getZaino())
             inventario.merge(cons.getTipo().name(), 1, Integer::sum);
-        return new GameStateDto(s.getNome(), s.getCognome(), s.getIntelligenzaBase(), s.getResilienzaBase(), s.getSaluteMentaleMax() - c.modificatoreHpMax(), s.getMonete() - c.modificatoreMoneteIniziali(), c.getClass().getSimpleName(), s.getSaluteMentale(), stato.getPosizioneCorrente().getNome(), esami, inventario);
+        return inventario;
     }
 
     private StatoGioco daDto(GameStateDto dto) {
-        CareerStrategy carriera = carrieraDa(dto.tipoCarriera());
-        Studente s = new Studente(dto.nome(), dto.cognome(), dto.intelligenzaBase(), dto.resilienzaBase(), dto.saluteMentaleMaxBase(), dto.moneteBase(), carriera);
-        int delta = s.getSaluteMentaleMax() - dto.saluteMentaleAttuale();
-        if (delta > 0) s.subisciDanno(delta);
+        Studente studente = ricreaStudente(dto);
+        ripristinaEsamiSuperati(studente, dto.esamiSuperati());
+        ripristinaInventario(studente, dto.inventario());
+        Stanza posizione = mappa.getStanza(dto.nomeStanzaCorrente())
+                .orElseThrow(() -> new PersistenceException(
+                        "la stanza del salvataggio non esiste nella mappa: " + dto.nomeStanzaCorrente(), null));
+        return new StatoGioco(studente, posizione);
+    }
+
+    private Studente ricreaStudente(GameStateDto dto) {
+        Studente studente = new Studente(dto.nome(), dto.cognome(), dto.intelligenzaBase(), dto.resilienzaBase(),
+                dto.saluteMentaleMaxBase(), dto.moneteBase(), carrieraDa(dto.tipoCarriera()));
+        int delta = studente.getSaluteMentaleMax() - dto.saluteMentaleAttuale();
+        if (delta > 0) studente.subisciDanno(delta);
+        return studente;
+    }
+
+    private void ripristinaEsamiSuperati(Studente studente, List<GameStateDto.EsameSuperatoDto> esamiSuperati) {
         Map<Integer, Esame> esamiPerCodice = new HashMap<>();
-        Map<String, Stanza> stanzePerNome = new HashMap<>();
-        for (Stanza st : mappa.getStanze()) {
-            stanzePerNome.put(st.getNome(), st);
+        for (Stanza st : mappa.getStanze())
             if (st.getEsame() != null) esamiPerCodice.put(st.getEsame().codiceCorso(), st.getEsame());
-        }
-        for (var e : dto.esamiSuperati()) {
+        for (var e : esamiSuperati) {
             Esame esame = esamiPerCodice.get(e.codiceCorso());
-            if (esame != null) s.getLibretto().addEsameSuperato(new EsameSuperato(esame, e.voto()));
+            if (esame != null) studente.getLibretto().addEsameSuperato(new EsameSuperato(esame, e.voto()));
         }
-        for (var voce : dto.inventario().entrySet()) {
+    }
+
+    private void ripristinaInventario(Studente studente, Map<String, Integer> inventario) {
+        for (var voce : inventario.entrySet()) {
             TipoItem tipo = TipoItem.valueOf(voce.getKey());
-            for (int i = 0; i < voce.getValue(); i++) {
-                Item item = CatalogoItem.crea(tipo);
-                item.aggiungiA(s);
-            }
+            for (int i = 0; i < voce.getValue(); i++)
+                CatalogoItem.crea(tipo).aggiungiA(studente);
         }
-        return new StatoGioco(s, stanzePerNome.get(dto.nomeStanzaCorrente()));
     }
 
     private CareerStrategy carrieraDa(String tipo) {

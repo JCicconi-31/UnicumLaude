@@ -1,5 +1,8 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
+/**
+ * Carriera Lavoratore: penalità agli HP massimi, bonus alle monete iniziali.
+ */
 public class StudenteLavoratore implements CareerStrategy {
 
     @Override

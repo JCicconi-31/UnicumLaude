@@ -6,6 +6,9 @@ import it.unicam.cs.mpgc.rpg130525.model.TipoItem;
 
 import java.util.Map;
 
+/**
+ * Equipaggiamento che fornisce bonus all'intelligenza.
+ */
 public class ChatGPT implements Equipaggiamento {
     private final Map<Stat, Integer> modificatori;
 

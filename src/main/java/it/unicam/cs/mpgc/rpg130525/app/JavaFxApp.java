@@ -11,6 +11,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+/**
+ * Avvio dell'interfaccia grafica JavaFX: costruisce la scena, crea la
+ * {@link JavaFxView} e fa girare la partita su un thread dedicato, così l'interfaccia utente
+ * resta reattiva.
+ */
 public class JavaFxApp extends Application {
 
     @Override

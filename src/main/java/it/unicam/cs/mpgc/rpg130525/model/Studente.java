@@ -2,6 +2,10 @@ package it.unicam.cs.mpgc.rpg130525.model;
 
 import java.util.*;
 
+/**
+ * Personaggio giocante: statistiche base ed effettive, salute mentale, monete,
+ * inventario (equipaggiamenti e consumabili), libretto e strategia di carriera.
+ */
 public class Studente extends Persona {
     private final int intelligenzaBase;
     private final int resilienzaBase;
