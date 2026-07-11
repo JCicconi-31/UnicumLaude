@@ -2,6 +2,10 @@ package it.unicam.cs.mpgc.rpg130525.persistence;
 
 import java.util.List;
 
+/**
+ * DTO di trasporto per deserializzare da JSON la configurazione della mappa:
+ * stanze con eventuale esame/professore, adiacenze e propedeuticità (per nome).
+ */
 public record MappaConfigDto(List<StanzaDto> stanze) {
     public record StanzaDto(String nome, String tipoStanza, EsameDto esame, List<String> adiacenze,
                             List<String> propedeuticita) {

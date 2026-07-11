@@ -2,6 +2,10 @@ package it.unicam.cs.mpgc.rpg130525.model;
 
 import java.util.Objects;
 
+/**
+ * Esito di un esame superato: l'esame e il voto conseguito. L'identità è data
+ * dal solo esame, così il libretto non ammette due esiti dello stesso esame.
+ */
 public record EsameSuperato(Esame esame, int voto) {
     public EsameSuperato {
         if (esame == null) throw new IllegalArgumentException("Esame non valido");

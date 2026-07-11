@@ -2,6 +2,10 @@ package it.unicam.cs.mpgc.rpg130525.port;
 
 import java.util.List;
 
+/**
+ * Contratto di output del gioco: mostra messaggi e aggiorna lo stato di
+ * giocatore, professore e mappa, indipendentemente dalla interfaccia utente.
+ */
 public interface GameView {
     void mostraMessaggio(String messaggio);
 

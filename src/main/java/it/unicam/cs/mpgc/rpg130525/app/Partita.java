@@ -11,6 +11,12 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * Composition root della partita: carica il mondo e le domande dai file JSON,
+ * costruisce motore e persistenza sui contratti astratti, gestisce il menù
+ * iniziale (nuova partita o ripresa dal salvataggio) e avvia il {@link GameLoop}.
+ * La stessa partita gira identica su console e interfaccia grafica.
+ */ 
 public final class Partita {
 
     private static final String FILE_MAPPA = "mappa.json";
@@ -47,7 +53,6 @@ public final class Partita {
         ControllerMovimentoStanze movimento = new ControllerMovimentoStanze(mappa);
         GameLoop gameLoop = new GameLoop(mappa, movimento, esameController, persistence, cfuPerLaurea);
 
-        //menù
         view.mostraMessaggio("=== Unicum Laude ===");
         StatoGioco stato;
         if (persistence.esisteSalvataggio()

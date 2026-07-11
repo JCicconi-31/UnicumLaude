@@ -1,5 +1,9 @@
 package it.unicam.cs.mpgc.rpg130525.model;
 
+/**
+ * Esame universitario: codice del corso, nome, CFU assegnati e professore che lo
+ * esamina.
+ */
 public record Esame(int codiceCorso, String nomeCorso, int cfuAssociati, Professore professore) {
     public Esame {
         if (codiceCorso < 0) throw new IllegalArgumentException("codice corso non valido");

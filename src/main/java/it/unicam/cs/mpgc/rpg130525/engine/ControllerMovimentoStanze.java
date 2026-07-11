@@ -2,6 +2,10 @@ package it.unicam.cs.mpgc.rpg130525.engine;
 
 import it.unicam.cs.mpgc.rpg130525.model.*;
 
+/**
+ * Governa lo spostamento del giocatore tra stanze, verificando l'esistenza del
+ * corridoio e il rispetto delle propedeuticità prima di aggiornare la posizione.
+ */
 public class ControllerMovimentoStanze {
     private final Mappa mappa;
 

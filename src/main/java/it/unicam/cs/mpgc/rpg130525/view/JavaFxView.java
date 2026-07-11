@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Adapter di {@link GameView} e {@link GameInput} per JavaFX: aggiorna i
+ * componenti grafici e raccoglie le scelte del giocatore in modo asincrono
+ * tramite {@code CompletableFuture}, tenendo il motore su un thread separato.
+ */
 public class JavaFxView implements GameView, GameInput {
     private final TextArea log;
     private final Label statoGiocatore;
@@ -48,7 +53,7 @@ public class JavaFxView implements GameView, GameInput {
 
     @Override
     public void aggiornaStatoGiocatore(StudenteDto s) {
-        Platform.runLater(() -> statoGiocatore.setText(String.format("[%s] HP %d/%d | INTELLIGENZA %d | RESILIENZA %d | CFU %d | Monete %d", s.nomeCompleto(), s.saluteMentale(), s.saluteMentaleMax(), s.intelligenzaEffettiva(), s.resilienzaEffettiva(), s.cfu(), s.monete())));
+        Platform.runLater(() -> statoGiocatore.setText(FormattatoreStato.formatta(s)));
     }
 
     @Override
@@ -65,37 +70,45 @@ public class JavaFxView implements GameView, GameInput {
         Platform.runLater(() -> {
             pannelloMappa.getChildren().clear();
             Map<String, Point2D> posizioni = disponiInCerchio(stanze);
-            for (StanzaDto st : stanze) {
-                Point2D da = posizioni.get(st.nome());
-                for (String vicina : st.adiacenti()) {
-                    Point2D a = posizioni.get(vicina);
-                    if (a == null) continue;
-                    Line corridoio = new Line(da.getX(), da.getY(), a.getX(), a.getY());
-                    corridoio.setStroke(Color.DARKGRAY);
-                    pannelloMappa.getChildren().add(corridoio);
-                }
-            }
-
-            for (StanzaDto st : stanze) {
-                Point2D p = posizioni.get(st.nome());
-                Circle nodo = new Circle(p.getX(), p.getY(), 18, coloreStanza(st.stato()));
-                nodo.setStroke(Color.BLACK);
-                nodo.setOnMouseClicked(e -> clickSuStanza(st.nome()));
-                Label etichetta = new Label(st.nome());
-                etichetta.setLayoutX(p.getX() - 30);
-                etichetta.setLayoutY(p.getY() + 22);
-                pannelloMappa.getChildren().addAll(nodo, etichetta);
-                if (st.nome().equals(posizioneCorrente)) {
-                    Circle giocatore = new Circle(p.getX(), p.getY(), 7, Color.ROYALBLUE);
-                    giocatore.setMouseTransparent(true);
-                    pannelloMappa.getChildren().add(giocatore);
-                }
-            }
+            disegnaCorridoi(stanze, posizioni);
+            disegnaStanze(stanze, posizioni, posizioneCorrente);
         });
     }
 
+    private void disegnaCorridoi(List<StanzaDto> stanze, Map<String, Point2D> posizioni) {
+        for (StanzaDto st : stanze) {
+            Point2D da = posizioni.get(st.nome());
+            for (String vicina : st.adiacenti()) {
+                Point2D a = posizioni.get(vicina);
+                if (a == null) continue;
+                Line corridoio = new Line(da.getX(), da.getY(), a.getX(), a.getY());
+                corridoio.setStroke(Color.DARKGRAY);
+                pannelloMappa.getChildren().add(corridoio);
+            }
+        }
+    }
+
+    private void disegnaStanze(List<StanzaDto> stanze, Map<String, Point2D> posizioni, String posizioneCorrente) {
+        for (StanzaDto st : stanze) {
+            Point2D p = posizioni.get(st.nome());
+            Circle nodo = new Circle(p.getX(), p.getY(), 18, coloreStanza(st.stato()));
+            nodo.setStroke(Color.BLACK);
+            nodo.setOnMouseClicked(e -> clickSuStanza(st.nome()));
+            Label etichetta = new Label(st.nome());
+            etichetta.setLayoutX(p.getX() - 30);
+            etichetta.setLayoutY(p.getY() + 22);
+            pannelloMappa.getChildren().addAll(nodo, etichetta);
+            if (st.nome().equals(posizioneCorrente)) {
+                Circle giocatore = new Circle(p.getX(), p.getY(), 7, Color.ROYALBLUE);
+                giocatore.setMouseTransparent(true);
+                pannelloMappa.getChildren().add(giocatore);
+            }
+        }
+    }
+
     /*
-     * Metodo sviluppato usando AI
+     * Metodo sviluppato usando AI;
+     * dispone le stanze in modo circolare
      * */
     private Map<String, Point2D> disponiInCerchio(List<StanzaDto> stanze) {
         Map<String, Point2D> posizioni = new HashMap<>();

@@ -16,6 +16,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementazione di {@link LoaderDomande} basata su Gson: costruisce la mappa
+ * {@code corso -> domande} dalla configurazione JSON, validando le domande
+ * tramite il loro costruttore di dominio.
+ */
 public class JsonLoaderDomande implements LoaderDomande {
     private final InputStream input;
     private final Gson gson = new Gson();

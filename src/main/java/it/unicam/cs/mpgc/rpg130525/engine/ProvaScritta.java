@@ -7,6 +7,10 @@ import it.unicam.cs.mpgc.rpg130525.model.StatoGioco;
 import it.unicam.cs.mpgc.rpg130525.port.GameInput;
 import it.unicam.cs.mpgc.rpg130525.port.GameView;
 
+/**
+ * Fase d'esame a risposta multipla: estrae una domanda del corso dell'aula e, in
+ * caso di risposta errata, applica allo studente il danno calcolato.
+ */
 public class ProvaScritta implements FaseEsame {
     private final DatabaseDomande database;
     private final GameInput input;

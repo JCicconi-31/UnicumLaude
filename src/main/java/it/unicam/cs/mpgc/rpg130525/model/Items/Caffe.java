@@ -4,6 +4,9 @@ import it.unicam.cs.mpgc.rpg130525.model.Consumabile;
 import it.unicam.cs.mpgc.rpg130525.model.Studente;
 import it.unicam.cs.mpgc.rpg130525.model.TipoItem;
 
+/**
+ * Consumabile che recupera salute mentale allo studente.
+ */
 public class Caffe implements Consumabile {
     private final int recuperoHp;
 

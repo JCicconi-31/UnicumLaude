@@ -9,6 +9,10 @@ import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
 
 import java.util.List;
 
+/**
+ * Fase d'esame a "combattimento": alterna i turni tra studente e professore
+ * finché il professore non è KO.
+ */
 public class ProvaOrale implements FaseEsame {
     private final GestoreTurno gestoreTurno;
     private final GameInput input;
@@ -32,7 +36,6 @@ public class ProvaOrale implements FaseEsame {
         Professore professore = aula.getEsame().professore();
         view.mostraMessaggio("Inizia la prova orale con il prof. " + professore.getNomeCompleto());
         view.aggiornaStatoProfessore(ProfessoreDto.da(professore));
-        //fase concreta di "combattimento" tra Studente e Professore
         while (!professore.isKO()) {
             input.scegli("Il prof. " + professore.getCognome() + " fa la domanda: ",
                     List.of("Rispondi alla domanda"));

@@ -6,6 +6,10 @@ import it.unicam.cs.mpgc.rpg130525.port.GameView;
 import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
 import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
 
+/**
+ * Gestisce un singolo turno della prova orale: il danno inflitto al professore
+ * e, se non è KO, il danno subìto dallo studente.
+ */
 public class GestoreTurno {
     private final CalcolatoreDanno calcolatore;
 

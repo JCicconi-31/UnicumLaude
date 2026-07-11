@@ -6,6 +6,9 @@ import it.unicam.cs.mpgc.rpg130525.model.TipoItem;
 
 import java.util.Map;
 
+/**
+ * Equipaggiamento che fornisce un bonus all'intelligenza.
+ */
 public class Libro implements Equipaggiamento {
     @Override
     public Map<Stat, Integer> getModificatori() {

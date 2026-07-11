@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Libretto degli esami superati dallo studente e dei CFU totali accumulati.
+ * L'aggiunta di un esame accredita i suoi CFU una sola volta.
+ */
 public class Libretto {
     private final Set<EsameSuperato> esamiSuperati = new HashSet<>();
     private int cfuOttenuti = 0;
