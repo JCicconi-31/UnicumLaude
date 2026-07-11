@@ -9,13 +9,15 @@ import it.unicam.cs.mpgc.rpg130525.port.*;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Composition root della partita: carica il mondo e le domande dai file JSON,
  * costruisce motore e persistenza sui contratti astratti, gestisce il menù
- * iniziale (nuova partita o ripresa dal salvataggio) e avvia il {@link GameLoop}.
- * La stessa partita gira identica su console e interfaccia grafica.
+ * iniziale (nuova partita, caricamento del salvataggio o uscita) e avvia il
+ * {@link GameLoop}. È espressa solo in termini dei contratti {@code GameView}
+ * e {@code GameInput}, senza dipendere dalla UI concreta.
  * <p>
  * <b>Dichiarazione uso AI:</b> questa classe è stata realizzata con l'assistenza
  * di un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code), come
@@ -57,16 +59,36 @@ public final class Partita {
         ControllerMovimentoStanze movimento = new ControllerMovimentoStanze(mappa);
         GameLoop gameLoop = new GameLoop(mappa, movimento, esameController, persistence, cfuPerLaurea);
 
-        view.mostraMessaggio("=== Unicum Laude ===");
-        StatoGioco stato;
-        if (persistence.esisteSalvataggio()
-                && input.scegli("Menu principale", List.of("Nuova partita", "Continua partita")) == 1) {
-            stato = persistence.carica();
-            view.mostraMessaggio("Bentornato, " + stato.getStudente().getNomeCompleto() + "!");
-        } else
-            stato = nuovaPartita(input, partenza);
+        view.mostraMessaggio("Benvenuto in Unicum Laude!");
+        StatoGioco stato = menuIniziale(view, input, persistence, partenza);
+        if (stato == null)
+            return; // il giocatore ha scelto di uscire dal menù
 
         gameLoop.gioca(stato, view, input);
+    }
+
+    /**
+     * Mostra il menù principale e prepara lo stato di gioco in base alla scelta.
+     *
+     * @return lo stato con cui iniziare a giocare, oppure null se il giocatore esce
+     */
+    private static StatoGioco menuIniziale(GameView view, GameInput input,
+                                           PersistenceManager persistence, Stanza partenza) {
+        List<String> voci = new ArrayList<>();
+        voci.add("Nuova Partita");
+        if (persistence.esisteSalvataggio())
+            voci.add("Carica Partita");
+        voci.add("Esci");
+
+        String scelta = voci.get(input.scegli("Menu principale", voci));
+        if (scelta.equals("Esci"))
+            return null;
+        if (scelta.equals("Carica Partita")) {
+            StatoGioco stato = persistence.carica();
+            view.mostraMessaggio("Bentornato, " + stato.getStudente().getNomeCompleto() + "!");
+            return stato;
+        }
+        return nuovaPartita(input, partenza);
     }
 
     private static InputStream risorsa(String nomeFile) {
