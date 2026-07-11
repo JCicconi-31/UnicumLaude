@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 /**
  * Adapter di {@link GameView} e {@link GameInput} per il terminale: stampa lo
- * stato di gioco e legge le scelte del giocatore da uno {@code Scanner}.
+ * stato di gioco e legge le scelte del giocatore da  uno {@code Scanner}.
  */
 public class ConsoleView implements GameView, GameInput {
     private final Scanner scanner;
