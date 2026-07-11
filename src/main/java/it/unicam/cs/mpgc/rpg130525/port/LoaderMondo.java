@@ -6,6 +6,10 @@ import it.unicam.cs.mpgc.rpg130525.model.Mappa;
  * Contratto per il caricamento della mappa di gioco (stanze, esami, professori,
  * corridoi e propedeuticità) da una sorgente esterna, restituendo solo tipi di
  * dominio: non conosce il file system né alcuna libreria di serializzazione.
+ * <p>
+ * <b>Dichiarazione uso AI:</b> questa interfaccia è stata realizzata con l'assistenza
+ * di un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code), come
+ * previsto dalle indicazioni del corso.
  */
 public interface LoaderMondo {
 

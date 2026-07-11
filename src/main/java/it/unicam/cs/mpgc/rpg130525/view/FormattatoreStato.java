@@ -5,6 +5,10 @@ import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
 /**
  * Utilità di presentazione che centralizza il formato della barra di stato del
  * giocatore, condiviso dalle view console e JavaFX per rispettare Dont Repeat Yourself.
+ * <p>
+ * <b>Dichiarazione uso AI:</b> questa classe è stata realizzata con l'assistenza
+ * di un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code), come
+ * previsto dalle indicazioni del corso.
  */
 public final class FormattatoreStato {
     private FormattatoreStato() {

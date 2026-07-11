@@ -18,6 +18,10 @@ import java.util.Map;
  * Implementazione di {@link LoaderMondo} basata su Gson: costruisce la
  * {@code Mappa} di dominio dalla configurazione JSON in due momenti — prima
  * istanzia tutte le stanze, poi collega corridoi e propedeuticità per nome.
+ * <p>
+ * <b>Dichiarazione uso AI:</b> questa classe è stata realizzata con l'assistenza
+ * di un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code), come
+ * previsto dalle indicazioni del corso.
  */
 public class JsonLoaderMondo implements LoaderMondo {
     private final InputStream input;

@@ -20,6 +20,10 @@ import java.util.Map;
  * Implementazione di {@link LoaderDomande} basata su Gson: costruisce la mappa
  * {@code corso -> domande} dalla configurazione JSON, validando le domande
  * tramite il loro costruttore di dominio.
+ * <p>
+ * <b>Dichiarazione uso AI:</b> questa classe è stata realizzata con l'assistenza
+ * di un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code), come
+ * previsto dalle indicazioni del corso.
  */
 public class JsonLoaderDomande implements LoaderDomande {
     private final InputStream input;

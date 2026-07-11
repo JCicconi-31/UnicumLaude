@@ -16,7 +16,11 @@ import java.util.List;
  * costruisce motore e persistenza sui contratti astratti, gestisce il menù
  * iniziale (nuova partita o ripresa dal salvataggio) e avvia il {@link GameLoop}.
  * La stessa partita gira identica su console e interfaccia grafica.
- */ 
+ * <p>
+ * <b>Dichiarazione uso AI:</b> questa classe è stata realizzata con l'assistenza
+ * di un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code), come
+ * previsto dalle indicazioni del corso.
+ */
 public final class Partita {
 
     private static final String FILE_MAPPA = "mappa.json";

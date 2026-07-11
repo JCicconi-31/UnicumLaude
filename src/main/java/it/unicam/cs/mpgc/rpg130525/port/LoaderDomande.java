@@ -8,6 +8,10 @@ import java.util.Map;
 /**
  * Contratto per il caricamento del database delle domande da una sorgente
  * esterna, restituendo le domande di dominio indicizzate per nome del corso.
+ * <p>
+ * <b>Dichiarazione uso AI:</b> questa interfaccia è stata realizzata con l'assistenza
+ * di un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code), come
+ * previsto dalle indicazioni del corso.
  */
 public interface LoaderDomande {
 

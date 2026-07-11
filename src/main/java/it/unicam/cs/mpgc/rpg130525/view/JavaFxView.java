@@ -75,6 +75,12 @@ public class JavaFxView implements GameView, GameInput {
         });
     }
 
+    /**
+     * Disegna gli archi del grafo (corridoi) fra le stanze adiacenti.
+     * <p>
+     * <b>Dichiarazione uso AI:</b> metodo realizzato con l'assistenza di
+     * un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code).
+     */
     private void disegnaCorridoi(List<StanzaDto> stanze, Map<String, Point2D> posizioni) {
         for (StanzaDto st : stanze) {
             Point2D da = posizioni.get(st.nome());
@@ -88,6 +94,13 @@ public class JavaFxView implements GameView, GameInput {
         }
     }
 
+    /**
+     * Disegna i nodi del grafo (stanze cliccabili con etichetta), evidenziando
+     * la posizione corrente del giocatore.
+     * <p>
+     * <b>Dichiarazione uso AI:</b> metodo realizzato con l'assistenza di
+     * un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code).
+     */
     private void disegnaStanze(List<StanzaDto> stanze, Map<String, Point2D> posizioni, String posizioneCorrente) {
         for (StanzaDto st : stanze) {
             Point2D p = posizioni.get(st.nome());
