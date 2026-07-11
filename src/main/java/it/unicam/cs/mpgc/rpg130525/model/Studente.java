@@ -20,17 +20,19 @@ public class Studente extends Persona {
     public Studente(String nome, String cognome, int intelligenzaBase, int resilienzaBase, int saluteMentaleMax, int monete, CareerStrategy carriera) {
         super(nome, cognome);
         if (intelligenzaBase <= 0) throw new IllegalArgumentException("INTELLIGENZA deve essere positiva");
-        if (saluteMentaleMax <= 0) throw new IllegalArgumentException("HP max deve essere positivo");
         if (carriera == null) throw new IllegalArgumentException("carriera nulla");
         if (resilienzaBase < 0) throw new IllegalArgumentException("resilienza non può essere negativa");
-        if (monete < 0) throw new IllegalArgumentException("le monete non possono essere negative");
 
         this.carriera = carriera;
         this.intelligenzaBase = intelligenzaBase;
         this.resilienzaBase = resilienzaBase;
         this.saluteMentaleMax = saluteMentaleMax + carriera.modificatoreHpMax();
+        if (this.saluteMentaleMax <= 0)
+            throw new IllegalArgumentException("HP max deve essere positivo");
         this.saluteMentale = this.saluteMentaleMax;
         this.monete = monete + carriera.modificatoreMoneteIniziali();
+        if (this.monete < 0)
+            throw new IllegalArgumentException("le monete non possono essere negative");
         this.inventario = new EnumMap<>(TipoItem.class);
         this.zaino = new ArrayList<>();
         this.libretto = new Libretto();

@@ -87,6 +87,21 @@ class JsonGameStatePersistenceTest {
     }
 
     @Test
+    void roundTripConMoneteSpeseSottoIlBonusDiCarriera() {
+        // regressione: il Lavoratore parte con +20 monete; se ne spende fino ad averne
+        // meno di 20, la "base" scomposta nel salvataggio diventa negativa e il
+        // caricamento non deve rifiutarla (l'invariante vale sul totale, non sulla base)
+        Studente s = new Studente("Mario", "Rossi", 10, 5, 100, 50, new StudenteLavoratore());
+        s.spendiMonete(60); // monete: 70 -> 10, sotto il modificatore di carriera (+20)
+        JsonGameStatePersistence persistence = new JsonGameStatePersistence(fileSalvataggio(), mappa);
+        persistence.salva(new StatoGioco(s, aula2));
+
+        Studente caricato = persistence.carica().getStudente();
+
+        assertEquals(10, caricato.getMonete());
+    }
+
+    @Test
     void roundTripRipristinaLibrettoEProgressione() {
         JsonGameStatePersistence persistence = new JsonGameStatePersistence(fileSalvataggio(), mappa);
         persistence.salva(statoConProgresso());
