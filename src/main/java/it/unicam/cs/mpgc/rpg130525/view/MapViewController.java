@@ -2,6 +2,8 @@ package it.unicam.cs.mpgc.rpg130525.view;
 
 import it.unicam.cs.mpgc.rpg130525.model.TipoStanza;
 import it.unicam.cs.mpgc.rpg130525.port.StanzaDto;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -40,15 +42,26 @@ public class MapViewController {
     private static final Color SENTIERO = Color.web("#e8d8a0");
     private static final Color BORDO_SENTIERO = Color.web("#7a5c2e");
 
-    private final Pane root = new Pane();
+    private final Pane tela = new Pane();
+    private final StackPane root = new StackPane();
 
     public MapViewController() {
-        root.setPrefSize(LARGHEZZA, ALTEZZA);
-        root.setMinSize(LARGHEZZA, ALTEZZA);
-        root.setMaxSize(LARGHEZZA, ALTEZZA);
+        tela.setPrefSize(LARGHEZZA, ALTEZZA);
+        tela.setMinSize(LARGHEZZA, ALTEZZA);
+        tela.setMaxSize(LARGHEZZA, ALTEZZA);
+        // la tela di disegno resta a coordinate fisse; il contenitore la scala
+        // in proporzione allo spazio disponibile, così la mappa riempie l'area
+        root.getChildren().add(new Group(tela));
+        root.setMinSize(0, 0);
+        DoubleBinding scala = Bindings.createDoubleBinding(() -> {
+            double fattore = Math.min(root.getWidth() / LARGHEZZA, root.getHeight() / ALTEZZA);
+            return fattore > 0 ? fattore : 1.0;
+        }, root.widthProperty(), root.heightProperty());
+        tela.scaleXProperty().bind(scala);
+        tela.scaleYProperty().bind(scala);
     }
 
-    public Pane getRoot() {
+    public StackPane getRoot() {
         return root;
     }
 
@@ -58,7 +71,7 @@ public class MapViewController {
      * @param onClickStanza callback invocata col nome della stanza cliccata
      */
     public void render(List<StanzaDto> stanze, String posizioneCorrente, Consumer<String> onClickStanza) {
-        root.getChildren().clear();
+        tela.getChildren().clear();
         disegnaPrato();
         Map<String, Point2D> posizioni = calcolaLayout(stanze);
         disegnaSentieri(stanze, posizioni);
@@ -74,7 +87,7 @@ public class MapViewController {
             for (int colonna = 0; colonna * TILE_SFONDO < LARGHEZZA; colonna++) {
                 Rectangle tile = new Rectangle(colonna * TILE_SFONDO, riga * TILE_SFONDO, TILE_SFONDO, TILE_SFONDO);
                 tile.setFill((riga + colonna) % 2 == 0 ? ERBA_CHIARA : ERBA_SCURA);
-                root.getChildren().add(tile);
+                tela.getChildren().add(tile);
             }
     }
 
@@ -139,7 +152,7 @@ public class MapViewController {
                 Point2D a = posizioni.get(vicina);
                 if (a == null || !archiDisegnati.add(chiaveArco(st.nome(), vicina)))
                     continue;
-                root.getChildren().addAll(
+                tela.getChildren().addAll(
                         sentiero(da, a, 14, BORDO_SENTIERO),
                         sentiero(da, a, 8, SENTIERO));
             }
@@ -182,7 +195,7 @@ public class MapViewController {
             nome.setPrefWidth(96);
             nome.setAlignment(javafx.geometry.Pos.CENTER);
 
-            root.getChildren().addAll(nodo, nome);
+            tela.getChildren().addAll(nodo, nome);
         }
     }
 
@@ -219,7 +232,7 @@ public class MapViewController {
                 pixel(p.getX() - 7, p.getY() - 5, 5, 4, Color.web("#5a3a1a")),    // piede sx
                 pixel(p.getX() + 2, p.getY() - 5, 5, 4, Color.web("#5a3a1a")));   // piede dx
         sprite.setMouseTransparent(true);
-        root.getChildren().add(sprite);
+        tela.getChildren().add(sprite);
     }
 
     private Rectangle pixel(double x, double y, double larghezza, double altezza, Color colore) {

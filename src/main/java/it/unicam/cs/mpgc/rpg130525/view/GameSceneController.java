@@ -55,13 +55,16 @@ public class GameSceneController {
 
         log.setEditable(false);
         log.setWrapText(true);
-        log.setPrefWidth(340);
+        log.setPrefWidth(300);
+        log.setMaxWidth(320);
         log.setStyle("-fx-control-inner-background: #101018; -fx-text-fill: #d8d8e8; "
                 + "-fx-font-family: 'Monospaced'; -fx-font-size: 14;");
 
+        // la mappa assorbe lo spazio extra della finestra, il log resta stretto
         HBox centro = new HBox(10, mappa.getRoot(), log);
         centro.setPadding(new Insets(0, 10, 0, 10));
-        HBox.setHgrow(log, Priority.ALWAYS);
+        HBox.setHgrow(mappa.getRoot(), Priority.ALWAYS);
+        HBox.setHgrow(log, Priority.NEVER);
         schermata.setCenter(centro);
 
         prompt.setStyle("-fx-text-fill: #ffe060; -fx-font-family: 'Monospaced'; "
@@ -157,26 +160,34 @@ public class GameSceneController {
         Label titolo = StileRetro.testoChiaro("COME SI GIOCA", 20);
         titolo.setStyle(titolo.getStyle() + "-fx-font-weight: bold; -fx-text-fill: #f8c810;");
         Label testo = StileRetro.testoChiaro("""
-                Obiettivo: supera tutti gli esami del polo e raggiungi i CFU
-                necessari alla laurea per scoprire il leggendario UNICUM!
+                Obiettivo: supera tutti gli esami del polo e raggiungi
+                i CFU necessari alla laurea per scoprire il leggendario
+                UNICUM!
 
-                - Muoviti cliccando le stanze sulla mappa o con i bottoni in basso
-                - Tile GIALLE: stanze disponibili   GRIGIE: bloccate da propedeuticita'
-                - Tile VERDI: esami gia' superati
-                - E = aula esame: prova scritta (quiz) + prova orale (sfida col prof)
-                - R = aula studio: riposa per recuperare HP e compra oggetti utili
-                - Gli HP sono la tua salute mentale: se arrivano a 0 e' BURNOUT,
-                  la partita finisce! Rispondere male agli esami ti costa HP
-                - Con "Salva ed esci" riprendi la partita la prossima volta
+                - Muoviti cliccando le stanze sulla mappa o con i
+                  bottoni in basso
+                - Stanze GIALLE: stanze disponibili
+                - Stanze GRIGIE: bloccate dalle propedeuticita'
+                - Stanze VERDI: esami gia' superati
+                - E = aula esame: prova scritta (quiz) + prova orale
+                  (sfida a colpi di domande col professore)
+                - R = aula studio: riposa per recuperare HP e compra
+                  oggetti utili
+                - Gli HP sono la tua salute mentale: se arrivano a 0
+                  e' BURNOUT e la partita finisce!
+                  Rispondere male agli esami ti costa HP
+                - Con "Salva ed esci" riprendi la partita la prossima
+                  volta
 
-                In bocca al lupo, matricola!""", 14);
+                In bocca al lupo matricola!""", 14);
+        testo.setWrapText(true);
         Button chiudi = StileRetro.bottone("Ho capito");
 
         VBox pannello = new VBox(16, titolo, testo, chiudi);
         pannello.setAlignment(Pos.CENTER);
         pannello.setPadding(new Insets(24));
         pannello.setMaxWidth(620);
-        pannello.setMaxHeight(460);
+        pannello.setMaxHeight(Region.USE_PREF_SIZE);
         pannello.setStyle("-fx-background-color: #182038; -fx-border-color: #f8c810; -fx-border-width: 4;");
 
         StackPane velo = new StackPane(pannello);
