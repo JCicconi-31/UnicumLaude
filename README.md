@@ -32,7 +32,7 @@ cd UnicumLaude
 
 ## 🤖 Uso di strumenti di AI
 
-Per lo sviluppo di CFU Quest è stato utilizzato Claude (Anthropic) come assistente alla programmazione.
+Per lo sviluppo di Unicum Laude è stato utilizzato Claude (Anthropic) come assistente alla programmazione.
 L'intelligenza artificiale è stata impiegata come supporto tecnico per risolvere diverse problemamatiche implementative e per
 approfondire concetti progettuali.
 
