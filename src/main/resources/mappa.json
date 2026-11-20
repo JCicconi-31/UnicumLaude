@@ -47,8 +47,8 @@
         "nome": "Metodologie di Programmazione",
         "cfu": 12,
         "professore": {
-          "nome": "Fornari",
-          "cognome": "Fabrizio",
+          "nome": "Fabrizio",
+          "cognome": "Fornari",
           "hp": 30,
           "attacco": 4
         }
