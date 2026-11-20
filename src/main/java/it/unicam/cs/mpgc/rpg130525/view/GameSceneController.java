@@ -1,38 +1,58 @@
 package it.unicam.cs.mpgc.rpg130525.view;
 
-import it.unicam.cs.mpgc.rpg130525.port.ProfessoreDto;
+import it.unicam.cs.mpgc.rpg130525.port.StudenteDto;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 /**
- * Schermata di gioco: assembla e gestisce i componenti della partita — barra di
- * stato del giocatore, barra HP del professore, mappa retro scorrevole, log
- * degli eventi e pannello delle azioni. Espone metodi di aggiornamento
- * puramente grafici, senza alcuna logica di gioco (SRP): è la
- * {@code JavaFxView} a decidere quando chiamarli in reazione al motore.
+ * Schermata principale di gioco: in alto il cartellino del giocatore con la barra
+ * HP, al centro la mappa e il diario dei messaggi, in basso le azioni
+ * disponibili. Sopra a tutto si apre, quando serve, la {@link SchermataEsame}.
  * <p>
- * <b>Dichiarazione uso AI:</b> questa classe è stata realizzata con l'assistenza
- * di un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code), come
- * previsto dalle indicazioni del corso.
+ * I tasti numerici 1-9 selezionano le opzioni visibili, sia sulla mappa sia
+ * durante gli esami.
  */
 public class GameSceneController {
 
+    private static final int MAX_VOCI_DIARIO = 60;
+
     private final StackPane rootConOverlay;
-    private final TextArea log = new TextArea();
-    private final Label statoGiocatore = new Label("Benvenuto in Unicum Laude!");
-    private final Label prompt = new Label();
-    private final FlowPane pannelloRisposte = new FlowPane(8, 8);
-    private final Label nomeProfessore = new Label();
-    private final ProgressBar barraProfessore = new ProgressBar(1.0);
-    private final HBox rigaProfessore = new HBox(10, nomeProfessore, barraProfessore);
     private final MapViewController mappa;
+    private final SchermataEsame esame = new SchermataEsame();
+
+    private final Label nomeGiocatore = StileRetro.testo("", "nome-giocatore");
+    private final BarraHp hpGiocatore = new BarraHp("HP", 200);
+    private final Label intelligenza = StileRetro.testo("", "chip");
+    private final Label resilienza = StileRetro.testo("", "chip");
+    private final Label cfu = StileRetro.testo("", "chip");
+    private final Label monete = StileRetro.testo("", "chip");
+
+    private final VBox vociDiario = new VBox(2);
+    private final ScrollPane diario = new ScrollPane(vociDiario);
+    private final Label prompt = StileRetro.testo("", "prompt");
+    private final FlowPane pannelloRisposte = new FlowPane(10, 10);
+    private final List<Button> bottoniAzione = new ArrayList<>();
 
     public GameSceneController(MapViewController mappa) {
         if (mappa == null)
@@ -40,42 +60,23 @@ public class GameSceneController {
         this.mappa = mappa;
 
         BorderPane schermata = new BorderPane();
-        schermata.setStyle("-fx-background-color: " + StileRetro.SFONDO_SCURO + ";");
+        schermata.getStyleClass().add("sfondo-gioco");
+        schermata.setTop(costruisciHud());
+        schermata.setCenter(costruisciCentro());
+        schermata.setBottom(costruisciAzioni());
 
-        statoGiocatore.setStyle("-fx-text-fill: #f8c810; -fx-font-family: 'Monospaced'; "
-                + "-fx-font-weight: bold; -fx-font-size: 14;");
-        nomeProfessore.setStyle("-fx-text-fill: #f89090; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
-        barraProfessore.setMaxWidth(Double.MAX_VALUE);
-        barraProfessore.setStyle("-fx-accent: #de2410;");
-        HBox.setHgrow(barraProfessore, Priority.ALWAYS);
-        rigaProfessore.setVisible(false);
-        VBox pannelloSuperiore = new VBox(6, statoGiocatore, rigaProfessore);
-        pannelloSuperiore.setPadding(new Insets(10));
-        schermata.setTop(pannelloSuperiore);
-
-        log.setEditable(false);
-        log.setWrapText(true);
-        log.setPrefWidth(300);
-        log.setMaxWidth(320);
-        log.setStyle("-fx-control-inner-background: #101018; -fx-text-fill: #d8d8e8; "
-                + "-fx-font-family: 'Monospaced'; -fx-font-size: 14;");
-
-        // la mappa assorbe lo spazio extra della finestra, il log resta stretto
-        HBox centro = new HBox(10, mappa.getRoot(), log);
-        centro.setPadding(new Insets(0, 10, 0, 10));
-        HBox.setHgrow(mappa.getRoot(), Priority.ALWAYS);
-        HBox.setHgrow(log, Priority.NEVER);
-        schermata.setCenter(centro);
-
-        prompt.setStyle("-fx-text-fill: #ffe060; -fx-font-family: 'Monospaced'; "
-                + "-fx-font-weight: bold; -fx-font-size: 14;");
-        prompt.setWrapText(true);
-        pannelloRisposte.setAlignment(Pos.CENTER_LEFT);
-        VBox zonaAzioni = new VBox(6, prompt, pannelloRisposte);
-        zonaAzioni.setPadding(new Insets(10));
-        schermata.setBottom(zonaAzioni);
-
-        rootConOverlay = new StackPane(schermata);
+        rootConOverlay = new StackPane(schermata, esame.getRoot());
+        appendiLog("Inizia la tua carriera universitaria!");
+        rootConOverlay.setOnKeyPressed(e -> {
+            KeyCode codice = e.getCode();
+            if (!codice.isDigitKey()) return;
+            int indice = codice.getName().charAt(codice.getName().length() - 1) - '1';
+            List<Button> attivi = esame.isAperta() ? esame.bottoniCorrenti() : bottoniAzione;
+            if (indice >= 0 && indice < attivi.size()) {
+                attivi.get(indice).fire();
+                e.consume();
+            }
+        });
     }
 
     public Parent getRoot() {
@@ -86,54 +87,117 @@ public class GameSceneController {
         return mappa;
     }
 
+    SchermataEsame esame() {
+        return esame;
+    }
+
+    // ---------------------------------------------------------------- costruzione
+
+    private Region costruisciHud() {
+        Personaggio ritratto = Personaggio.studente().animato();
+        ritratto.scala(0.5);
+        // si mostra solo la testa: il ritratto è ritagliato in un cerchio
+        Pane cornice = new Pane(new Group(ritratto));
+        ritratto.setLayoutX(26);
+        ritratto.setLayoutY(78);
+        cornice.setPrefSize(52, 52);
+        cornice.setMinSize(52, 52);
+        cornice.setMaxSize(52, 52);
+        cornice.setClip(new Circle(26, 26, 26));
+        cornice.setStyle("-fx-background-color: #cfe8ff; -fx-background-radius: 26;");
+
+        VBox identita = new VBox(4, nomeGiocatore, hpGiocatore);
+        identita.setPrefWidth(320);
+        HBox statistiche = new HBox(8, intelligenza, resilienza, cfu, monete);
+        statistiche.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(statistiche, Priority.ALWAYS);
+
+        HBox hud = new HBox(14, cornice, identita, statistiche);
+        hud.setAlignment(Pos.CENTER_LEFT);
+        hud.getStyleClass().add("pannello");
+        BorderPane.setMargin(hud, new Insets(12, 12, 8, 12));
+        return hud;
+    }
+
+    private Region costruisciCentro() {
+        StackPane riquadroMappa = new StackPane(mappa.getRoot());
+        riquadroMappa.setMinSize(0, 0);
+
+        Label titoloDiario = StileRetro.testo("Diario", "diario-titolo");
+        diario.getStyleClass().add("diario");
+        diario.setFitToWidth(true);
+        diario.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        vociDiario.heightProperty().addListener((o, a, b) -> diario.setVvalue(1.0));
+        VBox.setVgrow(diario, Priority.ALWAYS);
+        VBox pannelloDiario = new VBox(6, titoloDiario, diario);
+        pannelloDiario.getStyleClass().add("pannello");
+        pannelloDiario.setPrefWidth(280);
+        pannelloDiario.setMinWidth(240);
+        pannelloDiario.setMaxWidth(300);
+
+        HBox centro = new HBox(12, riquadroMappa, pannelloDiario);
+        centro.setPadding(new Insets(0, 12, 0, 12));
+        HBox.setHgrow(riquadroMappa, Priority.ALWAYS);
+        return centro;
+    }
+
+    private Region costruisciAzioni() {
+        prompt.setWrapText(true);
+        pannelloRisposte.setAlignment(Pos.CENTER_LEFT);
+        VBox zona = new VBox(8, prompt, pannelloRisposte);
+        zona.getStyleClass().add("pannello-scuro");
+        zona.setMinHeight(96);
+        BorderPane.setMargin(zona, new Insets(8, 12, 12, 12));
+        return zona;
+    }
+
+    // ------------------------------------------------------------- aggiornamenti
+
     public void appendiLog(String messaggio) {
-        log.appendText(messaggio + "\n");
+        vociDiario.getChildren().forEach(n -> n.getStyleClass().remove("voce-diario-nuova"));
+        Label voce = StileRetro.testo("› " + messaggio, "voce-diario", "voce-diario-nuova");
+        voce.setWrapText(true);
+        voce.setMaxWidth(Double.MAX_VALUE);
+        vociDiario.getChildren().add(voce);
+        if (vociDiario.getChildren().size() > MAX_VOCI_DIARIO)
+            vociDiario.getChildren().remove(0);
     }
 
-    public void impostaStatoGiocatore(String testo) {
-        statoGiocatore.setText(testo);
+    public void aggiornaGiocatore(StudenteDto s) {
+        boolean prima = nomeGiocatore.getText().isEmpty();
+        nomeGiocatore.setText(s.nomeCompleto());
+        hpGiocatore.imposta(s.saluteMentale(), s.saluteMentaleMax(), !prima);
+        intelligenza.setText("INT " + s.intelligenzaEffettiva());
+        resilienza.setText("RES " + s.resilienzaEffettiva());
+        cfu.setText("CFU " + s.cfu());
+        monete.setText("Monete " + s.monete());
     }
 
-    public void aggiornaProfessore(ProfessoreDto professore) {
-        nomeProfessore.setText("Prof. " + professore.nome() + "  " + professore.hp() + "/" + professore.hpMax());
-        barraProfessore.setProgress(professore.hp() / (double) professore.hpMax());
-        rigaProfessore.setVisible(professore.hp() > 0);
-    }
-
-    /**
-     * Mostra le opzioni come bottoni d'azione numerati; il pannello va a capo
-     * automaticamente, così tutte le opzioni restano sempre visibili.
-     *
-     * @param onScelta callback invocata con l'indice (in base 0) dell'opzione scelta
-     */
     public void mostraBottoni(List<String> opzioni, IntConsumer onScelta) {
-        pannelloRisposte.getChildren().clear();
+        pulisciBottoni();
         for (int i = 0; i < opzioni.size(); i++) {
             final int indice = i;
-            Button bottone = StileRetro.bottone((i + 1) + ") " + opzioni.get(i));
+            Button bottone = StileRetro.bottone(opzioni.get(i));
+            if (i < 9) bottone.setGraphic(StileRetro.testo(String.valueOf(i + 1), "bottone-numero"));
             bottone.setOnAction(e -> {
                 pulisciRisposte();
                 onScelta.accept(indice);
             });
+            bottoniAzione.add(bottone);
             pannelloRisposte.getChildren().add(bottone);
         }
+        rootConOverlay.requestFocus();
     }
 
-    /** Mostra il testo della richiesta corrente accanto ai bottoni di risposta. */
     public void impostaPrompt(String testo) {
         prompt.setText(testo);
     }
 
-    /**
-     * Mostra una richiesta di testo libero nel pannello delle azioni.
-     *
-     * @param onTesto callback invocata con il testo inserito, mai vuoto
-     */
     public void chiediTesto(String richiesta, Consumer<String> onTesto) {
         pulisciRisposte();
         impostaPrompt(richiesta);
         TextField campo = new TextField();
-        campo.setStyle("-fx-font-family: 'Monospaced';");
+        campo.getStyleClass().add("campo-testo");
         Button conferma = StileRetro.bottone("OK");
         conferma.setOnAction(e -> {
             String inserito = campo.getText().trim();
@@ -148,51 +212,61 @@ public class GameSceneController {
     }
 
     public void pulisciRisposte() {
-        pannelloRisposte.getChildren().clear();
+        pulisciBottoni();
         prompt.setText("");
     }
 
-    /**
-     * Mostra un pannello sovrapposto con le istruzioni di gioco; resta visibile
-     * finché il giocatore non lo chiude, senza bloccare il motore.
-     */
+    private void pulisciBottoni() {
+        pannelloRisposte.getChildren().clear();
+        bottoniAzione.clear();
+    }
+
     public void mostraIstruzioni() {
-        Label titolo = StileRetro.testoChiaro("COME SI GIOCA", 20);
-        titolo.setStyle(titolo.getStyle() + "-fx-font-weight: bold; -fx-text-fill: #f8c810;");
-        Label testo = StileRetro.testoChiaro("""
-                Obiettivo: supera tutti gli esami del polo e raggiungi
-                i CFU necessari alla laurea per scoprire il leggendario
-                UNICUM!
+        Label titolo = StileRetro.testo("Come si gioca", "prompt");
+        titolo.setStyle("-fx-font-size: 24px;");
+        Label testo = StileRetro.testo("""
+                Supera tutti gli esami del polo e raggiungi i CFU necessari \
+                alla laurea per scoprire il leggendario UNICUM!
 
-                - Muoviti cliccando le stanze sulla mappa o con i
-                  bottoni in basso
-                - Stanze GIALLE: stanze disponibili
-                - Stanze GRIGIE: bloccate dalle propedeuticita'
-                - Stanze VERDI: esami gia' superati
-                - E = aula esame: prova scritta (quiz) + prova orale
-                  (sfida a colpi di domande col professore)
-                - R = aula studio: riposa per recuperare HP e compra
-                  oggetti utili
-                - Gli HP sono la tua salute mentale: se arrivano a 0
-                  e' BURNOUT e la partita finisce!
-                  Rispondere male agli esami ti costa HP
-                - Con "Salva ed esci" riprendi la partita la prossima
-                  volta
+                • Muoviti cliccando le stanze sulla mappa o con i bottoni in basso \
+                (oppure con i tasti 1-9).
+                • Stanze gialle: disponibili. Grigie col lucchetto: bloccate dalle \
+                propedeuticità. Verdi con la spunta: esami superati.
+                • Edificio = aula d'esame: prova scritta (quiz) e prova orale \
+                (sfida a colpi di domande col professore).
+                • Tazza = aula studio: riposa per recuperare HP e compra oggetti utili.
+                • Gli HP sono la tua salute mentale: se arrivano a 0 è BURNOUT e la \
+                partita finisce.
+                • Con "Salva ed esci" riprendi la partita la prossima volta.
 
-                In bocca al lupo matricola!""", 14);
+                In bocca al lupo, matricola!""", "testo-chiaro");
         testo.setWrapText(true);
         Button chiudi = StileRetro.bottone("Ho capito");
 
-        VBox pannello = new VBox(16, titolo, testo, chiudi);
-        pannello.setAlignment(Pos.CENTER);
+        Personaggio guida = Personaggio.studente().animato();
+        guida.setEspressione(Personaggio.Espressione.FELICE);
+        Pane spazioGuida = new Pane(guida);
+        guida.setLayoutX(50);
+        guida.setLayoutY(150);
+        spazioGuida.setPrefSize(100, 160);
+        spazioGuida.setMinWidth(100);
+
+        VBox colonna = new VBox(14, titolo, testo, chiudi);
+        HBox pannello = new HBox(18, spazioGuida, colonna);
+        pannello.setAlignment(Pos.CENTER_LEFT);
+        pannello.getStyleClass().add("pannello-scuro");
         pannello.setPadding(new Insets(24));
-        pannello.setMaxWidth(620);
+        pannello.setMaxWidth(720);
         pannello.setMaxHeight(Region.USE_PREF_SIZE);
-        pannello.setStyle("-fx-background-color: #182038; -fx-border-color: #f8c810; -fx-border-width: 4;");
 
         StackPane velo = new StackPane(pannello);
-        velo.setStyle("-fx-background-color: rgba(0,0,0,0.65);");
-        chiudi.setOnAction(e -> rootConOverlay.getChildren().remove(velo));
+        velo.getStyleClass().add("velo");
+        chiudi.setOnAction(e -> {
+            guida.ferma();
+            rootConOverlay.getChildren().remove(velo);
+            rootConOverlay.requestFocus();
+        });
         rootConOverlay.getChildren().add(velo);
+        chiudi.requestFocus();
     }
 }

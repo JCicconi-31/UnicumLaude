@@ -5,6 +5,7 @@ import it.unicam.cs.mpgc.rpg130525.port.*;
 import javafx.application.Platform;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -14,6 +15,10 @@ import java.util.concurrent.CompletableFuture;
  * mappa) e raccoglie le scelte del giocatore in modo asincrono tramite
  * {@code CompletableFuture}, tenendo il motore su un thread separato. Il flusso
  * dei dati resta unidirezionale: il motore chiama, la view renderizza.
+ * <p>
+ * Durante un esame (dalla prima domanda dello scritto fino al ritorno sulla
+ * mappa) messaggi, punti vita e scelte vengono mostrati nella
+ * {@link SchermataEsame}; il diario registra comunque tutti i messaggi.
  * <p>
  * <b>Dichiarazione uso AI:</b> questa classe è stata realizzata con l'assistenza
  * di un'intelligenza artificiale (Claude, Anthropic, tramite Claude Code), come
@@ -26,6 +31,7 @@ public class JavaFxView implements GameView, GameInput {
     private final Runnable passaAllaSchermataDiGioco;
 
     private boolean partitaAvviata = false;
+    private StudenteDto ultimoStudente;
     private List<String> opzioniPendenti;
     private CompletableFuture<Integer> sceltaPendente;
 
@@ -40,19 +46,29 @@ public class JavaFxView implements GameView, GameInput {
     @Override
     public void mostraMessaggio(String messaggio) {
         Platform.runLater(() -> {
-            if (partitaAvviata) gioco.appendiLog(messaggio);
-            else menu.mostraMessaggio(messaggio);
+            if (!partitaAvviata) {
+                menu.mostraMessaggio(messaggio);
+                return;
+            }
+            gioco.appendiLog(messaggio);
+            if (gioco.esame().isAperta())
+                gioco.esame().messaggio(messaggio);
         });
     }
 
     @Override
     public void aggiornaStatoGiocatore(StudenteDto studente) {
-        Platform.runLater(() -> gioco.impostaStatoGiocatore(FormattatoreStato.formatta(studente)));
+        Platform.runLater(() -> {
+            ultimoStudente = studente;
+            gioco.aggiornaGiocatore(studente);
+            if (gioco.esame().isAperta())
+                gioco.esame().aggiornaStudente(studente);
+        });
     }
 
     @Override
     public void aggiornaStatoProfessore(ProfessoreDto professore) {
-        Platform.runLater(() -> gioco.aggiornaProfessore(professore));
+        Platform.runLater(() -> gioco.esame().aggiornaProfessore(professore, ultimoStudente));
     }
 
     @Override
@@ -63,6 +79,7 @@ public class JavaFxView implements GameView, GameInput {
                 passaAllaSchermataDiGioco.run();
                 gioco.mostraIstruzioni();
             }
+            gioco.esame().chiudi();
             gioco.mappa().render(stanze, posizioneCorrente, this::clickSuStanza);
         });
     }
@@ -71,8 +88,9 @@ public class JavaFxView implements GameView, GameInput {
     public int chiediRisposta(Domanda domanda) {
         CompletableFuture<Integer> scelta = new CompletableFuture<>();
         Platform.runLater(() -> {
-            gioco.mostraBottoni(domanda.getOpzioni(), scelta::complete);
-            gioco.impostaPrompt(domanda.getTesto()); // la domanda sta accanto alle risposte
+            if (!gioco.esame().isAperta())
+                gioco.esame().apriScritto(ultimoStudente);
+            gioco.esame().chiediScelta(domanda.getTesto(), domanda.getOpzioni(), scelta::complete);
         });
         return scelta.join();
     }
@@ -83,11 +101,14 @@ public class JavaFxView implements GameView, GameInput {
         Platform.runLater(() -> {
             opzioniPendenti = opzioni;
             sceltaPendente = scelta;
-            if (partitaAvviata) {
+            if (!partitaAvviata) {
+                menu.mostraScelte(titolo, opzioni, scelta::complete);
+            } else if (gioco.esame().isAperta()) {
+                gioco.esame().chiediScelta(titolo, opzioni, scelta::complete);
+            } else {
                 gioco.mostraBottoni(opzioni, scelta::complete);
                 gioco.impostaPrompt(titolo);
-            } else
-                menu.mostraScelte(titolo, opzioni, scelta::complete);
+            }
         });
         return scelta.join();
     }
@@ -102,9 +123,19 @@ public class JavaFxView implements GameView, GameInput {
         return testo.join();
     }
 
-    /** Il click su una stanza della mappa equivale a scegliere "Vai a: nome". */
+    @Override
+    public Optional<String> chiediTestoOppureIndietro(String prompt) {
+        CompletableFuture<Optional<String>> testo = new CompletableFuture<>();
+        Platform.runLater(() -> {
+            if (partitaAvviata) gioco.chiediTesto(prompt, t -> testo.complete(Optional.of(t)));
+            else menu.chiediTesto(prompt, t -> testo.complete(Optional.of(t)),
+                    () -> testo.complete(Optional.empty()));
+        });
+        return testo.join();
+    }
+
     private void clickSuStanza(String nome) {
-        if (sceltaPendente == null || sceltaPendente.isDone()) return;
+        if (sceltaPendente == null || sceltaPendente.isDone() || gioco.esame().isAperta()) return;
         int indice = opzioniPendenti.indexOf("Vai a: " + nome);
         if (indice < 0) return;
         gioco.pulisciRisposte();

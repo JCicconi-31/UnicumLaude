@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.rpg130525.app;
 
 import it.unicam.cs.mpgc.rpg130525.view.GameSceneController;
+import it.unicam.cs.mpgc.rpg130525.view.StileRetro;
 import it.unicam.cs.mpgc.rpg130525.view.JavaFxView;
 import it.unicam.cs.mpgc.rpg130525.view.MainMenuController;
 import it.unicam.cs.mpgc.rpg130525.view.MapViewController;
@@ -27,11 +28,14 @@ public class JavaFxApp extends Application {
     public void start(Stage stage) {
         MainMenuController menu = new MainMenuController();
         GameSceneController gioco = new GameSceneController(new MapViewController());
-        Scene scena = new Scene(menu.getRoot(), 1020, 640);
+        Scene scena = new Scene(menu.getRoot(), 1100, 720);
+        StileRetro.applicaA(scena);
         JavaFxView view = new JavaFxView(menu, gioco, () -> scena.setRoot(gioco.getRoot()));
 
         stage.setScene(scena);
         stage.setTitle("Unicum Laude");
+        stage.setMinWidth(900);
+        stage.setMinHeight(620);
         stage.show();
 
         Thread motore = new Thread(() -> {

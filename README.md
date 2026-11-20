@@ -20,8 +20,8 @@
 
 ## 🎮 Gameplay
 
-You walk through the rooms of the department on a map in the style of *Super
-Mario Bros. 3*. Each exam room holds a professor, who is the boss you have to beat.
+You walk through the rooms of the department on a world map in the style of
+*Super Mario Bros. 3*. Exams are fought on a JRPG-style battle screen. Each exam room holds a professor, who is the boss you have to beat.
 
 - **Exams in two phases.** The **written test** is a multiple-choice question
   drawn at random for that course. A wrong answer costs you stress (HP). The
@@ -63,7 +63,7 @@ flowchart LR
 | `model`       | Domain: `Studente`, `Professore`, `Esame`, `Mappa`, `Libretto`, items, careers |
 | `engine`      | Game rules: `GameLoop`, `EsameController`, `ProvaScritta`/`ProvaOrale`, `CalcolatoreDanno` |
 | `port`        | Interfaces and DTOs that the engine uses to talk to the outside world |
-| `view`        | JavaFX GUI (menu, map, battle scene, retro style) |
+| `view`        | JavaFX GUI: menu, world map, JRPG-style exam screen, vector characters, CSS theme |
 | `persistence` | Loading the map and questions, saving and loading the game, in JSON |
 | `app`         | Composition root: builds the object graph and starts the game |
 
@@ -78,6 +78,11 @@ flowchart LR
 - **Injected `Random`** in `EsameController`, so that grade generation is deterministic in tests.
 - **Immutable DTOs** (Java records) between the engine and the view, so the UI never changes the domain.
 - **Fail-fast validation** in constructors, and domain exceptions such as `BurnoutException` and `MovimentoNonConsentitoException`.
+- **Graphics without image assets.** Characters are drawn with JavaFX shapes and have
+  swappable facial expressions. Each professor's look is derived from their name,
+  so new professors in `mappa.json` get their own face automatically. The exam
+  screen queues engine events so that animations play in order. All styling lives
+  in one CSS file.
 
 ---
 
@@ -140,6 +145,12 @@ what to include. I reviewed every suggestion before using it, and the test
 suite checks the behaviour. Classes written with AI assistance say so in their
 Javadoc. The [repository Wiki](https://github.com/JCicconi-31/UnicumLaude/wiki)
 describes in more detail how I used AI.
+
+---
+
+## 🎨 Credits
+
+Fonts: [Nunito](https://github.com/googlefonts/nunito) for text and [Pixelify Sans](https://github.com/eifetx/Pixelify-Sans) for the title, both licensed under the SIL Open Font License 1.1 (see `src/main/resources/fonts/`).
 
 ---
 

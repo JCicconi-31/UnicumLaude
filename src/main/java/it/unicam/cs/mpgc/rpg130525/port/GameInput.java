@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.rpg130525.port;
 import it.unicam.cs.mpgc.rpg130525.model.Domanda;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Contratto di input del gioco: raccoglie le scelte del giocatore (risposte,
@@ -32,4 +33,15 @@ public interface GameInput {
      * @return il testo inserito, mai nullo né vuoto
      */
     String chiediTesto(String prompt);
+
+    /**
+     * Chiede un testo libero dando al giocatore anche la possibilità di tornare
+     * al passo precedente. L'implementazione di default non offre il ritorno.
+     *
+     * @return il testo inserito (mai vuoto), oppure {@code Optional.empty()} se il
+     * giocatore ha scelto di tornare indietro
+     */
+    default Optional<String> chiediTestoOppureIndietro(String prompt) {
+        return Optional.of(chiediTesto(prompt));
+    }
 }

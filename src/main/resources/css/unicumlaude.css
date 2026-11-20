@@ -1,0 +1,245 @@
+/* Tema grafico di Unicum Laude: Nunito per i testi, font pixel per il titolo, forme arrotondate. */
+
+.root {
+    -fx-font-family: "Nunito";
+    -fx-font-size: 15px;
+    -c-inchiostro: #2a1e16;
+    -c-crema: #fff7e0;
+    -c-notte: #1e2440;
+    -c-oro: #f8c810;
+    -c-oro-scuro: #a07800;
+}
+
+/* ---------------------------------------------------------------- bottoni */
+
+.bottone {
+    -fx-background-color: -c-oro-scuro, -c-oro;
+    -fx-background-insets: 0, 0 0 4 0;
+    -fx-background-radius: 12, 12;
+    -fx-border-color: -c-inchiostro;
+    -fx-border-width: 2.5;
+    -fx-border-radius: 12;
+    -fx-text-fill: #3a2000;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 7 16 10 16;
+    -fx-cursor: hand;
+    -fx-text-alignment: center;
+}
+
+.bottone:hover {
+    -fx-background-color: -c-oro-scuro, #ffe060;
+    -fx-translate-y: -1;
+}
+
+.bottone:pressed {
+    -fx-background-insets: 0, 2 0 0 0;
+    -fx-translate-y: 2;
+}
+
+.bottone:focused {
+    -fx-border-color: -c-inchiostro, #ffffff;
+}
+
+.bottone-numero {
+    -fx-background-color: -c-inchiostro;
+    -fx-background-radius: 8;
+    -fx-text-fill: -c-oro;
+    -fx-font-size: 12px;
+    -fx-padding: 0 5 0 5;
+}
+
+/* --------------------------------------------------------------- pannelli */
+
+.pannello {
+    -fx-background-color: -c-crema;
+    -fx-background-radius: 16;
+    -fx-border-color: -c-inchiostro;
+    -fx-border-width: 3;
+    -fx-border-radius: 16;
+    -fx-padding: 10 14 10 14;
+}
+
+.pannello-scuro {
+    -fx-background-color: -c-notte;
+    -fx-background-radius: 16;
+    -fx-border-color: -c-oro;
+    -fx-border-width: 3;
+    -fx-border-radius: 16;
+    -fx-padding: 12 16 12 16;
+}
+
+.sfondo-gioco {
+    -fx-background-color: linear-gradient(to bottom, #2a3466, #1a1f3c);
+}
+
+.chip {
+    -fx-background-color: #f1e3b8;
+    -fx-background-radius: 10;
+    -fx-border-color: #c9b07a;
+    -fx-border-radius: 10;
+    -fx-padding: 2 8 2 8;
+    -fx-text-fill: -c-inchiostro;
+    -fx-font-size: 13px;
+}
+
+.chip-nome {
+    -fx-background-color: rgba(30, 36, 64, 0.85);
+    -fx-background-radius: 9;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 1 6 1 6;
+}
+
+/* ------------------------------------------------------------------- testi */
+
+.titolo-gioco {
+    -fx-font-family: "Pixelify Sans";
+    -fx-font-size: 58px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -c-oro;
+    -fx-effect: dropshadow(one-pass-box, #b02010, 0, 0, 0, 5);
+}
+
+.sottotitolo {
+    -fx-text-fill: #e8e8f8;
+    -fx-font-size: 18px;
+}
+
+.testo-chiaro {
+    -fx-text-fill: #e8e8f8;
+}
+
+.testo-scuro {
+    -fx-text-fill: -c-inchiostro;
+}
+
+.nome-giocatore {
+    -fx-text-fill: -c-inchiostro;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.prompt {
+    -fx-text-fill: -c-oro;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.messaggio-menu {
+    -fx-text-fill: #ffe9a8;
+    -fx-font-size: 16px;
+}
+
+/* --------------------------------------------------------------- barra HP */
+
+.barra-hp-sigla {
+    -fx-text-fill: #c0392b;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.barra-hp-traccia {
+    -fx-background-color: -c-inchiostro;
+    -fx-background-radius: 7;
+}
+
+.barra-hp-valore {
+    -fx-text-fill: -c-inchiostro;
+    -fx-font-size: 13px;
+}
+
+.hp-alto { -fx-fill: #4cc35a; }
+.hp-medio { -fx-fill: #f2b81f; }
+.hp-basso { -fx-fill: #e8433a; }
+
+/* ------------------------------------------------------------------ diario */
+
+.diario-titolo {
+    -fx-text-fill: -c-inchiostro;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+.diario .viewport, .diario {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.diario .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+
+.diario .scroll-bar .thumb {
+    -fx-background-color: #c9b07a;
+    -fx-background-radius: 4;
+}
+
+.diario .scroll-bar .increment-button, .diario .scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-shape: "";
+}
+
+.voce-diario {
+    -fx-text-fill: #4a3a2a;
+    -fx-font-size: 15px;
+    -fx-padding: 3 0 3 0;
+}
+
+.voce-diario-nuova {
+    -fx-text-fill: -c-inchiostro;
+}
+
+/* -------------------------------------------------------------- battaglia */
+
+.dialogo-testo {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+}
+
+.dialogo-precedente {
+    -fx-text-fill: #a9b0d6;
+    -fx-font-size: 15px;
+}
+
+.cartellino-nome {
+    -fx-text-fill: -c-inchiostro;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.cartellino-sotto {
+    -fx-text-fill: #5a4a36;
+    -fx-font-size: 14px;
+}
+
+.bottone-risposta {
+    -fx-font-size: 14px;
+    -fx-alignment: center-left;
+    -fx-text-alignment: left;
+}
+
+/* -------------------------------------------------------------- controlli */
+
+.campo-testo {
+    -fx-background-color: -c-inchiostro, #ffffff;
+    -fx-background-insets: 0, 2.5;
+    -fx-background-radius: 12, 10;
+    -fx-font-size: 16px;
+    -fx-padding: 8 12 8 12;
+}
+
+.velo {
+    -fx-background-color: rgba(10, 12, 28, 0.7);
+}
+
+.bottone-secondario {
+    -fx-background-color: #8a7a5a, -c-crema;
+    -fx-text-fill: -c-inchiostro;
+}
+
+.bottone-secondario:hover {
+    -fx-background-color: #8a7a5a, #ffffff;
+}

@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Composition root della partita: carica il mondo e le domande dai file JSON,
@@ -32,6 +33,7 @@ public final class Partita {
     private static final int RESILIENZA_INIZIALE = 5;
     private static final int HP_INIZIALE = 100;
     private static final int MONETE_INIZIALI = 50;
+    private static final String INDIETRO = "Indietro";
 
 
     private Partita() {
@@ -74,21 +76,35 @@ public final class Partita {
      */
     private static StatoGioco menuIniziale(GameView view, GameInput input,
                                            PersistenceManager persistence, Stanza partenza) {
-        List<String> voci = new ArrayList<>();
-        voci.add("Nuova Partita");
-        if (persistence.esisteSalvataggio())
-            voci.add("Carica Partita");
-        voci.add("Esci");
+        while (true) {
+            List<String> voci = new ArrayList<>();
+            voci.add("Nuova Partita");
+            if (persistence.esisteSalvataggio())
+                voci.add("Carica Partita");
+            voci.add("Esci");
 
-        String scelta = voci.get(input.scegli("Menu principale", voci));
-        if (scelta.equals("Esci"))
-            return null;
-        if (scelta.equals("Carica Partita")) {
-            StatoGioco stato = persistence.carica();
-            view.mostraMessaggio("Bentornato, " + stato.getStudente().getNomeCompleto() + "!");
-            return stato;
+            String scelta = voci.get(input.scegli("Menu principale", voci));
+            if (scelta.equals("Esci"))
+                return null;
+            StatoGioco stato = scelta.equals("Carica Partita")
+                    ? caricaPartita(view, input, persistence)
+                    : nuovaPartita(input, partenza);
+            if (stato != null)
+                return stato;
+            // il giocatore è tornato indietro: si ripropone il menù principale
         }
-        return nuovaPartita(input, partenza);
+    }
+
+    /** Mostra il salvataggio trovato e chiede conferma; null se si torna indietro. */
+    private static StatoGioco caricaPartita(GameView view, GameInput input, PersistenceManager persistence) {
+        StatoGioco stato = persistence.carica();
+        Studente studente = stato.getStudente();
+        String riepilogo = "Partita salvata: " + studente.getNomeCompleto()
+                + " (" + studente.getLibretto().getCfuOttenuti() + " CFU)";
+        if (input.scegli(riepilogo, List.of("Continua", INDIETRO)) != 0)
+            return null;
+        view.mostraMessaggio("Bentornato, " + studente.getNomeCompleto() + "!");
+        return stato;
     }
 
     private static InputStream risorsa(String nomeFile) {
@@ -98,16 +114,48 @@ public final class Partita {
         return in;
     }
 
+    /**
+     * Procedura guidata di creazione del personaggio (nome, cognome, carriera).
+     * Da ogni passo si può tornare al precedente; dal primo si torna al menù.
+     *
+     * @return lo stato della nuova partita, oppure null se si torna al menù
+     */
     private static StatoGioco nuovaPartita(GameInput input, Stanza posizioneIniziale) {
-        String nome = input.chiediTesto("Nome del giocatore");
-        String cognome = input.chiediTesto("Cognome del giocatore");
         List<CareerStrategy> carriere = List.of(
                 new StudenteFullTime(), new StudenteLavoratore(), new StudenteFuoriCorso());
-        List<String> voci = carriere.stream()
+        List<String> voci = new ArrayList<>(carriere.stream()
                 .map(c -> c.getNome() + " (" + c.getDescrizione() + ")")
-                .toList();
-        CareerStrategy carriera = carriere.get(input.scegli("Scegli la tua carriera", voci));
-        Studente studente = new Studente(nome, cognome, INTELLIGENZA_INIZIALE, RESILIENZA_INIZIALE, HP_INIZIALE, MONETE_INIZIALI, carriera);
-        return new StatoGioco(studente, posizioneIniziale);
+                .toList());
+        voci.add(INDIETRO);
+
+        String nome = null;
+        String cognome = null;
+        int passo = 0;
+        while (true) {
+            switch (passo) {
+                case 0 -> {
+                    Optional<String> inserito = input.chiediTestoOppureIndietro("Nome del giocatore");
+                    if (inserito.isEmpty())
+                        return null;
+                    nome = inserito.get();
+                    passo = 1;
+                }
+                case 1 -> {
+                    Optional<String> inserito = input.chiediTestoOppureIndietro("Cognome del giocatore");
+                    cognome = inserito.orElse(null);
+                    passo = inserito.isPresent() ? 2 : 0;
+                }
+                default -> {
+                    int scelta = input.scegli("Scegli la tua carriera", voci);
+                    if (scelta == carriere.size()) {
+                        passo = 1;
+                        continue;
+                    }
+                    Studente studente = new Studente(nome, cognome, INTELLIGENZA_INIZIALE,
+                            RESILIENZA_INIZIALE, HP_INIZIALE, MONETE_INIZIALI, carriere.get(scelta));
+                    return new StatoGioco(studente, posizioneIniziale);
+                }
+            }
+        }
     }
 }

@@ -27,8 +27,8 @@
         "nome": "Programmazione",
         "cfu": 12,
         "professore": {
-          "nome": "Michele",
-          "cognome": "Loreti",
+          "nome": "Ettore",
+          "cognome": "Spadoni",
           "hp": 25,
           "attacco": 10
         }
@@ -47,8 +47,8 @@
         "nome": "Metodologie di Programmazione",
         "cfu": 12,
         "professore": {
-          "nome": "Fabrizio",
-          "cognome": "Fornari",
+          "nome": "Osvaldo",
+          "cognome": "Brunetti",
           "hp": 30,
           "attacco": 4
         }
@@ -69,8 +69,8 @@
         "nome": "Architettura degli elaboratori - Laboratorio",
         "cfu": 12,
         "professore": {
-          "nome": "Massimo",
-          "cognome": "Trojani",
+          "nome": "Ugo",
+          "cognome": "Pennacchi",
           "hp": 50,
           "attacco": 20
         }
@@ -91,8 +91,8 @@
         "nome": "Discussione tesi",
         "cfu": 6,
         "professore": {
-          "nome": "Graziano",
-          "cognome": "Leoni",
+          "nome": "Silvio",
+          "cognome": "Tarantini",
           "hp": 25,
           "attacco": 8
         }
